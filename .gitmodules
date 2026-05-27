@@ -1,0 +1,3 @@
+[submodule "PhanesEngine/vendor/spdlog"]
+	path = PhanesEngine/vendor/spdlog
+	url = https://github.com/gabime/spdlog

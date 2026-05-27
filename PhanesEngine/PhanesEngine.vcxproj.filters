@@ -1,12 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="src\Phanes\Core.h" />
-    <ClInclude Include="src\Phanes\Application.h" />
-    <ClInclude Include="src\Phanes.h" />
-    <ClInclude Include="src\Phanes\Entry.h" />
+    <Filter Include="Phanes">
+      <UniqueIdentifier>{A4BD0CCA-905F-37A0-791A-4BF4655BBEF0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Phanes\Application.cpp" />
+    <ClInclude Include="src\Phanes.h" />
+    <ClInclude Include="src\Phanes\Application.h">
+      <Filter>Phanes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phanes\Core.h">
+      <Filter>Phanes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phanes\Entry.h">
+      <Filter>Phanes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phanes\Log.h">
+      <Filter>Phanes</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Phanes\Application.cpp">
+      <Filter>Phanes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Phanes\Log.cpp">
+      <Filter>Phanes</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

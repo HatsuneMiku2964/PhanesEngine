@@ -2,7 +2,7 @@
 
 class Sandbox : public Phanes::Application
 {
-	public:
+public:
 	Sandbox() 
 	{
 
@@ -13,7 +13,6 @@ class Sandbox : public Phanes::Application
 	}
 };
 
-Phanes::Application* Phanes::CreateApplication()
-{
-	return new Sandbox();
+namespace Phanes {
+	Phanes::Application* Phanes::CreateApplication() { return new Sandbox(); }
 }

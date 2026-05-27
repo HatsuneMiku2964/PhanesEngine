@@ -12,6 +12,7 @@ namespace Phanes {
 		void Run();
 	};
 
+	// Will be defined by clients
 	Application* CreateApplication();
 }
 
