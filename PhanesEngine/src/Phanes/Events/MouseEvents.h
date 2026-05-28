@@ -52,8 +52,8 @@ namespace Phanes {
 	{
 	public:
 		inline int GetButtonCode() const { return buttonCode_; }
-
 		IMPL_EVENT_CATEGORY(EventCategories::Input | EventCategories::Mouse)
+
 	protected:
 		MouseButtonEvent(int buttoncode) : buttonCode_(buttoncode) {}
 		int buttonCode_;

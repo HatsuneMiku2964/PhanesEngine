@@ -30,16 +30,32 @@ namespace Phanes {
 	public:
 		IMPL_EVENT_TYPE(WindowClose)
 		IMPL_EVENT_CATEGORY(EventCategories::Application)
-
-		std::string ToString() const override { return GetName(); }
 	};
 
 	class PN_API AppTickEvent : public Event
 	{
 	public:
+		AppTickEvent() = default;
+
 		IMPL_EVENT_TYPE(AppTick)
 		IMPL_EVENT_CATEGORY(EventCategories::Application)
+	};
 
-		std::string ToString() const override { return GetName(); }
+	class PN_API AppUpdateEvent : public Event
+	{
+	public:
+		AppUpdateEvent() = default;
+
+		IMPL_EVENT_TYPE(AppUpdate)
+		IMPL_EVENT_CATEGORY(EventCategories::Application)
+	};
+
+	class PN_API AppRenderEvent : public Event
+	{
+	public:
+		AppRenderEvent() = default;
+
+		IMPL_EVENT_TYPE(AppRender)
+		IMPL_EVENT_CATEGORY(EventCategories::Application)
 	};
 }

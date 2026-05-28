@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Phanes/Core.h"
-#include <string>
+#include <functional>
+#include <sstream>
 
 namespace Phanes {
 
@@ -62,7 +63,7 @@ namespace Phanes {
 		bool handled_ = false;
 	};
 
-	class EventDispatcher 
+	class EventDispatcher
 	{
 		template<typename T>
 		using EventFunc = std::function<bool(T&)>;
@@ -71,8 +72,8 @@ namespace Phanes {
 
 		template<typename T>
 		bool Dispatch(EventFunc<T> func) {
-			if (event__.GetEventType = T::GetStaticType) {
-				event__.handled_ = func(*(T*)event__);
+			if (event__.GetEventType == T::GetStaticType) {
+				event__.handled_ = func(*(T*)&event__);
 				return true;
 			}
 			return false;
@@ -80,4 +81,8 @@ namespace Phanes {
 	private:
 		Event& event__;
 	};
+
+	inline std::ostream& operator<<(std::ostream& o, const Event& e) {
+		return o << e.ToString();
+	}
 }

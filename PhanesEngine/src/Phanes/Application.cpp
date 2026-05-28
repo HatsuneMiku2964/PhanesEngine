@@ -1,4 +1,5 @@
 #include "Application.h"
+
 namespace Phanes {
 	Application::Application() {
 
@@ -7,8 +8,6 @@ namespace Phanes {
 
 	}
 	void Application::Run() {
-		while(true){
-			
-		}
+		
 	}
 }

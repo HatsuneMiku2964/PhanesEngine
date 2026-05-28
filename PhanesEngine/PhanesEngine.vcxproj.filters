@@ -25,11 +25,15 @@
     <ClInclude Include="src\Phanes\Events\Events.h">
       <Filter>Phanes\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Phanes\Events\KeyEvents.h">
+      <Filter>Phanes\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phanes\Events\MouseEvents.h">
+      <Filter>Phanes\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\Phanes\Log.h">
       <Filter>Phanes</Filter>
     </ClInclude>
-    <ClInclude Include="src\Phanes\Events\KeyEvents.h" />
-    <ClInclude Include="src\Phanes\Events\MouseEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Phanes\Application.cpp">
