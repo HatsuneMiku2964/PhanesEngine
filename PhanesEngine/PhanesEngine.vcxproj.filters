@@ -4,6 +4,9 @@
     <Filter Include="Phanes">
       <UniqueIdentifier>{A4BD0CCA-905F-37A0-791A-4BF4655BBEF0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Phanes\Events">
+      <UniqueIdentifier>{08295844-74E9-D37A-3D24-1DF8A9A31857}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Phanes.h" />
@@ -16,9 +19,17 @@
     <ClInclude Include="src\Phanes\Entry.h">
       <Filter>Phanes</Filter>
     </ClInclude>
+    <ClInclude Include="src\Phanes\Events\AppEvents.h">
+      <Filter>Phanes\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phanes\Events\Events.h">
+      <Filter>Phanes\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\Phanes\Log.h">
       <Filter>Phanes</Filter>
     </ClInclude>
+    <ClInclude Include="src\Phanes\Events\KeyEvents.h" />
+    <ClInclude Include="src\Phanes\Events\MouseEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Phanes\Application.cpp">

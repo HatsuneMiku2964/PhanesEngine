@@ -5,18 +5,17 @@
 #include "spdlog/spdlog.h"
 
 namespace Phanes {
-
 	class PN_API Log
 	{
 	public:
 		static void Init();
 
-		inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
-		inline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
+		inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return CoreLogger__; }
+		inline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return ClientLogger__; }
 
 	private:
-		static std::shared_ptr<spdlog::logger> s_CoreLogger;
-		static std::shared_ptr<spdlog::logger> s_ClientLogger;
+		static std::shared_ptr<spdlog::logger> CoreLogger__;
+		static std::shared_ptr<spdlog::logger> ClientLogger__;
 	};
 }
 

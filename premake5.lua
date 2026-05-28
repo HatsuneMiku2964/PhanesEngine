@@ -25,7 +25,8 @@ project "PhanesEngine"
 	
 	includedirs
 	{
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/src",
+		"%{prj.name}/vendor/spdlog/include",
 	}
 	
 	filter "system:windows"
@@ -60,7 +61,7 @@ project "Game"
 	location "Game"
 	kind "ConsoleApp"
 	language "C++"
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}/")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 	
 	files
