@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Phanes/Core.h"
-#include <functional>
-#include <sstream>
 
 namespace Phanes {
 
@@ -18,10 +16,10 @@ namespace Phanes {
 	enum class EventCategories : int
 	{
 		None = 0,
-		Application = BIT(0),
-		Input = BIT(1),
-		Keyboard = BIT(2),
-		Mouse = BIT(3),
+		Application = BIT_PUSH(0),
+		Input = BIT_PUSH(1),
+		Keyboard = BIT_PUSH(2),
+		Mouse = BIT_PUSH(3),
 	};
 	// bitwise operators for EventCategories, so we can combine them using bitwise operations
 	inline EventCategories operator|(EventCategories a, EventCategories b) {
@@ -72,7 +70,7 @@ namespace Phanes {
 
 		template<typename T>
 		bool Dispatch(EventFunc<T> func) {
-			if (event__.GetEventType == T::GetStaticType) {
+			if (event__.GetEventType() == T::GetStaticType()) {
 				event__.handled_ = func(*(T*)&event__);
 				return true;
 			}

@@ -1,14 +1,15 @@
 workspace "PhanesEngine"
 	architecture "x64"
-
-	configurations
-	{
-		"Debug",
-		"Release",
-		"Dist",
-	}
+	configurations { "Debug", "Release", "Dist", }
+	staticruntime "On"
+	platforms { "x64" }
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+
+IncludeDirs = {}
+IncludeDirs["GLFW"] = "PhanesEngine/vendor/GLFW/include"
+
+include "PhanesEngine/vendor/GLFW"
 
 project "PhanesEngine"
 	location "PhanesEngine"
@@ -17,6 +18,9 @@ project "PhanesEngine"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 	
+	pchheader "pnpch.h"
+	pchsource "PhanesEngine/src/pnpch.cpp"
+
 	files
 	{
 		"%{prj.name}/src/**.h",
@@ -27,19 +31,28 @@ project "PhanesEngine"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
+		"%{IncludeDirs.GLFW}",
+	}
+
+	links 
+	{
+		"GLFW",
+		"opengl32.lib",
+		"ucrtd.lib",
+		"msvcrtd.lib",
 	}
 	
 	filter "system:windows"
 		cppdialect "C++20"
-		staticruntime "On"
 		systemversion "latest"
 		
 		buildoptions { "/utf-8" }
-
+		
 		defines 
 		{ 
 			"PN_PLATFORMS_WINDOWS", 
-			"PN_BUILD_DLL" 
+			"PN_BUILD_DLL",
+			"PN_ENABLE_ASSERTS",
 		}
 
 		postbuildcommands

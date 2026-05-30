@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Events.h"
-#include <sstream>
 
 namespace Phanes {
 	// base class for KeyPressedEvent, KeyReleasedEvent and KeyTypedEvent

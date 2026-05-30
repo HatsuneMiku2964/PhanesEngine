@@ -1,3 +1,6 @@
 [submodule "PhanesEngine/vendor/spdlog"]
 	path = PhanesEngine/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "PhanesEngine/vendor/GLFW"]
+	path = PhanesEngine/vendor/GLFW
+	url = https://github.com/TheCherno/GLFW

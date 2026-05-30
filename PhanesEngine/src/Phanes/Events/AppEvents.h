@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Events.h"
-#include <sstream>
 
 namespace Phanes {
 	class PN_API WindowResizeEvent : public Event
