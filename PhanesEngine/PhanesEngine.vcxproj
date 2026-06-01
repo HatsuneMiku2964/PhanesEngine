@@ -84,7 +84,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -113,7 +113,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -143,7 +143,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -169,6 +169,8 @@
     <ClInclude Include="src\Phanes\Events\Events.h" />
     <ClInclude Include="src\Phanes\Events\KeyEvents.h" />
     <ClInclude Include="src\Phanes\Events\MouseEvents.h" />
+    <ClInclude Include="src\Phanes\Layer\Layer.h" />
+    <ClInclude Include="src\Phanes\Layer\LayerStack.h" />
     <ClInclude Include="src\Phanes\Log.h" />
     <ClInclude Include="src\Phanes\Window.h" />
     <ClInclude Include="src\Platforms\Windows\WindowsWindow.h" />
@@ -176,6 +178,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Phanes\Application.cpp" />
+    <ClCompile Include="src\Phanes\Layer\Layer.cpp" />
+    <ClCompile Include="src\Phanes\Layer\LayerStack.cpp" />
     <ClCompile Include="src\Phanes\Log.cpp" />
     <ClCompile Include="src\Platforms\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\pnpch.cpp">

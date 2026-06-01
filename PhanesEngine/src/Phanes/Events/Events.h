@@ -57,7 +57,6 @@ namespace Phanes {
 		//utility function to check if the event is in a category
 		inline bool IsInCategory(EventCategories category) const { return GetCategoryFlags() & static_cast<int>(category); }
 
-	protected:
 		bool Handled_ = false;
 	};
 

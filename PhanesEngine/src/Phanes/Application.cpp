@@ -17,6 +17,8 @@ namespace Phanes {
 		while (running_) {
 			glClearColor(0, 0.5, 0.9, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			for (Layer* layer : layerStack_) layer->OnUpdate();
 			window_->OnUpdate();
 		}
 	}
@@ -26,6 +28,11 @@ namespace Phanes {
 		// won't do anything if it's not a WindowCloseEvent
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
 		PN_CORE_LOG_TRACE("{0}", e.ToString());
+
+		for (auto it = layerStack_.end(); it != layerStack_.begin();) {
+			(*--it)->OnEvent(e);
+			if (e.Handled_) break;
+		}
 	}
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
