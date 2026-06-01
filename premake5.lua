@@ -1,8 +1,8 @@
 workspace "PhanesEngine"
 	architecture "x64"
 	configurations { "Debug", "Release", "Dist", }
-	staticruntime "On"
 	platforms { "x64" }
+	staticruntime "On"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 

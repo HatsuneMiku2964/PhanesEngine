@@ -3,15 +3,15 @@
 #include "spdlog/sinks/stdout_color_sinks.h"
 
 namespace Phanes {
-	std::shared_ptr<spdlog::logger> Log::CoreLogger__;
-	std::shared_ptr<spdlog::logger> Log::ClientLogger__;
+	std::shared_ptr<spdlog::logger> Log::coreLogger_;
+	std::shared_ptr<spdlog::logger> Log::clientLogger_;
 
 	void Log::Init() {
 		spdlog::set_pattern("%^[%T] %n: %v%$");
-		CoreLogger__ = spdlog::stdout_color_mt("PHANES");
-		CoreLogger__->set_level(spdlog::level::trace);
+		coreLogger_ = spdlog::stdout_color_mt("PHANES");
+		coreLogger_->set_level(spdlog::level::trace);
 
-		ClientLogger__ = spdlog::stdout_color_mt("APP");
-		ClientLogger__->set_level(spdlog::level::trace);
+		clientLogger_ = spdlog::stdout_color_mt("APP");
+		clientLogger_->set_level(spdlog::level::trace);
 	}
 }

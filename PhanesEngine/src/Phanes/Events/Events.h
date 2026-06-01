@@ -58,7 +58,7 @@ namespace Phanes {
 		inline bool IsInCategory(EventCategories category) const { return GetCategoryFlags() & static_cast<int>(category); }
 
 	protected:
-		bool handled_ = false;
+		bool Handled_ = false;
 	};
 
 	class EventDispatcher
@@ -66,18 +66,18 @@ namespace Phanes {
 		template<typename T>
 		using EventFunc = std::function<bool(T&)>;
 	public:
-		EventDispatcher(Event& event) : event__(event) {}
+		EventDispatcher(Event& event) : event_(event) {}
 
 		template<typename T>
 		bool Dispatch(EventFunc<T> func) {
-			if (event__.GetEventType() == T::GetStaticType()) {
-				event__.handled_ = func(*(T*)&event__);
+			if (event_.GetEventType() == T::GetStaticType()) {
+				event_.Handled_ = func(*(T*)&event_);
 				return true;
 			}
 			return false;
 		}
 	private:
-		Event& event__;
+		Event& event_;
 	};
 
 	inline std::ostream& operator<<(std::ostream& o, const Event& e) {

@@ -14,19 +14,19 @@ namespace Phanes {
 		void OnUpdate() override;
 
 		// util getters & impls
-		inline unsigned int GetWidth() const override { return Data__.Width; }
-		inline unsigned int GetHeight() const override { return Data__.Height; }
+		inline unsigned int GetWidth() const override { return data_.Width; }
+		inline unsigned int GetHeight() const override { return data_.Height; }
 		bool IsVSync() const override;
 
 		// util setters & impls
-		inline void SetEventCallback(const EventCallbackFn& callback) override { Data__.EventCallback = callback; }
+		inline void SetEventCallback(const EventCallbackFn& callback) override { data_.EventCallback = callback; }
 		void SetVSync(bool enabled) override;
 
 	private:
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();
 	private:
-		GLFWwindow* Window__;
+		GLFWwindow* window_;
 
 		// main attribute set of the window
 		struct WindowData
@@ -37,6 +37,6 @@ namespace Phanes {
 			EventCallbackFn EventCallback;
 		};
 
-		WindowData Data__;
+		WindowData data_;
 	};
 }
