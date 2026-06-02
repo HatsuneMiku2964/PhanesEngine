@@ -8,9 +8,11 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDirs = {}
 IncludeDirs["GLFW"] = "PhanesEngine/vendor/GLFW/include"
 IncludeDirs["Glad"] = "PhanesEngine/vendor/Glad/include"
+IncludeDirs["ImGui"] = "PhanesEngine/vendor/imgui"
 
 include "PhanesEngine/vendor/GLFW"
 include "PhanesEngine/vendor/Glad"
+include "PhanesEngine/vendor/imgui"
 
 
 project "PhanesEngine"
@@ -35,12 +37,14 @@ project "PhanesEngine"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDirs.GLFW}",
 		"%{IncludeDirs.Glad}",
+		"%{IncludeDirs.ImGui}",
 	}
 
 	links 
 	{
 		"GLFW",
 		"Glad",
+		"ImGui",
 		"opengl32.lib",
 	}
 	
@@ -61,7 +65,7 @@ project "PhanesEngine"
 
 		postbuildcommands
 		{
-			"{COPYFILE} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Game/",
+			"{COPYFILE} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Game/%{cfg.buildtarget.name}",
 		}
 		
 	filter "configurations:Debug"
@@ -81,7 +85,7 @@ project "Game"
 	location "Game"
 	kind "ConsoleApp"
 	language "C++"
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}/")
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 	
 	files

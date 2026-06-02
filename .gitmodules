@@ -4,3 +4,6 @@
 [submodule "PhanesEngine/vendor/GLFW"]
 	path = PhanesEngine/vendor/GLFW
 	url = https://github.com/TheCherno/GLFW
+[submodule "PhanesEngine/vendor/imgui"]
+	path = PhanesEngine/vendor/imgui
+	url = https://github.com/TheCherno/imgui
