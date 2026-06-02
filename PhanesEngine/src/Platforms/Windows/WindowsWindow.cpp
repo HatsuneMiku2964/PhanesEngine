@@ -1,10 +1,11 @@
 #include "pnpch.h"
 #include "WindowsWindow.h"
-#include "Phanes/Log.h"
 
 #include "Phanes/Events/AppEvents.h"
 #include "Phanes/Events/KeyEvents.h"
 #include "Phanes/Events/MouseEvents.h"
+
+#include <glad/glad.h>
 
 namespace Phanes {
 
@@ -51,6 +52,10 @@ namespace Phanes {
 
 		window_ = glfwCreateWindow((int)props.Width, (int)props.Height, data_.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(window_);
+
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		PN_CORE_ASSERT(status, "Failed to initialize Glad!");
+
 		glfwSetWindowUserPointer(window_, &data_);
 		SetVSync(true);
 

@@ -7,7 +7,7 @@ class test : public Phanes::Layer {
 
 	void OnUpdate() override
 	{
-		PN_CORE_LOG_INFO("test layer update");
+		PN_CORE_LOG_TRACE("test layer update");
 	}
 };
 

@@ -1,6 +1,7 @@
 #include "pnpch.h"
 #include "Application.h"
-#include <GLFW/glfw3.h>
+
+#include <glad/glad.h>
 
 namespace Phanes {
 
@@ -30,7 +31,7 @@ namespace Phanes {
 		PN_CORE_LOG_TRACE("{0}", e.ToString());
 
 		for (auto it = layerStack_.end(); it != layerStack_.begin();) {
-			(*--it)->OnEvent(e);
+			(*--it)->OnEvent(e); // a safe iteration
 			if (e.Handled_) break;
 		}
 	}

@@ -45,7 +45,6 @@ namespace Phanes {
 
 	class PN_API Event
 	{
-		friend class EventDispatcher;
 	public:
 		// pure virtual functions, must be implemented by derived classes
 		virtual EventTypes GetEventType() const = 0;

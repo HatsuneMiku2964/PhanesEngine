@@ -2,14 +2,16 @@ workspace "PhanesEngine"
 	architecture "x64"
 	configurations { "Debug", "Release", "Dist", }
 	platforms { "x64" }
-	staticruntime "On"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDirs = {}
 IncludeDirs["GLFW"] = "PhanesEngine/vendor/GLFW/include"
+IncludeDirs["Glad"] = "PhanesEngine/vendor/Glad/include"
 
 include "PhanesEngine/vendor/GLFW"
+include "PhanesEngine/vendor/Glad"
+
 
 project "PhanesEngine"
 	location "PhanesEngine"
@@ -32,19 +34,20 @@ project "PhanesEngine"
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDirs.GLFW}",
+		"%{IncludeDirs.Glad}",
 	}
 
 	links 
 	{
 		"GLFW",
+		"Glad",
 		"opengl32.lib",
-		"ucrtd.lib",
-		"msvcrtd.lib",
 	}
 	
 	filter "system:windows"
 		cppdialect "C++20"
 		systemversion "latest"
+		staticruntime "On"
 		
 		buildoptions { "/utf-8" }
 		
@@ -53,6 +56,7 @@ project "PhanesEngine"
 			"PN_PLATFORMS_WINDOWS", 
 			"PN_BUILD_DLL",
 			"PN_ENABLE_ASSERTS",
+			"GLFW_INCLUDE_NONE",
 		}
 
 		postbuildcommands

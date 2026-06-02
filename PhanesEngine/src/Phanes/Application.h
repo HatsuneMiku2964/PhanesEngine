@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Core.h"
+#include "Phanes/Core.h"
 
-#include "Window.h"
+#include "Phanes/Window.h"
 #include "Phanes/Layer/LayerStack.h"
 #include "Phanes/Events/Events.h"
 #include "Phanes/Events/AppEvents.h"
@@ -19,6 +19,7 @@ namespace Phanes {
 
 		bool OnWindowClose(WindowCloseEvent& e);
 
+		// pointless funcs for future extension
 		void PushLayer(Layer* layer) { layerStack_.PushLayer(layer); }
 		void PushOverlay(Layer* overlay) { layerStack_.PushOverlay(overlay); }
 	private:
