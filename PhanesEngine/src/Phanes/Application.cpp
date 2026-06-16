@@ -7,7 +7,12 @@ namespace Phanes {
 
 #define BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
 
+	Application* Application::instance_ = nullptr;
+
 	Application::Application() {
+		PN_CORE_ASSERT ( !instance_, "Application already exists!" )
+		instance_ = this;
+
 		window_ = std::unique_ptr<Window>(Window::Create());
 		window_->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 	}

@@ -4,4 +4,6 @@
 #include "Phanes/Layer/Layer.h"
 #include "Phanes/Log.h"
 
+#include "Phanes/ImGui/ImGuiLayer.h"
+
 #include "Phanes/Entry.h"

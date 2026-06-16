@@ -3,11 +3,11 @@
 class test : public Phanes::Layer {
 	public:
 	test() : Layer("test") {}
-	~test() {}
+	~test() {}	
 
 	void OnUpdate() override
 	{
-		PN_CORE_LOG_TRACE("test layer update");
+		
 	}
 };
 
@@ -19,6 +19,7 @@ public:
 	Sandbox() 
 	{
 		PushLayer(new test());
+		PushOverlay ( new Phanes::ImGuiLayer ( ) );
 	}
 	~Sandbox()
 	{

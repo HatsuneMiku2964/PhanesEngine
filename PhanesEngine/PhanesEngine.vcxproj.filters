@@ -57,6 +57,7 @@
     </ClInclude>
     <ClInclude Include="src\pnpch.h" />
     <ClInclude Include="src\Phanes\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\Platforms\OpenGL\ImGuiOpenGLRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Phanes\Application.cpp">
@@ -76,5 +77,6 @@
     </ClCompile>
     <ClCompile Include="src\pnpch.cpp" />
     <ClCompile Include="src\Phanes\ImGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\Platforms\OpenGL\ImGuiOpenGLRenderer.cpp" />
   </ItemGroup>
 </Project>
