@@ -2,7 +2,8 @@
 
 #include "Phanes/Core.h"
 
-namespace Phanes {
+namespace Phanes
+{
 
 	enum class EventTypes
 	{
@@ -29,14 +30,14 @@ namespace Phanes {
 		return static_cast<EventCategories>(static_cast<int>(a) & static_cast<int>(b));
 	}
 	inline EventCategories& operator|=(EventCategories& a, EventCategories b) {
-		a = a | b; 
+		a = a | b;
 		return a;
 	}
 	inline bool HasCategory(EventCategories flags, EventCategories category) {
 		return (static_cast<int>(flags) & static_cast<int>(category)) != 0;
 	}
 
-// macros for u to impl Phanes::Event in your event class FASTER, u can use this macro to impl the GetEventType(), GetName() and GetCategoryFlags() function
+	// macros for u to impl Phanes::Event in your event class FASTER, u can use this macro to impl the GetEventType(), GetName() and GetCategoryFlags() function
 #define IMPL_EVENT_TYPE(type)	static EventTypes GetStaticType() { return EventTypes::##type; }\
 								virtual EventTypes GetEventType() const override { return GetStaticType(); }\
 								virtual const char* GetName() const override { return #type; }
@@ -64,12 +65,12 @@ namespace Phanes {
 		template<typename T>
 		using EventFunc = std::function<bool(T&)>;
 	public:
-		EventDispatcher(Event& event) : event_(event) {}
+		EventDispatcher(Event& event) : event_(event) { }
 
 		template<typename T>
 		bool Dispatch(EventFunc<T> func) {
 			if (event_.GetEventType() == T::GetStaticType()) {
-				event_.Handled_ = func(*(T*)&event_);
+				event_.Handled_ = func(*(T*) &event_);
 				return true;
 			}
 			return false;

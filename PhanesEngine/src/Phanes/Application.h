@@ -7,7 +7,8 @@
 #include "Phanes/Events/Events.h"
 #include "Phanes/Events/AppEvents.h"
 
-namespace Phanes {
+namespace Phanes
+{
 	class PN_API Application
 	{
 	public:
@@ -19,19 +20,17 @@ namespace Phanes {
 
 		bool OnWindowClose(WindowCloseEvent& e);
 
-		void PushLayer(Layer* layer) 
-		{ 
+		void PushLayer(Layer* layer) {
 			layerStack_.PushLayer(layer);
-			layer->OnAttach ( );
+			layer->OnAttach();
 		}
-		void PushOverlay(Layer* overlay) 
-		{
+		void PushOverlay(Layer* overlay) {
 			layerStack_.PushOverlay(overlay);
-			overlay->OnAttach ( );
+			overlay->OnAttach();
 		}
 
-		inline static Application& Get ( ) { return *instance_; }
-		inline Window& GetWindow ( ) { return *window_; }
+		inline static Application& Get() { return *instance_; }
+		inline Window& GetWindow() { return *window_; }
 	private:
 		std::unique_ptr<Window> window_;
 		bool running_ = true;

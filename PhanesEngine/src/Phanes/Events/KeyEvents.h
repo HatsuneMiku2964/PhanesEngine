@@ -43,4 +43,18 @@ namespace Phanes {
 		}
 		IMPL_EVENT_TYPE(KeyReleased)
 	};
+
+	class PN_API KeyTypedEvent : public KeyEvent
+	{
+	public:
+		KeyTypedEvent(int keycode)
+			: KeyEvent(keycode) {}
+
+		std::string ToString() const override {
+			std::stringstream ss;
+			ss << GetName() << ": " << KeyCode_;
+			return ss.str();
+		}
+		IMPL_EVENT_TYPE(KeyTyped)
+	};
 }
