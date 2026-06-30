@@ -7,11 +7,17 @@
     <Filter Include="Phanes\Events">
       <UniqueIdentifier>{08295844-74E9-D37A-3D24-1DF8A9A31857}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Phanes\ImGui">
+      <UniqueIdentifier>{CEDD3DA5-BA40-CD49-63C6-05004F0899CC}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Phanes\Layer">
       <UniqueIdentifier>{70656EA5-5CC8-FD49-054E-3600F18FC9CC}</UniqueIdentifier>
     </Filter>
     <Filter Include="Platforms">
       <UniqueIdentifier>{DDACA145-4917-56BC-9255-0762FEFE3311}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platforms\OpenGL">
+      <UniqueIdentifier>{719BB998-5D94-D8EA-86C6-BD6F721EB8F6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Platforms\Windows">
       <UniqueIdentifier>{17E40808-83FA-069E-CC71-92BF38C7D725}</UniqueIdentifier>
@@ -40,6 +46,9 @@
     <ClInclude Include="src\Phanes\Events\MouseEvents.h">
       <Filter>Phanes\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Phanes\ImGui\ImGuiLayer.h">
+      <Filter>Phanes\ImGui</Filter>
+    </ClInclude>
     <ClInclude Include="src\Phanes\Layer\Layer.h">
       <Filter>Phanes\Layer</Filter>
     </ClInclude>
@@ -52,16 +61,20 @@
     <ClInclude Include="src\Phanes\Window.h">
       <Filter>Phanes</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platforms\OpenGL\ImGuiOpenGLRenderer.h">
+      <Filter>Platforms\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platforms\Windows\WindowsWindow.h">
       <Filter>Platforms\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\pnpch.h" />
-    <ClInclude Include="src\Phanes\ImGui\ImGuiLayer.h" />
-    <ClInclude Include="src\Platforms\OpenGL\ImGuiOpenGLRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Phanes\Application.cpp">
       <Filter>Phanes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Phanes\ImGui\ImGuiLayer.cpp">
+      <Filter>Phanes\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Phanes\Layer\Layer.cpp">
       <Filter>Phanes\Layer</Filter>
@@ -72,11 +85,12 @@
     <ClCompile Include="src\Phanes\Log.cpp">
       <Filter>Phanes</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platforms\OpenGL\ImGuiOpenGLRenderer.cpp">
+      <Filter>Platforms\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platforms\Windows\WindowsWindow.cpp">
       <Filter>Platforms\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\pnpch.cpp" />
-    <ClCompile Include="src\Phanes\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Platforms\OpenGL\ImGuiOpenGLRenderer.cpp" />
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@ workspace "PhanesEngine"
 	architecture "x64"
 	configurations { "Debug", "Release", "Dist", }
 	platforms { "x64" }
+	startproject "Game"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
@@ -19,6 +20,8 @@ project "PhanesEngine"
 	location "PhanesEngine"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "off"
+
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 	
@@ -51,7 +54,6 @@ project "PhanesEngine"
 	filter "system:windows"
 		cppdialect "C++20"
 		systemversion "latest"
-		staticruntime "On"
 		
 		buildoptions { "/utf-8" }
 		
@@ -70,21 +72,23 @@ project "PhanesEngine"
 		
 	filter "configurations:Debug"
 		defines "PN_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 	filter "configurations:Release"
 		defines "PN_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 	filter "configurations:Dist"
 		defines "PN_DIST"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 project "Game"
 	location "Game"
 	kind "ConsoleApp"
 	language "C++"
+	staticruntime "off"
+
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 	
@@ -119,13 +123,13 @@ project "Game"
 
 	filter "configurations:Debug"
 		defines "PN_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 	filter "configurations:Release"
 		defines "PN_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 	filter "configurations:Dist"
 		defines "PN_DIST"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
