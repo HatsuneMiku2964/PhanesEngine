@@ -49,6 +49,9 @@
     <ClInclude Include="src\Phanes\ImGui\ImGuiLayer.h">
       <Filter>Phanes\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\Phanes\Input.h">
+      <Filter>Phanes</Filter>
+    </ClInclude>
     <ClInclude Include="src\Phanes\Layer\Layer.h">
       <Filter>Phanes\Layer</Filter>
     </ClInclude>
@@ -63,6 +66,9 @@
     </ClInclude>
     <ClInclude Include="src\Platforms\OpenGL\ImGuiOpenGLRenderer.h">
       <Filter>Platforms\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platforms\Windows\WindowsInput.h">
+      <Filter>Platforms\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\Platforms\Windows\WindowsWindow.h">
       <Filter>Platforms\Windows</Filter>
@@ -87,6 +93,9 @@
     </ClCompile>
     <ClCompile Include="src\Platforms\OpenGL\ImGuiOpenGLRenderer.cpp">
       <Filter>Platforms\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platforms\Windows\WindowsInput.cpp">
+      <Filter>Platforms\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Platforms\Windows\WindowsWindow.cpp">
       <Filter>Platforms\Windows</Filter>

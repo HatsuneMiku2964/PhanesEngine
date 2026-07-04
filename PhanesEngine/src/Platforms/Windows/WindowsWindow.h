@@ -1,43 +1,45 @@
 #pragma once
 
-#include "Phanes/Window.h"
 #include "GLFW/glfw3.h"
+#include "Phanes/Window.h"
 
 namespace Phanes
 {
-	class WindowsWindow : public Window
-	{
-	public:
-		WindowsWindow(const WindowProps& props);
-		virtual ~WindowsWindow();
+    class WindowsWindow : public Window
+    {
+    public:
+        WindowsWindow(const WindowProps& props);
+        virtual ~WindowsWindow();
 
-		// main loop impl
-		void OnUpdate() override;
+        // main loop impl
+        void OnUpdate() override;
 
-		// util getters & impls
-		inline unsigned int GetWidth() const override { return data_.Width; }
-		inline unsigned int GetHeight() const override { return data_.Height; }
-		bool IsVSync() const override;
+        // util getters & impls
+        bool IsVSync() const override;
+        inline virtual void* GetNativeWindow() const override { return (void*)window_; }
+        inline unsigned int GetWidth() const override { return data_.Width; }
+        inline unsigned int GetHeight() const override { return data_.Height; }
 
-		// util setters & impls
-		inline void SetEventCallback(const EventCallbackFn& callback) override { data_.EventCallback = callback; }
-		void SetVSync(bool enabled) override;
+        // util setters & impls
+        void SetVSync(bool enabled) override;
+        inline void SetEventCallback(const EventCallbackFn& callback) override { data_.EventCallback = callback; }
 
-	private:
-		virtual void Init(const WindowProps& props);
-		virtual void Shutdown();
-	private:
-		GLFWwindow* window_;
+    private:
+        virtual void Init(const WindowProps& props);
+        virtual void Shutdown();
 
-		// main attribute set of the window
-		struct WindowData
-		{
-			std::string Title;
-			unsigned int Width, Height;
-			bool VSync;
-			EventCallbackFn EventCallback;
-		};
+    private:
+        GLFWwindow* window_;
 
-		WindowData data_;
-	};
+        // main attribute set of the window
+        struct WindowData
+        {
+            std::string Title;
+            unsigned int Width, Height;
+            bool VSync;
+            EventCallbackFn EventCallback;
+        };
+
+        WindowData data_;
+    };
 }
