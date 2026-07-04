@@ -13,13 +13,11 @@ namespace Phanes
 
     Application::Application()
     {
-        {
-            if (!!instance_) {
-                PN_CORE_LOG_ERROR("Assertion Failed: {0}",
-                                  "Application already exists!");
-                __debugbreak();
-            }
-        };
+        if (instance_) {
+            PN_CORE_LOG_ERROR("Assertion Failed: {0}", "Application already exists!");
+            __debugbreak();
+        }
+
         instance_ = this;
 
         window_ = std::unique_ptr<Window>(Window::Create());
@@ -27,10 +25,11 @@ namespace Phanes
     }
 
     Application::~Application() {}
+
     void Application::Run()
     {
         while (running_) {
-            glClearColor(0, 0.5, 0.9, 1);
+            glClearColor(0.f, 0.5f, 0.9f, 1.f);
             glClear(GL_COLOR_BUFFER_BIT);
 
             for (Layer* layer : layerStack_) layer->OnUpdate();
@@ -44,7 +43,7 @@ namespace Phanes
     {
         EventDispatcher dispatcher(e);
 
-        // won't do anything if it's not a WindowCloseEvent
+        // TIP: won't do anything if it's not a WindowCloseEvent
         dispatcher.Dispatch<WindowCloseEvent>(
             BIND_EVENT_FN(Application::OnWindowClose));
 
@@ -52,8 +51,7 @@ namespace Phanes
 
         for (auto it = layerStack_.end(); it != layerStack_.begin();) {
             (*--it)->OnEvent(e);
-            if (e.Handled_)
-                break;
+            if (e.Handled_) break;
         }
     }
     bool Application::OnWindowClose(WindowCloseEvent& e)
@@ -61,4 +59,4 @@ namespace Phanes
         running_ = false;
         return true;
     }
-} // namespace Phanes
+}

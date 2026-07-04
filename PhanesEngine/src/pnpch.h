@@ -19,3 +19,6 @@
     #include <Windows.h>
 #endif
 
+#ifdef _MSC_VER
+    #pragma warning(disable : 4251) // make error C4251 shut up
+#endif

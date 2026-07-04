@@ -36,29 +36,25 @@ namespace Phanes
         return (static_cast<int>(flags) & static_cast<int>(category)) != 0;
     }
 
-// macros for u to impl Phanes::Event in your event class FASTER, u can use this macro to impl the GetEventType(), GetName() and GetCategoryFlags() function
-#define IMPL_EVENT_TYPE(type)      static EventTypes GetStaticType() { return EventTypes::##type; }\
-                                   virtual EventTypes GetEventType() const override { return GetStaticType(); }\
-                                   virtual const char* GetName() const override { return #type; }
-#define IMPL_EVENT_CATEGORY(category)  virtual int GetCategoryFlags() const override { return static_cast<int>(category); }
+// impl functions of interface Phanes::Event
+#define IMPL_EVENT_TYPE(type)           static EventTypes GetStaticType() { return EventTypes::##type; }\
+                                        virtual EventTypes GetEventType() const override { return GetStaticType(); }\
+                                        virtual const char* GetName() const override { return #type; }
+#define IMPL_EVENT_CATEGORY(category)   virtual int GetCategoryFlags() const override { return static_cast<int>(category); }
 // ~macros
 
     class PN_API Event
     {
     public:
-        // pure virtual functions, must be implemented by derived classes
         virtual EventTypes GetEventType() const = 0;
         virtual const char* GetName() const = 0;
         virtual int GetCategoryFlags() const = 0;
 
         // mainly for debug
-        virtual std::string ToString() const {
-            return GetName();
-        }
+        virtual std::string ToString() const { return GetName(); }
+
         //utility function to check if the event is in a category
-        inline bool IsInCategory(EventCategories category) const {
-            return GetCategoryFlags() & static_cast<int>(category);
-        }
+        inline bool IsInCategory(EventCategories category) const { return GetCategoryFlags() & static_cast<int>(category); }
 
         bool Handled_ = false;
     };
@@ -82,7 +78,5 @@ namespace Phanes
         Event& event_;
     };
 
-    inline std::ostream& operator<<(std::ostream& o, const Event& e) {
-        return o << e.ToString();
-    }
+    inline std::ostream& operator<<(std::ostream& o, const Event& e) { return o << e.ToString(); }
 }

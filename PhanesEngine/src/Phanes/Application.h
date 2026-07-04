@@ -28,12 +28,8 @@ namespace Phanes
             overlay->OnAttach();
         }
 
-        inline static Application& Get() {
-            return *instance_;
-        }
-        inline Window& GetWindow() {
-            return *window_;
-        }
+        inline static Application& Get() { return *instance_; }
+        inline Window& GetWindow() { return *window_; }
 
     private:
         std::unique_ptr<Window> window_;
@@ -42,6 +38,6 @@ namespace Phanes
         static Application* instance_;
     };
 
-    // Will be defined by clients
+    // TIP: Will be defined by clients
     Application* CreateApplication();
-} // namespace Phanes
+}
