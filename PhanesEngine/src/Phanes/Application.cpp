@@ -35,19 +35,19 @@ namespace Phanes
             for (Layer* layer : layerStack_) layer->OnUpdate();
             window_->OnUpdate();
 
-            auto [x, y] = Input::GetMousePos();
-            PN_CORE_LOG_TRACE("{0}, {1}", x, y);
+            // auto [x, y] = Input::GetMousePos();
+            // PN_CORE_LOG_TRACE("{0}, {1}", x, y);
         }
     }
     void Application::OnEvent(Event& e)
     {
+        // PN_CORE_LOG_TRACE("{0}", e.ToString());
+
         EventDispatcher dispatcher(e);
 
         // TIP: won't do anything if it's not a WindowCloseEvent
         dispatcher.Dispatch<WindowCloseEvent>(
             BIND_EVENT_FN(Application::OnWindowClose));
-
-        PN_CORE_LOG_TRACE("{0}", e.ToString());
 
         for (auto it = layerStack_.end(); it != layerStack_.begin();) {
             (*--it)->OnEvent(e);

@@ -15,5 +15,7 @@ namespace Phanes
 
         clientLogger_ = spdlog::stdout_color_mt("APP");
         clientLogger_->set_level(spdlog::level::trace);
+
+        PN_CORE_LOG_INFO("Log initialized successfully");
     }
 }

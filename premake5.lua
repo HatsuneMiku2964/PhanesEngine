@@ -10,6 +10,7 @@ IncludeDirs = {}
 IncludeDirs["GLFW"] = "PhanesEngine/vendor/GLFW/include"
 IncludeDirs["Glad"] = "PhanesEngine/vendor/Glad/include"
 IncludeDirs["ImGui"] = "PhanesEngine/vendor/imgui"
+IncludeDirs["glm"] = "PhanesEngine/vendor/glm"
 
 group "Dependencies"
     include "PhanesEngine/vendor/GLFW"
@@ -35,6 +36,8 @@ project "PhanesEngine"
     {
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
+        "%{prj.name}/vendor/glm/glm/**.hpp",
+        "%{prj.name}/vendor/glm/glm/**.inl",
     }
     
     includedirs
@@ -44,6 +47,7 @@ project "PhanesEngine"
         "%{IncludeDirs.GLFW}",
         "%{IncludeDirs.Glad}",
         "%{IncludeDirs.ImGui}",
+        "%{IncludeDirs.glm}",
     }
 
     links 
@@ -105,6 +109,7 @@ project "Game"
     {
         "PhanesEngine/vendor/spdlog/include",
         "PhanesEngine/src",
+        "%{IncludeDirs.glm}",
     }
 
     links
