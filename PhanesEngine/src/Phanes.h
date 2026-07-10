@@ -3,17 +3,17 @@
 // For the applications
 
 // from the engine
-#include "Phanes/Application.h"
-#include "Phanes/Layer/Layer.h"
+#include "Phanes/App/Application.h"
+#include "Phanes/Layer/Layer.h"c
 #include "Phanes/Input.h"
-#include "Phanes/Log.h"
+#include "Phanes/Log/Log.h"
 
 // keycodes
-#include "Phanes/KeyCodes.h"
-#include "Phanes/MouseButtons.h"
+#include "Phanes/KeyCodes/KeyCodes.h"
+#include "Phanes/KeyCodes/MouseButtons.h"
 
 // dependencies
 #include "Phanes/ImGui/ImGuiLayer.h"
 
-// the entry point (int main())
+// the entry point ( int main() )
 #include "Phanes/Entry.h"

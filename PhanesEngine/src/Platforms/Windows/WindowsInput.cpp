@@ -3,7 +3,7 @@
 
 #include <GLFW/glfw3.h>
 
-#include "Phanes/Application.h"
+#include "Phanes/App/Application.h"
 
 namespace Phanes
 {

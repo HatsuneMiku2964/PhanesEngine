@@ -4,7 +4,7 @@
 #include "imgui.h"
 #include "Platforms/OpenGL/ImGuiOpenGLRenderer.h"
 #include "GLFW/glfw3.h"
-#include "Phanes/Application.h"
+#include "Phanes/App/Application.h"
 
 #include <glad/glad.h>
 

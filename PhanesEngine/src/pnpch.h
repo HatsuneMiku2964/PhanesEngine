@@ -13,7 +13,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "Phanes/Log.h"
+#include "Phanes/Log/Log.h"
 
 #ifdef PN_PLATFORMS_WINDOWS
     #include <Windows.h>

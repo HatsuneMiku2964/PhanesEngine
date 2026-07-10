@@ -3,7 +3,7 @@
 
 #include <glad/glad.h>
 
-#include "Input.h"
+#include "Phanes/Input.h"
 
 namespace Phanes
 {

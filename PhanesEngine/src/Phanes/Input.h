@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 namespace Phanes {
+    // TIP: singleton
     class PN_API Input
     {
     public:
