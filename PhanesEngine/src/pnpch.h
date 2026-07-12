@@ -4,7 +4,7 @@
 #include <string>
 #include <sstream>
 
-#include<functional>
+#include <functional>
 #include <memory>
 #include <utility>
 #include <algorithm>

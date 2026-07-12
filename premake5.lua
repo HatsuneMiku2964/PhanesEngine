@@ -74,7 +74,7 @@ project "PhanesEngine"
 
         postbuildcommands
         {
-            ("{COPYFILE} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Game/\""),
+            ("{COPYFILE} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Game\""),
         }
         
     filter "configurations:Debug"

@@ -4,11 +4,10 @@
 #include <glad/glad.h>
 
 #include "Phanes/Input.h"
+#include "Phanes/Events/Dispatch/EventsDispatch.h"
 
 namespace Phanes
 {
-    #define BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
-
     Application* Application::instance_ = nullptr;
 
     Application::Application()
@@ -51,7 +50,7 @@ namespace Phanes
 
         for (auto it = layerStack_.end(); it != layerStack_.begin();) {
             (*--it)->OnEvent(e);
-            if (e.Handled_) break;
+            if (e.Handled) break;
         }
     }
     bool Application::OnWindowClose(WindowCloseEvent& e)

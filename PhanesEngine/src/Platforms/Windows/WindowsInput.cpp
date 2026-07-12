@@ -8,7 +8,7 @@
 namespace Phanes
 {
     Input* Input::instance_ = new WindowsInput();
-
+    
     bool WindowsInput::IsKeyPressed_Impl(int keycode)
     {
         GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());

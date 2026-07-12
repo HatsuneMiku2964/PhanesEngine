@@ -2,6 +2,8 @@
 
 #include "Phanes/Core.h"
 
+#include <ostream>
+
 namespace Phanes
 {
     enum class EventTypes
@@ -12,7 +14,6 @@ namespace Phanes
         KeyPressed, KeyReleased, KeyTyped,
         MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
     };
-
     enum class EventCategories : int
     {
         None = 0,
@@ -21,6 +22,7 @@ namespace Phanes
         Keyboard = BIT_PUSH(2),
         Mouse = BIT_PUSH(3),
     };
+
     // bitwise operators for EventCategories, so we can combine them using bitwise operations
     inline EventCategories operator|(EventCategories a, EventCategories b) {
         return static_cast<EventCategories>(static_cast<int>(a) | static_cast<int>(b));
@@ -29,8 +31,7 @@ namespace Phanes
         return static_cast<EventCategories>(static_cast<int>(a) & static_cast<int>(b));
     }
     inline EventCategories& operator|=(EventCategories& a, EventCategories b) {
-        a = a | b;
-        return a;
+        a |= b; return a;
     }
     inline bool HasCategory(EventCategories flags, EventCategories category) {
         return (static_cast<int>(flags) & static_cast<int>(category)) != 0;
@@ -56,27 +57,9 @@ namespace Phanes
         //utility function to check if the event is in a category
         inline bool IsInCategory(EventCategories category) const { return GetCategoryFlags() & static_cast<int>(category); }
 
-        bool Handled_ = false;
+        bool Handled = false;
     };
 
-    class EventDispatcher
-    {
-        template<typename T>
-        using EventFunc = std::function<bool(T&)>;
-    public:
-        EventDispatcher(Event& event) : event_(event) {}
-
-        template<typename T>
-        bool Dispatch(EventFunc<T> func) {
-            if (event_.GetEventType() == T::GetStaticType()) {
-                event_.Handled_ = func(*(T*)&event_);
-                return true;
-            }
-            return false;
-        }
-    private:
-        Event& event_;
-    };
-
-    inline std::ostream& operator<<(std::ostream& o, const Event& e) { return o << e.ToString(); }
+    // the way to print a event
+    inline std::ostream& operator<<(std::ostream& os, const Event& e) { return os << e.ToString(); }
 }

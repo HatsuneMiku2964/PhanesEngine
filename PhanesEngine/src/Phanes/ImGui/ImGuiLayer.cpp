@@ -1,17 +1,18 @@
-#include "pnpch.h"
+﻿#include "pnpch.h"
 #include "ImGuiLayer.h"
 
-#include "imgui.h"
-#include "Platforms/OpenGL/ImGuiOpenGLRenderer.h"
-#include "GLFW/glfw3.h"
-#include "Phanes/App/Application.h"
-
+#include <GLFW/glfw3.h>
+#include <imgui.h>
 #include <glad/glad.h>
+
+#include "Phanes/App/Application.h"
+#include "Phanes/Events/Dispatch/EventsDispatch.h"
+#include "Platforms/OpenGL/ImGuiOpenGLRenderer.h"
+
 
 namespace Phanes
 {
-    ImGuiLayer::ImGuiLayer()
-        : Layer("ImGuiLayer") {}
+    ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer") {}
     ImGuiLayer::~ImGuiLayer() {}
 
     void ImGuiLayer::OnAttach() {
@@ -25,9 +26,7 @@ namespace Phanes
         ImGui_ImplOpenGL3_Init("#version 410");
     }
 
-    void ImGuiLayer::OnDetach() {
-
-    }
+    void ImGuiLayer::OnDetach() {}
 
     void ImGuiLayer::OnUpdate() {
         ImGuiIO& io = ImGui::GetIO();
@@ -49,17 +48,20 @@ namespace Phanes
     }
 
     void ImGuiLayer::OnEvent(Event& e) {
-        EventDispatcher dispatcher(e);
-        dispatcher.Dispatch<MouseButtonPressedEvent>(BIND_EVENT_FN(ImGuiLayer::OnMouseButtonPressedEvent));
-        dispatcher.Dispatch<MouseButtonReleasedEvent>(BIND_EVENT_FN(ImGuiLayer::OnMouseButtonReleasedEvent));
-        dispatcher.Dispatch<MouseMovedEvent>(BIND_EVENT_FN(ImGuiLayer::OnMouseMovedEvent));
-        dispatcher.Dispatch<MouseScrolledEvent>(BIND_EVENT_FN(ImGuiLayer::OnMouseScrolledEvent));
-        dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(ImGuiLayer::OnKeyPressedEvent));
-        dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(ImGuiLayer::OnKeyReleasedEvent));
-        dispatcher.Dispatch<KeyTypedEvent>(BIND_EVENT_FN(ImGuiLayer::OnKeyTypedEvent));
-        dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(ImGuiLayer::OnWindowResizeEvent));
+        EventBox eventbox = PackEvent(e);
+        std::visit(EventDispatchOverload{
+            [&e](std::monostate) { PN_CORE_LOG_WARN("Invalid event type dispatched: {0} event", e.GetName()); return false; },
+            [this](MouseButtonPressedEvent& ev) { return OnMouseButtonPressedEvent(ev); },
+            [this](MouseButtonReleasedEvent& ev) { return OnMouseButtonReleasedEvent(ev); },
+            [this](MouseMovedEvent& ev) { return OnMouseMovedEvent(ev); },
+            [this](MouseScrolledEvent& ev) { return OnMouseScrolledEvent(ev); },
+            [this](KeyPressedEvent& ev) { return OnKeyPressedEvent(ev); },
+            [this](KeyReleasedEvent& ev) { return OnKeyReleasedEvent(ev); },
+            [this](KeyTypedEvent& ev) { return OnKeyTypedEvent(ev); },
+            [this](WindowResizeEvent& ev) { return OnWindowResizeEvent(ev); } }
+        , eventbox);
     }
-
+    
     bool ImGuiLayer::OnMouseButtonPressedEvent(MouseButtonPressedEvent& e) {
         ImGuiIO& io = ImGui::GetIO();
         io.MouseDown[e.GetButtonCode()] = true;
@@ -89,7 +91,7 @@ namespace Phanes
         io.KeyCtrl = io.KeysData[GLFW_KEY_LEFT_CONTROL].Down || io.KeysData[GLFW_KEY_RIGHT_CONTROL].Down;
         io.KeyShift = io.KeysData[GLFW_KEY_LEFT_SHIFT].Down || io.KeysData[GLFW_KEY_RIGHT_SHIFT].Down;
         io.KeySuper = io.KeysData[GLFW_KEY_LEFT_SUPER].Down || io.KeysData[GLFW_KEY_RIGHT_SUPER].Down;
-
+        
         return false;
     }
     bool ImGuiLayer::OnKeyReleasedEvent(KeyReleasedEvent& e) {
@@ -100,7 +102,7 @@ namespace Phanes
         io.KeyCtrl = io.KeysData[GLFW_KEY_LEFT_CONTROL].Down || io.KeysData[GLFW_KEY_RIGHT_CONTROL].Down;
         io.KeyShift = io.KeysData[GLFW_KEY_LEFT_SHIFT].Down || io.KeysData[GLFW_KEY_RIGHT_SHIFT].Down;
         io.KeySuper = io.KeysData[GLFW_KEY_LEFT_SUPER].Down || io.KeysData[GLFW_KEY_RIGHT_SUPER].Down;
-
+    
         return false;
     }
     bool ImGuiLayer::OnKeyTypedEvent(KeyTypedEvent& e) {
@@ -116,7 +118,6 @@ namespace Phanes
         io.DisplaySize = ImVec2((float) e.GetWidth(), (float) e.GetHeight());
         io.DisplayFramebufferScale = ImVec2(1.f, 1.f);
         glViewport(0, 0, e.GetWidth(), e.GetHeight());
-
         return false;
     }
 }
