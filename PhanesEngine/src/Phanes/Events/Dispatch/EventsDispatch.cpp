@@ -13,6 +13,7 @@ namespace Phanes {
             case EventTypes::KeyReleased:          return static_cast<KeyReleasedEvent&>(e);
             case EventTypes::KeyTyped:             return static_cast<KeyTypedEvent&>(e);
             case EventTypes::WindowResize:         return static_cast<WindowResizeEvent&>(e);
+            case EventTypes::WindowClose:          return static_cast<WindowCloseEvent&>(e);
         default: return std::monostate{}; }
 	}
 }

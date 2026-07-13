@@ -18,7 +18,7 @@ namespace Phanes
         void Run();
         void OnEvent(Event& e);
 
-        bool OnWindowClose(WindowCloseEvent& e);
+        bool OnWindowClose(const WindowCloseEvent& e);
 
         void PushLayer(Layer* layer) {
             layerStack_.PushLayer(layer);

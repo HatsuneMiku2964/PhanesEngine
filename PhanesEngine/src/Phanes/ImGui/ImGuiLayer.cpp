@@ -48,9 +48,8 @@ namespace Phanes
     }
 
     void ImGuiLayer::OnEvent(Event& e) {
-        EventBox eventbox = PackEvent(e);
-        std::visit(EventDispatchOverload{
-            [&e](std::monostate) { PN_CORE_LOG_WARN("Invalid event type dispatched: {0} event", e.GetName()); return false; },
+        EventDispatcher dispatcher(e);
+        dispatcher.Dispatch(
             [this](MouseButtonPressedEvent& ev) { return OnMouseButtonPressedEvent(ev); },
             [this](MouseButtonReleasedEvent& ev) { return OnMouseButtonReleasedEvent(ev); },
             [this](MouseMovedEvent& ev) { return OnMouseMovedEvent(ev); },
@@ -58,8 +57,8 @@ namespace Phanes
             [this](KeyPressedEvent& ev) { return OnKeyPressedEvent(ev); },
             [this](KeyReleasedEvent& ev) { return OnKeyReleasedEvent(ev); },
             [this](KeyTypedEvent& ev) { return OnKeyTypedEvent(ev); },
-            [this](WindowResizeEvent& ev) { return OnWindowResizeEvent(ev); } }
-        , eventbox);
+            [this](WindowResizeEvent& ev) { return OnWindowResizeEvent(ev); }
+        );
     }
     
     bool ImGuiLayer::OnMouseButtonPressedEvent(MouseButtonPressedEvent& e) {

@@ -44,16 +44,14 @@ namespace Phanes
 
         EventDispatcher dispatcher(e);
 
-        // TIP: won't do anything if it's not a WindowCloseEvent
-        dispatcher.Dispatch<WindowCloseEvent>(
-            BIND_EVENT_FN(Application::OnWindowClose));
+        dispatcher.Dispatch([this](const WindowCloseEvent& ev) { return OnWindowClose(ev); });
 
         for (auto it = layerStack_.end(); it != layerStack_.begin();) {
             (*--it)->OnEvent(e);
             if (e.Handled) break;
         }
     }
-    bool Application::OnWindowClose(WindowCloseEvent& e)
+    bool Application::OnWindowClose(const WindowCloseEvent& e)
     {
         running_ = false;
         return true;

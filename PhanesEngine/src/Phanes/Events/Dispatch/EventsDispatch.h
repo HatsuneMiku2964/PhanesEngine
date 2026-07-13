@@ -1,6 +1,7 @@
 #pragma once
 
 #include <variant>
+#include <utility>c
 
 #include "Phanes/Events/Events.h"
 #include "Phanes/Events/AppEvents.h"
@@ -31,7 +32,7 @@ namespace Phanes {
         std::monostate,
         MouseButtonPressedEvent, MouseButtonReleasedEvent, MouseMovedEvent,
         MouseScrolledEvent, KeyPressedEvent, KeyReleasedEvent, KeyTypedEvent,
-        WindowResizeEvent
+        WindowResizeEvent, WindowCloseEvent
     >;
     EventBox PackEvent(Event& e);
 
@@ -45,12 +46,34 @@ namespace Phanes {
         
         template<typename T>
         bool Dispatch(EventFunc<T> func) {
+            PN_CORE_LOG_WARN("Legacy func used: EventDispatcher::Dispatch(EventFunc<T> func) in {0}", __FILE__);
             if (event_.GetEventType() == T::GetStaticType()) {
                 event_.Handled = func(*(T*)&event_);
                 return true;
             }
             return false;
         }
+
+        template<typename... Args>
+        bool Dispatch(Args&&... args) {
+            EventBox eventbox_ = PackEvent(event_);
+
+            EventDispatchOverload overload {
+                std::forward<Args>(args)...,                   // pack all callbacks using perfect forwarding
+
+                [](const auto& otherEvent) { return false; },  // handle arbitary EVENT type
+                [this](std::monostate) {                       // handle arbitary type
+                    PN_CORE_LOG_WARN("Invalid event type dispatched: {0} event", 
+                        event_.GetName());
+                    return false;
+                }
+            };
+
+            bool success = std::visit(overload, eventbox_);
+            if (success) event_.Handled = true;
+            return success;
+        }
+
     private:
         Event& event_;
     };
