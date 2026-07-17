@@ -43,7 +43,7 @@ namespace Phanes
         // PN_CORE_LOG_TRACE("{0}", e.ToString());
 
         EventDispatcher dispatcher(e);
-
+        
         dispatcher.Dispatch([this](const WindowCloseEvent& ev) { return OnWindowClose(ev); });
 
         for (auto it = layerStack_.end(); it != layerStack_.begin();) {
