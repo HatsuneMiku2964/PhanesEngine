@@ -9,7 +9,7 @@ namespace Phanes
     {
     public:
         WindowsWindow(const WindowProps& props);
-        virtual ~WindowsWindow();
+        ~WindowsWindow() override;
 
         // main loop impl
         void OnUpdate() override;
@@ -31,7 +31,7 @@ namespace Phanes
     private:
         GLFWwindow* window_;
 
-        // main attribute set of the window
+        // main attributes of the window
         struct WindowData
         {
             std::string Title;

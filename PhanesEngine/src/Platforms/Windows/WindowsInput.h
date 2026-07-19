@@ -13,8 +13,5 @@ namespace Phanes
         virtual std::pair<float, float> GetMousePos_Impl() override;
         virtual bool IsKeyPressed_Impl(int keycode) override;
         virtual bool IsMouseButtonPressed_Impl(int button) override;
-
-    private:
-
     };
 }

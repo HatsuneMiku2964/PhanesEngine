@@ -38,7 +38,7 @@ namespace Phanes
         data_.Height = props.Height;
         data_.Title = props.Title;
 
-        PN_CORE_LOG_INFO("Creating window: Title: {0}, ({1}, {2})", props.Title, props.Width, props.Height);
+        PN_CORE_LOG_INFO("Creating window: Title: {0}, size = {1}px * {2}px", props.Title, props.Width, props.Height);
 
         if (!GLFWInitialized) {
             int success = glfwInit();
@@ -128,5 +128,5 @@ namespace Phanes
         // ~Set GLFW callbacks
     }
 
-    void WindowsWindow::Shutdown() { glfwDestroyWindow(window_); }
+    void WindowsWindow::Shutdown() { glfwDestroyWindow(window_); PN_CORE_LOG_INFO("window distroyed"); }
 };

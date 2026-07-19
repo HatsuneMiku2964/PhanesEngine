@@ -1,9 +1,5 @@
 #pragma once
 
-#include "Phanes/Core.h"
-
-#include <ostream>
-
 namespace Phanes
 {
     enum class EventTypes
@@ -24,29 +20,35 @@ namespace Phanes
     };
 
     // bitwise operators for EventCategories, so we can combine them using bitwise operations
-    inline EventCategories operator|(EventCategories a, EventCategories b) {
+    inline EventCategories operator|(EventCategories a, EventCategories b)
+    {
         return static_cast<EventCategories>(static_cast<int>(a) | static_cast<int>(b));
     }
-    inline EventCategories operator&(EventCategories a, EventCategories b) {
+    inline EventCategories operator&(EventCategories a, EventCategories b)
+    {
         return static_cast<EventCategories>(static_cast<int>(a) & static_cast<int>(b));
     }
-    inline EventCategories& operator|=(EventCategories& a, EventCategories b) {
+    inline EventCategories& operator|=(EventCategories& a, EventCategories b)
+    {
         a |= b; return a;
     }
-    inline bool HasCategory(EventCategories flags, EventCategories category) {
+    inline bool HasCategory(EventCategories flags, EventCategories category)
+    {
         return (static_cast<int>(flags) & static_cast<int>(category)) != 0;
     }
 
-// impl functions of interface Phanes::Event
-#define IMPL_EVENT_TYPE(type)           static EventTypes GetStaticType() { return EventTypes::##type; }\
-                                        virtual EventTypes GetEventType() const override { return GetStaticType(); }\
-                                        virtual const char* GetName() const override { return #type; }
-#define IMPL_EVENT_CATEGORY(category)   virtual int GetCategoryFlags() const override { return static_cast<int>(category); }
-// ~macros
+    // impl functions of interface Phanes::Event
+    #define IMPL_EVENT_TYPE(type)           static EventTypes GetStaticType() { return EventTypes::##type; }\
+                                            virtual EventTypes GetEventType() const override { return GetStaticType(); }\
+                                            const char* GetName() const override { return #type; }
+
+    #define IMPL_EVENT_CATEGORY(category)   virtual int GetCategoryFlags() const override { return static_cast<int>(category); }
+    // ~macros
 
     class PN_API Event
     {
     public:
+        virtual ~Event() = default;
         virtual EventTypes GetEventType() const = 0;
         virtual const char* GetName() const = 0;
         virtual int GetCategoryFlags() const = 0;
@@ -60,6 +62,5 @@ namespace Phanes
         bool Handled = false;
     };
 
-    // the way to print a event
     inline std::ostream& operator<<(std::ostream& os, const Event& e) { return os << e.ToString(); }
 }

@@ -3,7 +3,6 @@
 
 #include <glad/glad.h>
 
-#include "Phanes/Input.h"
 #include "Phanes/Events/Dispatch/EventsDispatch.h"
 
 namespace Phanes
@@ -13,7 +12,7 @@ namespace Phanes
     Application::Application()
     {
         if (instance_) {
-            PN_CORE_LOG_ERROR("Assertion Failed: {0}", "Application already exists!");
+            PN_CORE_LOG_ERROR("Assertion Failed: Application already exists!");
             __debugbreak();
         }
 
@@ -21,9 +20,12 @@ namespace Phanes
 
         window_ = std::unique_ptr<Window>(Window::Create());
         window_->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+
+        imgui_layer = new ImGuiLayer();
+        PushOverlay(imgui_layer);
     }
 
-    Application::~Application() {}
+    Application::~Application() { PN_CORE_LOG_INFO("Phanes Engine is closed"); }
 
     void Application::Run()
     {
@@ -32,8 +34,12 @@ namespace Phanes
             glClear(GL_COLOR_BUFFER_BIT);
 
             for (Layer* layer : layerStack_) layer->OnUpdate();
-            window_->OnUpdate();
 
+            imgui_layer->Begin();
+            for (Layer* layer : layerStack_) layer->OnImGuiRender();
+            imgui_layer->End();
+
+            window_->OnUpdate();
             // auto [x, y] = Input::GetMousePos();
             // PN_CORE_LOG_TRACE("{0}, {1}", x, y);
         }
@@ -43,8 +49,8 @@ namespace Phanes
         // PN_CORE_LOG_TRACE("{0}", e.ToString());
 
         EventDispatcher dispatcher(e);
-        
-        dispatcher.Dispatch([this](const WindowCloseEvent& ev) { return OnWindowClose(ev); });
+
+        e.Handled = dispatcher.Dispatch([this](const WindowCloseEvent& ev) { return OnWindowClose(ev); });
 
         for (auto it = layerStack_.end(); it != layerStack_.begin();) {
             (*--it)->OnEvent(e);

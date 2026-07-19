@@ -109,6 +109,7 @@ project "Game"
     {
         "PhanesEngine/vendor/spdlog/include",
         "PhanesEngine/src",
+        "PhanesEngine/vendor",
         "%{IncludeDirs.glm}",
     }
 

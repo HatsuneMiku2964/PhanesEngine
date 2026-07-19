@@ -1,6 +1,7 @@
 #pragma once
 
 #ifdef PN_PLATFORMS_WINDOWS
+    // INFO: Will be defined by clients
     extern Phanes::Application* Phanes::CreateApplication();
 
     int main(int argc, char** argv)

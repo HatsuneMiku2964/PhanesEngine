@@ -1,36 +1,17 @@
 #include "pnpch.h"
 
 #include <Phanes.h>
-#include "Phanes/Layer/Layer.h"
+#include <imgui/imgui.h>
 
-class SampleLayer : public Phanes::Layer
-{
-public:
-    void OnUpdate() override
-    {
-        //if (Phanes::Input::IsKeyPressed(PN_KEY_TAB))
-        //    PN_CORE_LOG_TRACE("{0}", "tab is pressed!");
-    }
-};
+#include "Phanes/Layer/Layer.h"
 
 class Sandbox : public Phanes::Application
 {
 public:
-    Sandbox()
-    {
-        PushLayer(new SampleLayer());
-        PushOverlay(new Phanes::ImGuiLayer());
-    }
-    ~Sandbox()
-    {
-
-    }
+    Sandbox() { PushLayer(new Phanes::Layer()); }
 };
 
 namespace Phanes
 {
-    Application* Phanes::CreateApplication()
-    {
-        return new Sandbox();
-    }
+    Application* Phanes::CreateApplication() { return new Sandbox(); }
 }

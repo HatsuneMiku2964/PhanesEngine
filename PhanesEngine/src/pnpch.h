@@ -14,6 +14,7 @@
 #include <unordered_set>
 
 #include "Phanes/Log/Log.h"
+#include "Phanes/Core.h"
 
 #ifdef PN_PLATFORMS_WINDOWS
     #include <Windows.h>

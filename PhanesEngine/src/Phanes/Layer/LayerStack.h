@@ -1,25 +1,26 @@
 #pragma once
 
-#include "Phanes/Core.h"
 #include "Layer.h"
 
-namespace Phanes {
-	class LayerStack
-	{
-	public:
-		LayerStack();
-		~LayerStack();
+namespace Phanes
+{
+    class LayerStack
+    {
+    public:
+        LayerStack() : Idx_(0) {}
+        ~LayerStack();
+        
+        void PushLayer(Layer* layer);
+        void PushOverlay(Layer* overlay);
+        void PopLayer(Layer* layer);
+        void PopOverlay(Layer* overlay);
 
-		void PushLayer(Layer* layer);
-		void PushOverlay(Layer* overlay);
-		void PopLayer(Layer* layer);
-		void PopOverlay(Layer* overlay);
+        std::vector<Layer*>::iterator begin() { return Lys_.begin(); }
+        std::vector<Layer*>::iterator end() { return Lys_.end(); }
 
-		std::vector<Layer*>::iterator begin() { return Layers_.begin(); }
-		std::vector<Layer*>::iterator end() { return Layers_.end(); }
-
-	protected:
-		std::vector<Layer*> Layers_;
-		std::vector<Layer*>::iterator LayerInsert_;
-	};
+    protected:
+        std::vector<Layer*> Lys_;	// the actual stack
+        unsigned int Idx_;			/* INFO: the index of the last layer (not overlays, the first half),
+                                            this is to make sure that layers & overlays are inserted properly */
+    };
 }
