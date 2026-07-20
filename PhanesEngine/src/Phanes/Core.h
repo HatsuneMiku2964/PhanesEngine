@@ -2,10 +2,14 @@
 
 // API
 #ifdef PN_PLATFORMS_WINDOWS
-    #ifdef PN_BUILD_DLL
-#define PN_API __declspec(dllexport)
+    #if PN_DY_LKN
+        #ifdef PN_BUILD_DLL
+            #define PN_API __declspec(dllexport)
+        #else
+            #define PN_API __declspec(dllimport)
+        #endif
     #else
-#define PN_API __declspec(dllimport)
+        #define PN_API
     #endif
 #else
     #error Phanes Engine only supports Windows!

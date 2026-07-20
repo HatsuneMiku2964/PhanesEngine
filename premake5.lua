@@ -22,9 +22,9 @@ group ""
 
 project "PhanesEngine"
     location "PhanesEngine"
-    kind "SharedLib"
+    kind "StaticLib"
     language "C++"
-    staticruntime "off"
+    staticruntime "on"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -72,29 +72,24 @@ project "PhanesEngine"
             "GLFW_INCLUDE_NONE",
         }
 
-        postbuildcommands
-        {
-            ("{COPYFILE} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Game\""),
-        }
-        
     filter "configurations:Debug"
         defines "PN_DEBUG"
         runtime "Debug"
-        symbols "On"
+        symbols "on"
     filter "configurations:Release"
         defines "PN_RELEASE"
         runtime "Release"
-        optimize "On"
+        optimize "on"
     filter "configurations:Dist"
         defines "PN_DIST"
         runtime "Release"
-        optimize "On"
+        optimize "on"
 
 project "Game"
     location "Game"
     kind "ConsoleApp"
     language "C++"
-    staticruntime "off"
+    staticruntime "on"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")

@@ -3,7 +3,7 @@
 
 #include <glad/glad.h>
 
-#include "Phanes/Events/Dispatch/EventsDispatch.h"
+#include "Phanes/Events/EventsDispatch.h"
 
 namespace Phanes
 {
@@ -30,7 +30,7 @@ namespace Phanes
     void Application::Run()
     {
         while (running_) {
-            glClearColor(0.f, 0.5f, 0.9f, 1.f);
+            glClearColor(0.4f, 0.55f, 0.9f, 1.f);
             glClear(GL_COLOR_BUFFER_BIT);
 
             for (Layer* layer : layerStack_) layer->OnUpdate();
@@ -50,14 +50,15 @@ namespace Phanes
 
         EventDispatcher dispatcher(e);
 
-        e.Handled = dispatcher.Dispatch([this](const WindowCloseEvent& ev) { return OnWindowClose(ev); });
+        // Info: won't do anything if e is not a WindowCloseEvent
+        e.Handled = dispatcher.Dispatch([this](WindowCloseEvent& ev) { return OnWindowClose(ev); });
 
         for (auto it = layerStack_.end(); it != layerStack_.begin();) {
             (*--it)->OnEvent(e);
             if (e.Handled) break;
         }
     }
-    bool Application::OnWindowClose(const WindowCloseEvent& e)
+    bool Application::OnWindowClose(WindowCloseEvent& e)
     {
         running_ = false;
         return true;

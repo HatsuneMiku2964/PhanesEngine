@@ -19,7 +19,7 @@ namespace Phanes
         void Run();
         void OnEvent(Event& e);
 
-        bool OnWindowClose(const WindowCloseEvent& e);
+        bool OnWindowClose(WindowCloseEvent& e);
 
         void PushLayer(Layer* layer) { layerStack_.PushLayer(layer); }
         void PushOverlay(Layer* overlay) { layerStack_.PushOverlay(overlay); }
@@ -29,9 +29,11 @@ namespace Phanes
 
     private:
         bool running_ = true;
+
         LayerStack layerStack_;
-        std::unique_ptr<Window> window_;
         ImGuiLayer* imgui_layer;
+
+        std::unique_ptr<Window> window_;
 
         static Application* instance_;
     };

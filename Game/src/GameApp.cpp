@@ -4,11 +4,22 @@
 #include <imgui/imgui.h>
 
 #include "Phanes/Layer/Layer.h"
+#include "Phanes/Events/Events.h"
+
+class SampleLayer : public Phanes::Layer
+{
+public:
+    void OnEvent(Phanes::Event& event) override
+    {
+
+    }
+};
+
 
 class Sandbox : public Phanes::Application
 {
 public:
-    Sandbox() { PushLayer(new Phanes::Layer()); }
+    Sandbox() { PushLayer(new SampleLayer()); }
 };
 
 namespace Phanes

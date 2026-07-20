@@ -6,7 +6,6 @@
 #include <GLFW/glfw3.h>
 
 #include "Phanes/App/Application.h"
-#include "Phanes/Events/Dispatch/EventsDispatch.h"
 
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
