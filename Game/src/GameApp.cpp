@@ -9,9 +9,11 @@
 class SampleLayer : public Phanes::Layer
 {
 public:
-    void OnEvent(Phanes::Event& event) override
+    void OnImGuiRender() override
     {
-
+        ImGui::Begin("Test");
+        ImGui::Text("Test window");
+        ImGui::End();
     }
 };
 
