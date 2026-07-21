@@ -1,7 +1,9 @@
 #pragma once
 
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
+
 #include "Phanes/Window.h"
+#include "Renderer/RenderContext.h"
 
 namespace Phanes
 {
@@ -30,6 +32,7 @@ namespace Phanes
 
     private:
         GLFWwindow* window_;
+        RenderContext* context_;
 
         // main attributes of the window
         struct WindowData

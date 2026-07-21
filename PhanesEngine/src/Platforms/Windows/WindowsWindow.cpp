@@ -4,8 +4,7 @@
 #include "Phanes/Events/AppEvents.h"
 #include "Phanes/Events/KeyEvents.h"
 #include "Phanes/Events/MouseEvents.h"
-
-#include <glad/glad.h>
+#include "Platforms/RenderAPI/OpenGL/OpenGLRenderContext.h"
 
 namespace Phanes
 {
@@ -19,7 +18,7 @@ namespace Phanes
 
     void WindowsWindow::OnUpdate() {
         glfwPollEvents();
-        glfwSwapBuffers(window_);
+        context_->Swap();
     }
 
     bool WindowsWindow::IsVSync() const {
@@ -48,11 +47,9 @@ namespace Phanes
         }
 
         window_ = glfwCreateWindow((int)props.Width, (int)props.Height, data_.Title.c_str(), nullptr, nullptr);
-        glfwMakeContextCurrent(window_);
-
-        int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-        PN_CORE_ASSERT(status, "Failed to initialize Glad!");
-
+        context_ = new OpenGLRenderContext(window_);
+        context_->Init();
+        
         glfwSetWindowUserPointer(window_, &data_);
         SetVSync(true);
 
