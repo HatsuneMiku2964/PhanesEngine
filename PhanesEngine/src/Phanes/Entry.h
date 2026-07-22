@@ -7,7 +7,6 @@
     int main(int argc, char** argv)
     {
         Phanes::Log::Init();
-        PN_CORE_LOG_INFO("Phanes Engine is lauched...");
 
         Phanes::Application* App = Phanes::CreateApplication();
         App->Run();

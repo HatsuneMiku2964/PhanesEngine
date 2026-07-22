@@ -21,21 +21,23 @@ namespace Phanes
 
         bool OnWindowClose(WindowCloseEvent& e);
 
-        void PushLayer(Layer* layer) { layerStack_.PushLayer(layer); }
-        void PushOverlay(Layer* overlay) { layerStack_.PushOverlay(overlay); }
+        void PushLayer(Layer* layer) { layerStack.PushLayer(layer); }
+        void PushOverlay(Layer* overlay) { layerStack.PushOverlay(overlay); }
 
-        inline static Application& Get() { return *instance_; }
-        inline Window& GetWindow() { return *window_; }
+        inline static Application& Get() { return *instance; }
+        inline Window& GetWindow() { return *window; }
 
     private:
-        bool running_ = true;
+        unsigned int vtx_arr, vtx_buffer, idx_buffer;
 
-        LayerStack layerStack_;
+        bool running = true;
+
+        LayerStack layerStack;
         ImGuiLayer* imgui_layer;
 
-        std::unique_ptr<Window> window_;
+        std::unique_ptr<Window> window;
 
-        static Application* instance_;
+        static Application* instance;
     };
 
     // INFO: Will be defined by clients
