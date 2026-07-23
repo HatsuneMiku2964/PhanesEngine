@@ -1,0 +1,20 @@
+﻿#pragma once
+
+namespace Phanes
+{
+    enum class RendererAPI
+    {
+        None = 0,
+        OpenGL = 1,
+
+    };
+
+    class Renderer
+    {
+    public:
+        inline static RendererAPI GetAPI() { return API; }
+
+    private:
+        static RendererAPI API;
+    };
+}

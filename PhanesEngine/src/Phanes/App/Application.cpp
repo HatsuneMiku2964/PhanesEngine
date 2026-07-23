@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 
 #include "Phanes/Events/EventsDispatch.h"
+#include "Phanes/Renderer/Buffer/Buffer.h"
 
 namespace Phanes
 {
@@ -29,25 +30,53 @@ namespace Phanes
         glGenVertexArrays(1, &vtx_arr);
         glBindVertexArray(vtx_arr);
 
-        glGenBuffers(1, &vtx_buffer);
-        glBindBuffer(GL_ARRAY_BUFFER, vtx_buffer);
-
-        float vertices[9] = {
-            -0.5f, -0.5f, 0.f,
-             0.5f, -0.5f, 0.f,
-             0.f,   0.5f, 0.f,
+        float vertices[] = {
+            -0.5f, -0.5f,	1.f, 0.f, 0.f,
+             0.5f, -0.5f,	0.f, 1.f, 0.f,
+             0.f,   0.5f,	0.f, 0.f, 1.f,
         };
 
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), (const void*) &vertices, GL_STATIC_DRAW);
+        vtx_buffer.reset(VtxBuffer::Create(vertices, 15));
+
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), nullptr);
+
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (const void*) (3 * sizeof(float)));
 
         unsigned int indices[3] = { 0, 1, 2 };
 
-        glGenBuffers(1, &idx_buffer);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idx_buffer);
+        idx_buffer.reset(IdxBuffer::Create(indices, 3));
 
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), (const void*) &indices, GL_STATIC_DRAW);
+        std::string vertexsrc = R"(
+            #version 330 core
+
+            layout(location = 0) in vec2 position;
+            layout(location = 1) in vec3 aColor;
+
+            out vec3 vColor;
+
+            void main()
+            {
+	            gl_Position = vec4(position, 0, 1);
+	            vColor = aColor;
+            }
+        )";
+        std::string fragmentsrc = R"(
+            #version 330 core
+
+            layout(location = 0) out vec4 color;
+
+            in vec3 vColor;
+
+            void main()
+            {
+	            color = vec4(vColor, 1);
+            }
+        
+        )";
+
+        shader.reset(new Shader(vertexsrc, fragmentsrc));
     }
 
     Application::~Application() { PN_CORE_LOG_INFO("Phanes Engine is closed"); }
@@ -58,8 +87,13 @@ namespace Phanes
             glClearColor(0.4f, 0.55f, 0.9f, 1.f);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            shader->Bind();
             glBindVertexArray(vtx_arr);
-            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+
+            vtx_buffer->Bind();
+            idx_buffer->Bind();
+
+            glDrawElements(GL_TRIANGLES, idx_buffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
             for (Layer* layer : layerStack) layer->OnUpdate();
 

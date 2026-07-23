@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Phanes/Window.h"
-#include "Renderer/RenderContext.h"
+#include "Phanes/Renderer/RenderContext.h"
 
 namespace Phanes
 {

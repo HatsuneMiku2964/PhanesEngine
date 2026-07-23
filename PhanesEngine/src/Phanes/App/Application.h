@@ -7,6 +7,8 @@
 #include "Phanes/Events/AppEvents.h"
 #include "Phanes/Layer/LayerStack.h"
 #include "Phanes/ImGui/ImGuiLayer.h"
+#include "Phanes/Renderer/Shader/Shader.h"
+#include "Platforms/RenderAPI/OpenGL/OpenGLBuffer.h"
 
 namespace Phanes
 {
@@ -28,7 +30,11 @@ namespace Phanes
         inline Window& GetWindow() { return *window; }
 
     private:
-        unsigned int vtx_arr, vtx_buffer, idx_buffer;
+        unsigned int vtx_arr;
+        std::unique_ptr<Shader> shader;
+        std::unique_ptr<VtxBuffer> vtx_buffer;
+        std::unique_ptr<IdxBuffer> idx_buffer;
+
 
         bool running = true;
 
