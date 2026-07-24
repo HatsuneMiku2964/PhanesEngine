@@ -43,7 +43,7 @@ namespace Phanes
     {
         std::ifstream stream(path);
         if (!stream.is_open()) {
-            PN_CORE_LOG_ERROR("Invalid shader file path: {0}", path.c_str());
+            PN_CORE_ASSERT(false, "Invalid shader file path: {0}", path.c_str());
             return ShaderSrc();
         }
 
@@ -58,9 +58,9 @@ namespace Phanes
                 if (line.find("vertex") != std::string::npos)           type = ShaderType::VERTEX;
                 else if (line.find("fragment") != std::string::npos)    type = ShaderType::FRAGMENT;
                 else {
-                    PN_CORE_LOG_ERROR("Invalid shader type: "
-                                      "should be either \"#shader vertex\" or \"#shader fragment\".\n"
-                                      "                   see file {0}", path.c_str());
+                    PN_CORE_ASSERT(false, "Invalid shader type: "
+                                          "should be either \"#shader vertex\" or \"#shader fragment\".\n"
+                                          "                   see file {0}", path.c_str());
                     return ShaderSrc();
                 }
             } else {

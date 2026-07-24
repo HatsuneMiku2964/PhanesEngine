@@ -14,10 +14,7 @@ namespace Phanes
     {
         PN_CORE_LOG_WARN("Phanes Engine is lauched...");
 
-        if (instance) {
-            PN_CORE_LOG_ERROR("Assertion Failed: Application already exists!");
-            __debugbreak();
-        }
+        PN_CORE_ASSERT(!instance, "Assertion Failed: Application already exists!");
 
         instance = this;
 
@@ -36,17 +33,16 @@ namespace Phanes
              0.f,   0.5f,	0.f, 0.f, 1.f,
         };
 
-        vtx_buffer.reset(VtxBuffer::Create(vertices, 15));
+        vtx_buffer.reset(VtxBuffer::Create(vertices));
 
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), nullptr);
-
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (const void*) (3 * sizeof(float)));
-
+        BufferLayout layout = {
+            ShaderData::ShaderDataType::Float2, ShaderData::ShaderDataType::Float3
+        };
+        vtx_buffer->ConfigLayout(layout);
+        
         unsigned int indices[3] = { 0, 1, 2 };
 
-        idx_buffer.reset(IdxBuffer::Create(indices, 3));
+        idx_buffer.reset(IdxBuffer::Create(indices));
 
         shader.reset(new Shader("../Game/src/Shader.shader"));
     }

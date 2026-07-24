@@ -4,7 +4,6 @@
 #include <imgui/imgui.h>
 
 #include "Phanes/Layer/Layer.h"
-#include "Phanes/Events/Events.h"
 
 class SampleLayer : public Phanes::Layer
 {

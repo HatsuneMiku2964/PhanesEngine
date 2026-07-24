@@ -17,7 +17,7 @@
 
 // Asserts
 #ifdef PN_ENABLE_ASSERTS
-    #define PN_ASSERT(x, ...) { if(!(x)) { PN_CLIENT_LOG_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+    #define PN_ASSERT(x, ...) { if(!(x)) { PN_LOG_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
     #define PN_CORE_ASSERT(x, ...) { if(!(x)) { PN_CORE_LOG_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
 #else
     #define PN_ASSERT(x, ...)

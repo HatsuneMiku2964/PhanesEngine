@@ -28,8 +28,8 @@ namespace Phanes
 #define PN_CORE_LOG_CRITICAL(...)       ::Phanes::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
 // Client log macros
-#define PN_CLIENT_LOG_TRACE(...)        ::Phanes::Log::GetClientLogger()->trace(__VA_ARGS__)
-#define PN_CLIENT_LOG_INFO(...)         ::Phanes::Log::GetClientLogger()->info(__VA_ARGS__)
-#define PN_CLIENT_LOG_WARN(...)         ::Phanes::Log::GetClientLogger()->warn(__VA_ARGS__)
-#define PN_CLIENT_LOG_ERROR(...)        ::Phanes::Log::GetClientLogger()->error(__VA_ARGS__)
-#define PN_CLIENT_LOG_CRITICAL(...)     ::Phanes::Log::GetClientLogger()->critical(__VA_ARGS__)
+#define PN_LOG_TRACE(...)               ::Phanes::Log::GetClientLogger()->trace(__VA_ARGS__)
+#define PN_LOG_INFO(...)                ::Phanes::Log::GetClientLogger()->info(__VA_ARGS__)
+#define PN_LOG_WARN(...)                ::Phanes::Log::GetClientLogger()->warn(__VA_ARGS__)
+#define PN_LOG_ERROR(...)               ::Phanes::Log::GetClientLogger()->error(__VA_ARGS__)
+#define PN_LOG_CRITICAL(...)            ::Phanes::Log::GetClientLogger()->critical(__VA_ARGS__)
