@@ -6,13 +6,13 @@
 
 namespace Phanes
 {
-    class PN_API Log
+    class Log
     {
     public:
         static void Init();
 
-        inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return coreLogger_; }
-        inline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return clientLogger_; }
+        pn_forceinline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return coreLogger_; }
+        pn_forceinline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return clientLogger_; }
 
     private:
         static std::shared_ptr<spdlog::logger> coreLogger_;

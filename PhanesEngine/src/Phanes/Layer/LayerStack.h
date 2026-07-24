@@ -15,8 +15,8 @@ namespace Phanes
         void PopLayer(Layer* layer);
         void PopOverlay(Layer* overlay);
 
-        std::vector<Layer*>::iterator begin() { return Lys_.begin(); }
-        std::vector<Layer*>::iterator end() { return Lys_.end(); }
+        pn_forceinline std::vector<Layer*>::iterator begin() { return Lys_.begin(); }
+        pn_forceinline std::vector<Layer*>::iterator end() { return Lys_.end(); }
 
     protected:
         std::vector<Layer*> Lys_;	// the actual stack

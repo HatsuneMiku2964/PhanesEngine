@@ -17,14 +17,14 @@ namespace Phanes
         void OnUpdate() override;
 
         // util getters & impls
-        bool IsVSync() const override;
-        inline virtual void* GetNativeWindow() const override { return (void*)window_; }
-        inline unsigned int GetWidth() const override { return data_.Width; }
-        inline unsigned int GetHeight() const override { return data_.Height; }
+        pn_forceinline bool IsVSync() const override;
+        pn_forceinline void* GetNativeWindow() const override { return (void*)window_; }
+        pn_forceinline unsigned int GetWidth() const override { return data_.Width; }
+        pn_forceinline unsigned int GetHeight() const override { return data_.Height; }
 
         // util setters & impls
-        void SetVSync(bool enabled) override;
-        inline void SetEventCallback(const EventCallbackFn& callback) override { data_.EventCallback = callback; }
+        pn_forceinline void SetVSync(bool enabled) override;
+        pn_forceinline void SetEventCallback(const EventCallbackFn& callback) override { data_.EventCallback = callback; }
 
     private:
         virtual void Init(const WindowProps& props);
@@ -32,7 +32,7 @@ namespace Phanes
 
     private:
         GLFWwindow* window_;
-        RenderContext* context_;
+        std::unique_ptr<RenderContext> context_;
 
         // main attributes of the window
         struct WindowData

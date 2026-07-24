@@ -4,10 +4,11 @@
 
 namespace Phanes {
 	// base class for KeyPressedEvent, KeyReleasedEvent and KeyTypedEvent
-	class PN_API KeyEvent : public Event
+	class KeyEvent : public Event
 	{
 	public:
-		inline int GetKeyCode() const { return KeyCode_; }
+		pn_forceinline int GetKeyCode() const { return KeyCode_; }
+
 		IMPL_EVENT_CATEGORY(EventCategories::Input | EventCategories::Keyboard)
 
 	protected:
@@ -15,12 +16,14 @@ namespace Phanes {
 		int KeyCode_;
 	};
 
-	class PN_API KeyPressedEvent : public KeyEvent
+	class KeyPressedEvent : public KeyEvent
 	{
 	public:
 		KeyPressedEvent(int keycode, unsigned int repeatCount)
 			: KeyEvent(keycode), RepeatCount_(repeatCount) {}
-		inline unsigned int GetRepeatCount() const { return RepeatCount_; }
+
+		pn_forceinline unsigned int GetRepeatCount() const { return RepeatCount_; }
+
 		std::string ToString() const override {
 			std::stringstream ss;
 			ss << GetName() << ": " << KeyCode_ << " (" << RepeatCount_ << " repeats)";
@@ -32,7 +35,7 @@ namespace Phanes {
 		unsigned int RepeatCount_;
 	};
 
-	class PN_API KeyReleasedEvent : public KeyEvent
+	class KeyReleasedEvent : public KeyEvent
 	{
 	public:
 		KeyReleasedEvent(int keycode) : KeyEvent(keycode) {}
@@ -44,7 +47,7 @@ namespace Phanes {
 		IMPL_EVENT_TYPE(KeyReleased)
 	};
 
-	class PN_API KeyTypedEvent : public KeyEvent
+	class KeyTypedEvent : public KeyEvent
 	{
 	public:
 		KeyTypedEvent(int keycode)

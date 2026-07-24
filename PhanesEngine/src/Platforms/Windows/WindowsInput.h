@@ -5,13 +5,11 @@ namespace Phanes
 {
     class WindowsInput : public Input
     {
-    public:
-
     protected:
-        virtual float GetMouseX_Impl() override;
-        virtual float GetMouseY_Impl() override;
-        virtual std::pair<float, float> GetMousePos_Impl() override;
-        virtual bool IsKeyPressed_Impl(int keycode) override;
-        virtual bool IsMouseButtonPressed_Impl(int button) override;
+        float GetMouseX_Impl() override;
+        float GetMouseY_Impl() override;
+        std::pair<float, float> GetMousePos_Impl() override;
+        bool IsKeyPressed_Impl(int keycode) override;
+        bool IsMouseButtonPressed_Impl(int button) override;
     };
 }

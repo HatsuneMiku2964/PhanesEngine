@@ -8,12 +8,12 @@ namespace Phanes
     {
     public:
         OpenGLVtxBuffer(float* vertices, unsigned int cnt);
-        virtual ~OpenGLVtxBuffer() override;
+        ~OpenGLVtxBuffer() override;
 
-        virtual void Bind() const override;
-        virtual void Unbind() const override;
+        void Bind() const override;
+        void Unbind() const override;
 
-        virtual inline unsigned int GetCount() const override { return elem_cnt; }
+        pn_forceinline unsigned int GetCount() const override { return elem_cnt; }
 
     private:
         unsigned int buffer_id = 0;
@@ -28,12 +28,12 @@ namespace Phanes
     {
     public:
         OpenGLIdxBuffer(unsigned int* indices, unsigned int cnt);
-        virtual ~OpenGLIdxBuffer() override;
+        ~OpenGLIdxBuffer() override;
 
-        virtual void Bind() const override;
-        virtual void Unbind() const override;
+        void Bind() const override;
+        void Unbind() const override;
 
-        virtual inline unsigned int GetCount() const override { return elem_cnt; }
+        pn_forceinline unsigned int GetCount() const override { return elem_cnt; }
 
     private:
         unsigned int buffer_id = 0;

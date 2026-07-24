@@ -48,35 +48,7 @@ namespace Phanes
 
         idx_buffer.reset(IdxBuffer::Create(indices, 3));
 
-        std::string vertexsrc = R"(
-            #version 330 core
-
-            layout(location = 0) in vec2 position;
-            layout(location = 1) in vec3 aColor;
-
-            out vec3 vColor;
-
-            void main()
-            {
-	            gl_Position = vec4(position, 0, 1);
-	            vColor = aColor;
-            }
-        )";
-        std::string fragmentsrc = R"(
-            #version 330 core
-
-            layout(location = 0) out vec4 color;
-
-            in vec3 vColor;
-
-            void main()
-            {
-	            color = vec4(vColor, 1);
-            }
-        
-        )";
-
-        shader.reset(new Shader(vertexsrc, fragmentsrc));
+        shader.reset(new Shader("../Game/src/Shader.shader"));
     }
 
     Application::~Application() { PN_CORE_LOG_INFO("Phanes Engine is closed"); }

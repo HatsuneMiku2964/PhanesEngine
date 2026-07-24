@@ -3,14 +3,14 @@
 #include "Events.h"
 
 namespace Phanes {
-	class PN_API WindowResizeEvent : public Event
+	class WindowResizeEvent : public Event
 	{
 	public:
 		WindowResizeEvent(unsigned int width, unsigned int height)
 			: width_(width), height_(height) {}
 
-		inline unsigned int GetWidth() const { return width_; }
-		inline unsigned int GetHeight() const { return height_; }
+		pn_forceinline unsigned int GetWidth() const { return width_; }
+		pn_forceinline unsigned int GetHeight() const { return height_; }
 
 		std::string ToString() const override {
 			std::stringstream ss;
@@ -24,14 +24,14 @@ namespace Phanes {
 		unsigned int width_, height_;
 	};
 
-	class PN_API WindowCloseEvent : public Event
+	class WindowCloseEvent : public Event
 	{
 	public:
 		IMPL_EVENT_TYPE(WindowClose)
 		IMPL_EVENT_CATEGORY(EventCategories::Application)
 	};
 
-	class PN_API AppTickEvent : public Event
+	class AppTickEvent : public Event
 	{
 	public:
 		AppTickEvent() = default;
@@ -40,7 +40,7 @@ namespace Phanes {
 		IMPL_EVENT_CATEGORY(EventCategories::Application)
 	};
 
-	class PN_API AppUpdateEvent : public Event
+	class AppUpdateEvent : public Event
 	{
 	public:
 		AppUpdateEvent() = default;
@@ -49,7 +49,7 @@ namespace Phanes {
 		IMPL_EVENT_CATEGORY(EventCategories::Application)
 	};
 
-	class PN_API AppRenderEvent : public Event
+	class AppRenderEvent : public Event
 	{
 	public:
 		AppRenderEvent() = default;

@@ -47,7 +47,7 @@ namespace Phanes
         }
 
         window_ = glfwCreateWindow((int)props.Width, (int)props.Height, data_.Title.c_str(), nullptr, nullptr);
-        context_ = new OpenGLRenderContext(window_);
+        context_.reset(new OpenGLRenderContext(window_));
         context_->Init();
         
         glfwSetWindowUserPointer(window_, &data_);

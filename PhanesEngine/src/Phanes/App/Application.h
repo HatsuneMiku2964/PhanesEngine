@@ -12,7 +12,7 @@
 
 namespace Phanes
 {
-    class PN_API Application
+    class Application
     {
     public:
         Application();
@@ -23,11 +23,11 @@ namespace Phanes
 
         bool OnWindowClose(WindowCloseEvent& e);
 
-        void PushLayer(Layer* layer) { layerStack.PushLayer(layer); }
-        void PushOverlay(Layer* overlay) { layerStack.PushOverlay(overlay); }
+        pn_forceinline void PushLayer(Layer* layer) { layerStack.PushLayer(layer); }
+        pn_forceinline void PushOverlay(Layer* overlay) { layerStack.PushOverlay(overlay); }
 
-        inline static Application& Get() { return *instance; }
-        inline Window& GetWindow() { return *window; }
+        pn_forceinline static Application& Get() { return *instance; }
+        pn_forceinline Window& GetWindow() { return *window; }
 
     private:
         unsigned int vtx_arr;

@@ -20,32 +20,32 @@ namespace Phanes
     };
 
     // bitwise operators for EventCategories, so we can combine them using bitwise operations
-    inline EventCategories operator|(EventCategories a, EventCategories b)
+    pn_forceinline EventCategories operator|(EventCategories a, EventCategories b)
     {
         return static_cast<EventCategories>(static_cast<int>(a) | static_cast<int>(b));
     }
-    inline EventCategories operator&(EventCategories a, EventCategories b)
+    pn_forceinline EventCategories operator&(EventCategories a, EventCategories b)
     {
         return static_cast<EventCategories>(static_cast<int>(a) & static_cast<int>(b));
     }
-    inline EventCategories& operator|=(EventCategories& a, EventCategories b)
+    pn_forceinline EventCategories& operator|=(EventCategories& a, EventCategories b)
     {
         a |= b; return a;
     }
-    inline bool HasCategory(EventCategories flags, EventCategories category)
+    pn_forceinline bool HasCategory(EventCategories flags, EventCategories category)
     {
         return (static_cast<int>(flags) & static_cast<int>(category)) != 0;
     }
 
     // impl functions of interface Phanes::Event
-    #define IMPL_EVENT_TYPE(type)           static EventTypes GetStaticType() { return EventTypes::##type; }\
-                                            virtual EventTypes GetEventType() const override { return GetStaticType(); }\
-                                            const char* GetName() const override { return #type; }
+    #define IMPL_EVENT_TYPE(type)           pn_forceinline static EventTypes GetStaticType() { return EventTypes::##type; }\
+                                            pn_forceinline EventTypes GetEventType() const override { return GetStaticType(); }\
+                                            pn_forceinline const char* GetName() const override { return #type; }
 
-    #define IMPL_EVENT_CATEGORY(category)   virtual int GetCategoryFlags() const override { return static_cast<int>(category); }
+    #define IMPL_EVENT_CATEGORY(category)   pn_forceinline int GetCategoryFlags() const override { return static_cast<int>(category); }
     // ~macros
 
-    class PN_API Event
+    class Event
     {
     public:
         virtual ~Event() = default;
@@ -54,13 +54,13 @@ namespace Phanes
         virtual int GetCategoryFlags() const = 0;
 
         // mainly for debug
-        virtual std::string ToString() const { return GetName(); }
+        pn_forceinline virtual std::string ToString() const { return GetName(); }
 
         //utility function to check if the event is in a category
-        inline bool IsInCategory(EventCategories category) const { return GetCategoryFlags() & static_cast<int>(category); }
+        pn_forceinline bool IsInCategory(EventCategories category) const { return GetCategoryFlags() & static_cast<int>(category); }
 
         bool Handled = false;
     };
 
-    inline std::ostream& operator<<(std::ostream& os, const Event& e) { return os << e.ToString(); }
+    pn_forceinline std::ostream& operator<<(std::ostream& os, const Event& e) { return os << e.ToString(); }
 }

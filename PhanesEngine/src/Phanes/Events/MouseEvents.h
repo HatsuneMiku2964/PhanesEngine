@@ -3,14 +3,14 @@
 #include "Events.h"
 
 namespace Phanes {
-	class PN_API MouseMovedEvent : public Event
+	class MouseMovedEvent : public Event
 	{
 	public:
 		MouseMovedEvent(float x, float y)
 			: mouseX_(x), mouseY_(y) {}
 
-		inline float GetX() const { return mouseX_; }
-		inline float GetY() const { return mouseY_; }
+		pn_forceinline float GetX() const { return mouseX_; }
+		pn_forceinline float GetY() const { return mouseY_; }
 
 		std::string ToString() const override {
 			std::stringstream ss;
@@ -24,15 +24,15 @@ namespace Phanes {
 		float mouseX_, mouseY_;
 	};
 
-	class PN_API MouseScrolledEvent : public Event
+	class MouseScrolledEvent : public Event
 	{
 	public:
 		MouseScrolledEvent(float x, float y)
 			: xOffset_(x), yOffset_(y) {
 		}
 
-		inline float GetXOffset() const { return xOffset_; }
-		inline float GetYOffset() const { return yOffset_; }
+		pn_forceinline float GetXOffset() const { return xOffset_; }
+		pn_forceinline float GetYOffset() const { return yOffset_; }
 
 		std::string ToString() const override {
 			std::stringstream ss;
@@ -47,10 +47,10 @@ namespace Phanes {
 	};
 
 	// base class for MouseButtonPressedEvent and MouseButtonReleasedEvent
-	class PN_API MouseButtonEvent : public Event
+	class MouseButtonEvent : public Event
 	{
 	public:
-		inline int GetButtonCode() const { return ButtonCode_; }
+		pn_forceinline int GetButtonCode() const { return ButtonCode_; }
 		IMPL_EVENT_CATEGORY(EventCategories::Input | EventCategories::Mouse)
 
 	protected:
@@ -58,7 +58,7 @@ namespace Phanes {
 		int ButtonCode_;
 	};
 	
-	class PN_API MouseButtonPressedEvent : public MouseButtonEvent
+	class MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonPressedEvent(int buttoncode) : MouseButtonEvent(buttoncode) {}
@@ -70,7 +70,7 @@ namespace Phanes {
 		IMPL_EVENT_TYPE(MouseButtonPressed)
 	};
 
-	class PN_API MouseButtonReleasedEvent : public MouseButtonEvent
+	class MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonReleasedEvent(int buttoncode) : MouseButtonEvent(buttoncode) {}

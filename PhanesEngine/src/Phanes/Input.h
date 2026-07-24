@@ -2,7 +2,7 @@
 
 namespace Phanes {
     // INFO: singleton
-    class PN_API Input
+    class Input
     {
     public:
         inline static float GetMouseX() { return instance_->GetMouseX_Impl(); }

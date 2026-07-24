@@ -12,7 +12,7 @@ namespace Phanes
     class Renderer
     {
     public:
-        inline static RendererAPI GetAPI() { return API; }
+        pn_forceinline static RendererAPI GetAPI() { return API; }
 
     private:
         static RendererAPI API;

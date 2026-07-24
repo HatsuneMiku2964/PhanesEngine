@@ -11,8 +11,8 @@ namespace Phanes
     public:
         OpenGLRenderContext(GLFWwindow* window);
 
-        virtual bool Init() override;
-        virtual bool Swap() override;
+        bool Init() override;
+        bool Swap() override;
 
     private:
         GLFWwindow* window_handle;

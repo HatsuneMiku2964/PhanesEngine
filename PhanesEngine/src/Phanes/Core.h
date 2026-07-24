@@ -29,3 +29,12 @@
 
 // Event binding
 #define BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
+
+// Inlining
+#if defined(_MSC_VER)
+    #define pn_forceinline __forceinline
+#elif defined(__GNUC__) || defined(__clang__)
+    #define pn_forceinline __attribute__((always_inline)) inline
+#else
+    #define pn_forceinline inline
+#endif
