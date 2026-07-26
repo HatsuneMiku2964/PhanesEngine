@@ -13,9 +13,7 @@ namespace Phanes
     Application::Application()
     {
         PN_CORE_LOG_WARN("Phanes Engine is lauched...");
-
         PN_CORE_ASSERT(!instance, "Assertion Failed: Application already exists!");
-
         instance = this;
 
         window = std::unique_ptr<Window>(Window::Create());
@@ -24,27 +22,27 @@ namespace Phanes
         imgui_layer = new ImGuiLayer();
         PushOverlay(imgui_layer);
 
-        glGenVertexArrays(1, &vtx_arr);
-        glBindVertexArray(vtx_arr);
+        vtx_arr.reset(VtxArr::Create());
 
         float vertices[] = {
-            -0.5f, -0.5f,	1.f, 0.f, 0.f,
-             0.5f, -0.5f,	0.f, 1.f, 0.f,
+            -0.35f, -0.5f,	1.f, 0.f, 0.f,
+             0.35f, -0.5f,	0.f, 1.f, 0.f,
              0.f,   0.5f,	0.f, 0.f, 1.f,
         };
-
-        vtx_buffer.reset(VtxBuffer::Create(vertices));
-
-        BufferLayout layout = {
-            ShaderData::ShaderDataType::Float2, ShaderData::ShaderDataType::Float3
-        };
-        vtx_buffer->ConfigLayout(layout);
+        std::shared_ptr<VtxBuffer> vtx_buffer;
+        BufferLayout layout = { ShaderData::ShaderDataType::Float2, ShaderData::ShaderDataType::Float3 };
+        vtx_buffer.reset(VtxBuffer::Create(vertices, layout));
         
-        unsigned int indices[3] = { 0, 1, 2 };
-
+        uint32_t indices[3] = { 0, 1, 2 };
+        std::shared_ptr<IdxBuffer> idx_buffer;
         idx_buffer.reset(IdxBuffer::Create(indices));
 
         shader.reset(new Shader("../Game/src/Shader.shader"));
+
+        vtx_arr->AddVtxBuffer(vtx_buffer);
+        vtx_arr->SetIdxBuffer(idx_buffer);
+
+        vtx_arr->Unbind();
     }
 
     Application::~Application() { PN_CORE_LOG_INFO("Phanes Engine is closed"); }
@@ -56,12 +54,9 @@ namespace Phanes
             glClear(GL_COLOR_BUFFER_BIT);
 
             shader->Bind();
-            glBindVertexArray(vtx_arr);
+            vtx_arr->Bind();
 
-            vtx_buffer->Bind();
-            idx_buffer->Bind();
-
-            glDrawElements(GL_TRIANGLES, idx_buffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+            glDrawElements(GL_TRIANGLES, vtx_arr->GetIdxBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 
             for (Layer* layer : layerStack) layer->OnUpdate();
 

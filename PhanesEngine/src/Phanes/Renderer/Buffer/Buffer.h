@@ -14,7 +14,7 @@ namespace Phanes
             Int, Int2, Int3, Int4,
         };
 
-        static unsigned int ShaderDataTypeSize(const ShaderDataType& type)
+        static uint32_t ShaderDataTypeSize(const ShaderDataType& type)
         {
             switch (type) {
             case ShaderDataType::Float:     return 4;
@@ -41,27 +41,27 @@ namespace Phanes
         {
         }
 
-        unsigned int Size;
+        uint32_t Size;
         ShaderData::ShaderDataType Type;
-        unsigned int Normalize;
-        unsigned int Offset;
+        uint32_t Normalize;
+        uint32_t Offset;
 
-        pn_forceinline unsigned int GetElemCnt() const
+        pn_forceinline uint32_t GetElemCnt() const
         {
             switch (Type) {
-            case ShaderData::ShaderDataType::Float:     return 1;
-            case ShaderData::ShaderDataType::Float2:    return 2;
-            case ShaderData::ShaderDataType::Float3:    return 3;
-            case ShaderData::ShaderDataType::Float4:    return 4;
-            case ShaderData::ShaderDataType::Mat3:      return 3 * 3;
-            case ShaderData::ShaderDataType::Mat4:      return 4 * 4;
-            case ShaderData::ShaderDataType::Int:       return 1;
-            case ShaderData::ShaderDataType::Int2:      return 2;
-            case ShaderData::ShaderDataType::Int3:      return 3;
-            case ShaderData::ShaderDataType::Int4:      return 4;
+                case ShaderData::ShaderDataType::Float:     return 1;
+                case ShaderData::ShaderDataType::Float2:    return 2;
+                case ShaderData::ShaderDataType::Float3:    return 3;
+                case ShaderData::ShaderDataType::Float4:    return 4;
+                case ShaderData::ShaderDataType::Mat3:      return 3 * 3;
+                case ShaderData::ShaderDataType::Mat4:      return 4 * 4;
+                case ShaderData::ShaderDataType::Int:       return 1;
+                case ShaderData::ShaderDataType::Int2:      return 2;
+                case ShaderData::ShaderDataType::Int3:      return 3;
+                case ShaderData::ShaderDataType::Int4:      return 4;
 
-            case ShaderData::ShaderDataType::None: PN_CORE_LOG_ERROR("Invalid shader data type of \"None\"");  return 0;
-            default:                               PN_CORE_LOG_ERROR("Unknown shader data type!!");            return 0;
+                case ShaderData::ShaderDataType::None: PN_CORE_LOG_ERROR("Invalid shader data type of \"None\"");  return 0;
+                default:                               PN_CORE_LOG_ERROR("Unknown shader data type!!");            return 0;
             }
         }
     };
@@ -71,7 +71,7 @@ namespace Phanes
         BufferLayout(const std::initializer_list<BufferLayout_Elem>& elements)
             : elements(elements)
         {
-            unsigned int offset = 0;
+            uint32_t offset = 0;
             for (auto& elem : this->elements) {
                 elem.Offset = offset;
                 offset += elem.Size;
@@ -86,15 +86,15 @@ namespace Phanes
         pn_forceinline std::vector<BufferLayout_Elem>::const_iterator end() const noexcept { return elements.cend(); }
 
         pn_forceinline size_t size() const noexcept { return elements.size(); }
-        pn_forceinline BufferLayout_Elem operator[](unsigned int idx) const noexcept { return elements[idx]; }
+        pn_forceinline BufferLayout_Elem operator[](uint32_t idx) const noexcept { return elements[idx]; }
         // ~~~
 
         pn_forceinline const std::vector<BufferLayout_Elem>& GetElements() const { return elements; }
-        pn_forceinline unsigned int GetStride() const { return stride; }
+        pn_forceinline uint32_t GetStride() const { return stride; }
 
     private:
         std::vector<BufferLayout_Elem> elements;
-        unsigned int stride = 0;
+        uint32_t stride = 0;
     };
 
     class VtxBuffer
@@ -111,6 +111,7 @@ namespace Phanes
         virtual uint32_t GetCount() const = 0;
 
         static VtxBuffer* Create(std::span<const float> vertices);
+        static VtxBuffer* Create(std::span<const float> vertices, const BufferLayout& layout);
     };
     class IdxBuffer
     {
@@ -122,6 +123,6 @@ namespace Phanes
 
         virtual uint32_t GetCount() const = 0;
 
-        static IdxBuffer* Create(std::span<const unsigned int> indices);
+        static IdxBuffer* Create(std::span<const uint32_t> indices);
     };
 }

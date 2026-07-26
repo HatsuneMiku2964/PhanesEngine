@@ -90,7 +90,7 @@ namespace Phanes
             }
             }
             });
-        glfwSetCharCallback(window_, [](GLFWwindow* window, unsigned int key) {
+        glfwSetCharCallback(window_, [](GLFWwindow* window, uint32_t key) {
             WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
             KeyTypedEvent event(key);
             data.EventCallback(event);

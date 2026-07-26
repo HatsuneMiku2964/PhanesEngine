@@ -6,6 +6,7 @@
 // INFO: belongs to OpenGLVtxBuffer
 namespace Phanes
 {
+    // TODO: remove it in the future
     pn_forceinline static GLenum ShaderDataTypeToGLenum(const ShaderData::ShaderDataType& type)
     {
         switch (type) {
@@ -24,18 +25,11 @@ namespace Phanes
         }
     }
 
-    OpenGLVtxBuffer::OpenGLVtxBuffer(std::span<const float> span)
-    {
-        PN_ASSERT(!(span.size() > INT32_MAX), "Element count of vertex buffer exceeds maximum GLsizei capacity of 2147483647 !!");
-        elem_cnt = static_cast<uint32_t>(span.size());
+    OpenGLVtxBuffer::OpenGLVtxBuffer(std::span<const float> span) { init(span); }
+    OpenGLVtxBuffer::OpenGLVtxBuffer(std::span<const float> span, const BufferLayout& layout) { init(span); OpenGLVtxBuffer::ConfigLayout(layout); }
+    OpenGLVtxBuffer::~OpenGLVtxBuffer() { glDeleteBuffers(1, &buffer_id); }
 
-        glCreateBuffers(1, &this->buffer_id);
-        glBindBuffer(GL_ARRAY_BUFFER, this->buffer_id);
-        glBufferData(GL_ARRAY_BUFFER, span.size_bytes(), (const void*) span.data(), GL_STATIC_DRAW);
-    }
-    OpenGLVtxBuffer::~OpenGLVtxBuffer() { glDeleteBuffers(1, &this->buffer_id); }
-
-    void OpenGLVtxBuffer::Bind() const { glBindBuffer(GL_ARRAY_BUFFER, this->buffer_id); }
+    void OpenGLVtxBuffer::Bind() const { glBindBuffer(GL_ARRAY_BUFFER, buffer_id); }
     void OpenGLVtxBuffer::Unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
     void OpenGLVtxBuffer::ConfigLayout(const BufferLayout& layout)
@@ -56,24 +50,33 @@ namespace Phanes
             idx++;
         }
     }
+
+    void OpenGLVtxBuffer::init(const std::span<const float>& span_) {
+        PN_ASSERT(!(span_.size() > INT32_MAX), "Element count of vertex buffer exceeds maximum GLsizei capacity of 2147483647 !!");
+        elem_cnt = static_cast<uint32_t>(span_.size());
+
+        glCreateBuffers(1, &buffer_id);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer_id);
+        glBufferData(GL_ARRAY_BUFFER, span_.size_bytes(), (const void*) span_.data(), GL_STATIC_DRAW);
+    }
 }
 // ~OpenGLVtxBuffer
 
 // INFO: belongs to OpenGLIdxBuffer
 namespace Phanes
 {
-    OpenGLIdxBuffer::OpenGLIdxBuffer(std::span<const unsigned int> span)
+    OpenGLIdxBuffer::OpenGLIdxBuffer(std::span<const uint32_t> span)
     {
         PN_ASSERT(!(span.size() > INT32_MAX), "Element count of index buffer exceeds maximum GLsizei capacity of 2147483647 !!");
         elem_cnt = static_cast<uint32_t>(span.size());
 
-        glCreateBuffers(1, &this->buffer_id);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->buffer_id);
+        glCreateBuffers(1, &buffer_id);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_id);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, span.size_bytes(), (const void*) span.data(), GL_STATIC_DRAW);
     }
-    OpenGLIdxBuffer::~OpenGLIdxBuffer() { glDeleteBuffers(1, &this->buffer_id); }
+    OpenGLIdxBuffer::~OpenGLIdxBuffer() { glDeleteBuffers(1, &buffer_id); }
 
-    void OpenGLIdxBuffer::Bind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->buffer_id); }
+    void OpenGLIdxBuffer::Bind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_id); }
     void OpenGLIdxBuffer::Unbind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }
 }
 //~OpenGLIdxBuffer

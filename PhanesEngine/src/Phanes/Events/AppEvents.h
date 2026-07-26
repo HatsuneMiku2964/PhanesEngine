@@ -6,11 +6,11 @@ namespace Phanes {
 	class WindowResizeEvent : public Event
 	{
 	public:
-		WindowResizeEvent(unsigned int width, unsigned int height)
+		WindowResizeEvent(uint32_t width, uint32_t height)
 			: width_(width), height_(height) {}
 
-		pn_forceinline unsigned int GetWidth() const { return width_; }
-		pn_forceinline unsigned int GetHeight() const { return height_; }
+		pn_forceinline uint32_t GetWidth() const { return width_; }
+		pn_forceinline uint32_t GetHeight() const { return height_; }
 
 		std::string ToString() const override {
 			std::stringstream ss;
@@ -21,7 +21,7 @@ namespace Phanes {
 		IMPL_EVENT_TYPE(WindowResize)
 		IMPL_EVENT_CATEGORY(EventCategories::Application)
 	private:
-		unsigned int width_, height_;
+		uint32_t width_, height_;
 	};
 
 	class WindowCloseEvent : public Event

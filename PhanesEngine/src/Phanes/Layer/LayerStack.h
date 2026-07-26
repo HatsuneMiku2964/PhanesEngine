@@ -20,7 +20,7 @@ namespace Phanes
 
     protected:
         std::vector<Layer*> Lys_;	// the actual stack
-        unsigned int Idx_;			/* INFO: the index of the last layer (not overlays, the first half),
+        uint32_t Idx_;			/* INFO: the index of the last layer (not overlays, the first half),
                                             this is to make sure that layers & overlays are inserted properly */
     };
 }

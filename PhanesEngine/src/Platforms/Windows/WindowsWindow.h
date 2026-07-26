@@ -19,8 +19,8 @@ namespace Phanes
         // util getters & impls
         pn_forceinline bool IsVSync() const override;
         pn_forceinline void* GetNativeWindow() const override { return (void*)window_; }
-        pn_forceinline unsigned int GetWidth() const override { return data_.Width; }
-        pn_forceinline unsigned int GetHeight() const override { return data_.Height; }
+        pn_forceinline uint32_t GetWidth() const override { return data_.Width; }
+        pn_forceinline uint32_t GetHeight() const override { return data_.Height; }
 
         // util setters & impls
         pn_forceinline void SetVSync(bool enabled) override;
@@ -38,7 +38,7 @@ namespace Phanes
         struct WindowData
         {
             std::string Title;
-            unsigned int Width, Height;
+            uint32_t Width, Height;
             bool VSync;
             EventCallbackFn EventCallback;
         };

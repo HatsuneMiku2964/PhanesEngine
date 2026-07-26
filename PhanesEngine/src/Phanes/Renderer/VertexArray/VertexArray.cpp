@@ -1,0 +1,18 @@
+#include "pnpch.h"
+#include "VertexArray.h"
+
+#include "Phanes/Renderer/Renderer/Renderer.h"
+#include "Platforms/RenderAPI/OpenGL/OpenGLBuffer.h"
+#include "Platforms/RenderAPI/OpenGL/OpenGLVertexArray.h"
+
+namespace Phanes
+{
+    VtxArr* VtxArr::Create()
+    {
+        switch (Renderer::GetAPI()) {
+        case RendererAPI::OpenGL:       return new OpenGLVtxArr();
+        case RendererAPI::None:         PN_CORE_ASSERT(false, "Renderer API should not be None!!"); return nullptr;
+        default:                        PN_CORE_ASSERT(false, "Unknown renderer API"); return nullptr;
+        }
+    }
+}

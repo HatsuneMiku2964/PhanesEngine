@@ -10,10 +10,10 @@ namespace Phanes
         ShaderSrc src = ParseShader(path);
 
         shader_id = glCreateProgram();
-        unsigned int program = shader_id;
+        uint32_t program = shader_id;
 
-        unsigned int vs = glCreateShader(GL_VERTEX_SHADER);
-        unsigned int fs = glCreateShader(GL_FRAGMENT_SHADER);
+        uint32_t vs = glCreateShader(GL_VERTEX_SHADER);
+        uint32_t fs = glCreateShader(GL_FRAGMENT_SHADER);
 
         const char* vs_src = src.vtxsrc.c_str();
         glShaderSource(vs, 1, &vs_src, nullptr);

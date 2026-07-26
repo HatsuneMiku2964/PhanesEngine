@@ -19,10 +19,10 @@ namespace Phanes {
 	class KeyPressedEvent : public KeyEvent
 	{
 	public:
-		KeyPressedEvent(int keycode, unsigned int repeatCount)
+		KeyPressedEvent(int keycode, uint32_t repeatCount)
 			: KeyEvent(keycode), RepeatCount_(repeatCount) {}
 
-		pn_forceinline unsigned int GetRepeatCount() const { return RepeatCount_; }
+		pn_forceinline uint32_t GetRepeatCount() const { return RepeatCount_; }
 
 		std::string ToString() const override {
 			std::stringstream ss;
@@ -32,7 +32,7 @@ namespace Phanes {
 		IMPL_EVENT_TYPE(KeyPressed)
 
 	private:
-		unsigned int RepeatCount_;
+		uint32_t RepeatCount_;
 	};
 
 	class KeyReleasedEvent : public KeyEvent

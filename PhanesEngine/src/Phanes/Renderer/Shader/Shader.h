@@ -18,7 +18,7 @@ namespace Phanes
 
         static ShaderSrc ParseShader(const std::string &path);
     private:
-        unsigned int shader_id = 0;
+        uint32_t shader_id = 0;
         const std::string filepath;
     };
 
