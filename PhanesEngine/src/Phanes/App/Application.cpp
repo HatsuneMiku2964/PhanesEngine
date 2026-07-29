@@ -1,16 +1,16 @@
 #include "pnpch.h"
 #include "Application.h"
 
-#include <glad/glad.h>
-
 #include "Phanes/Events/EventsDispatch.h"
-#include "Phanes/Renderer/Buffer/Buffer.h"
+#include "Phanes/Renderer/Renderer/Renderer.h"
+#include "Phanes/Renderer/RenderCommand/RenderCommand.h"
 
 namespace Phanes
 {
     Application* Application::instance = nullptr;
 
     Application::Application()
+        :camera(-1.6f, 1.6f, -0.9f, 0.9f)
     {
         PN_CORE_LOG_WARN("Phanes Engine is lauched...");
         PN_CORE_ASSERT(!instance, "Assertion Failed: Application already exists!");
@@ -22,27 +22,27 @@ namespace Phanes
         imgui_layer = new ImGuiLayer();
         PushOverlay(imgui_layer);
 
-        vtx_arr.reset(VtxArr::Create());
+        vao.reset(VtxArr::Create());
 
         float vertices[] = {
-            -0.35f, -0.5f,	1.f, 0.f, 0.f,
-             0.35f, -0.5f,	0.f, 1.f, 0.f,
+            -0.5f, -0.5f,	1.f, 0.f, 0.f,
+             0.5f, -0.5f,	0.f, 1.f, 0.f,
              0.f,   0.5f,	0.f, 0.f, 1.f,
         };
-        std::shared_ptr<VtxBuffer> vtx_buffer;
-        BufferLayout layout = { ShaderData::ShaderDataType::Float2, ShaderData::ShaderDataType::Float3 };
-        vtx_buffer.reset(VtxBuffer::Create(vertices, layout));
-        
-        uint32_t indices[3] = { 0, 1, 2 };
-        std::shared_ptr<IdxBuffer> idx_buffer;
-        idx_buffer.reset(IdxBuffer::Create(indices));
+        std::shared_ptr<VtxBuffer> vbo;
+        BufferLayout layout = {ShaderData::ShaderDataType::Float2, ShaderData::ShaderDataType::Float3};
+        vbo.reset(VtxBuffer::Create(vertices, layout));
+
+        uint32_t indices[3] = {0, 1, 2};
+        std::shared_ptr<IdxBuffer> ibo;
+        ibo.reset(IdxBuffer::Create(indices));
 
         shader.reset(new Shader("../Game/src/Shader.shader"));
 
-        vtx_arr->AddVtxBuffer(vtx_buffer);
-        vtx_arr->SetIdxBuffer(idx_buffer);
+        vao->AddVtxBuffer(vbo);
+        vao->SetIdxBuffer(ibo);
 
-        vtx_arr->Unbind();
+        vao->Unbind();
     }
 
     Application::~Application() { PN_CORE_LOG_INFO("Phanes Engine is closed"); }
@@ -50,13 +50,15 @@ namespace Phanes
     void Application::Run()
     {
         while (running) {
-            glClearColor(0.4f, 0.55f, 0.9f, 1.f);
-            glClear(GL_COLOR_BUFFER_BIT);
+            RenderCmd::SetClearColor({0.06f, 0.06f, 0.06f, 0.06f});
+            RenderCmd::Clear();
 
-            shader->Bind();
-            vtx_arr->Bind();
+            camera.SetPos({0.1f, 0.1f, 0.f});
+            camera.SetRot(70.f);
 
-            glDrawElements(GL_TRIANGLES, vtx_arr->GetIdxBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+            Renderer::BeginScene(camera);
+            Renderer::Submit(shader, vao);
+            Renderer::EndScene();
 
             for (Layer* layer : layerStack) layer->OnUpdate();
 

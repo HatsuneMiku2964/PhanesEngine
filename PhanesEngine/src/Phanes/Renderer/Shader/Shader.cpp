@@ -2,6 +2,7 @@
 #include "Shader.h"
 
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Phanes
 {
@@ -39,7 +40,13 @@ namespace Phanes
     void Shader::Bind() const { glUseProgram(shader_id); }
     void Shader::Unbind() const { glUseProgram(0); }
 
-    ShaderSrc Shader::ParseShader(const std::string &path)
+    void Shader::SetUniformMat4(const std::string& name, const glm::mat4& value)
+    {
+        int loc = glGetUniformLocation(shader_id, name.c_str());
+        glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(value));
+    }
+
+    ShaderSrc Shader::ParseShader(const std::string& path)
     {
         std::ifstream stream(path);
         if (!stream.is_open()) {
@@ -59,8 +66,8 @@ namespace Phanes
                 else if (line.find("fragment") != std::string::npos)    type = ShaderType::FRAGMENT;
                 else {
                     PN_CORE_ASSERT(false, "Invalid shader type: "
-                                          "should be either \"#shader vertex\" or \"#shader fragment\".\n"
-                                          "                   see file {0}", path.c_str());
+                                   "should be either \"#shader vertex\" or \"#shader fragment\".\n"
+                                   "                   see file {0}", path.c_str());
                     return ShaderSrc();
                 }
             } else {
@@ -68,8 +75,8 @@ namespace Phanes
             }
         }
         ShaderSrc src;
-        src.vtxsrc =    ss[0].str();
-        src.frgmsrc =   ss[1].str();
+        src.vtxsrc = ss[0].str();
+        src.frgmsrc = ss[1].str();
         return src;
     }
 }

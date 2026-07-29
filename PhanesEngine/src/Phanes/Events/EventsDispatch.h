@@ -10,7 +10,7 @@
 
 namespace Phanes
 {
-    template<class... Ts>
+    template<typename... Ts>
     struct FnOverload : Ts... { using Ts::operator()...; };
 
     using EventBox = std::variant
@@ -23,15 +23,13 @@ namespace Phanes
 
     class EventDispatcher
     {
-        template<typename T>
-        using EventFunc = std::function<bool(T&)>;
     public:
         EventDispatcher(Event& e) : event_(e), eventbox_(PackEvent(e)) {}
 
         template<typename T>
-        bool Dispatch(EventFunc<T> func)
+        bool Dispatch(std::function<bool(T&)> func)
         {
-            PN_CORE_LOG_WARN("Legacy func used: EventDispatcher::Dispatch(EventFunc<T> func)");
+            PN_CORE_LOG_WARN("Legacy func used: EventDispatcher::Dispatch(std::function<bool(T&)> func)");
             if (event_.GetEventType() == T::GetStaticType()) {
                 event_.Handled = func(*(T*) &event_);
                 return true;

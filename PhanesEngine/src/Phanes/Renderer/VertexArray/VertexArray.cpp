@@ -10,8 +10,8 @@ namespace Phanes
     VtxArr* VtxArr::Create()
     {
         switch (Renderer::GetAPI()) {
-        case RendererAPI::OpenGL:       return new OpenGLVtxArr();
-        case RendererAPI::None:         PN_CORE_ASSERT(false, "Renderer API should not be None!!"); return nullptr;
+        case RenderAPI::RendererAPI::OpenGL:       return new OpenGLVtxArr();
+        case RenderAPI::RendererAPI::None:         PN_CORE_ASSERT(false, "Renderer API should not be None!!"); return nullptr;
         default:                        PN_CORE_ASSERT(false, "Unknown renderer API"); return nullptr;
         }
     }
