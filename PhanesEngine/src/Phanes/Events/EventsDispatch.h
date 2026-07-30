@@ -42,7 +42,7 @@ namespace Phanes
         {
             FnOverload overload{
                 std::forward<Args>(args)...,        // pack all callbacks using perfect forwarding
-                [](auto&) { return false; },        // handle arbitary EVENT type
+                [](const auto&) { return false; },        // handle arbitary EVENT type
                 [this](std::monostate) {            // handle arbitary type
                     PN_CORE_LOG_WARN("Try dispatching unknown event: {0} event", event_.GetName());
                     return false;
@@ -55,26 +55,26 @@ namespace Phanes
         }
 
     private:
-        static EventBox PackEvent(Event& e)
+        pn_forceinline static EventBox PackEvent(Event& e)
         {
             switch (e.GetEventType()) {
-                case EventTypes::MouseButtonPressed:    return dynamic_cast<MouseButtonPressedEvent&>(e);
-                case EventTypes::MouseButtonReleased:   return dynamic_cast<MouseButtonReleasedEvent&>(e);
-                case EventTypes::MouseMoved:            return dynamic_cast<MouseMovedEvent&>(e);
-                case EventTypes::MouseScrolled:         return dynamic_cast<MouseScrolledEvent&>(e);
-                case EventTypes::KeyPressed:            return dynamic_cast<KeyPressedEvent&>(e);
-                case EventTypes::KeyReleased:           return dynamic_cast<KeyReleasedEvent&>(e);
-                case EventTypes::KeyTyped:              return dynamic_cast<KeyTypedEvent&>(e);
-                case EventTypes::WindowResize:          return dynamic_cast<WindowResizeEvent&>(e);
-                case EventTypes::WindowClose:           return dynamic_cast<WindowCloseEvent&>(e);
-                case EventTypes::WindowFocus:           return std::monostate{}; // NO IMPL
-                case EventTypes::WindowLostFocus:       return std::monostate{}; // NO IMPL
-                case EventTypes::WindowMoved:           return std::monostate{}; // NO IMPL
-                case EventTypes::AppTick:               return std::monostate{}; // NO IMPL
-                case EventTypes::AppUpdate:             return std::monostate{}; // NO IMPL
-                case EventTypes::AppRender:             return std::monostate{}; // NO IMPL
-                case EventTypes::None:                  return std::monostate{};
-                default:                                return std::monostate{};
+            case EventTypes::MouseButtonPressed:    return static_cast<MouseButtonPressedEvent&>(e);
+            case EventTypes::MouseButtonReleased:   return static_cast<MouseButtonReleasedEvent&>(e);
+            case EventTypes::MouseMoved:            return static_cast<MouseMovedEvent&>(e);
+            case EventTypes::MouseScrolled:         return static_cast<MouseScrolledEvent&>(e);
+            case EventTypes::KeyPressed:            return static_cast<KeyPressedEvent&>(e);
+            case EventTypes::KeyReleased:           return static_cast<KeyReleasedEvent&>(e);
+            case EventTypes::KeyTyped:              return static_cast<KeyTypedEvent&>(e);
+            case EventTypes::WindowResize:          return static_cast<WindowResizeEvent&>(e);
+            case EventTypes::WindowClose:           return static_cast<WindowCloseEvent&>(e);
+            case EventTypes::WindowFocus:           return std::monostate{}; // NO IMPL
+            case EventTypes::WindowLostFocus:       return std::monostate{}; // NO IMPL
+            case EventTypes::WindowMoved:           return std::monostate{}; // NO IMPL
+            case EventTypes::AppTick:               return std::monostate{}; // NO IMPL
+            case EventTypes::AppUpdate:             return std::monostate{}; // NO IMPL
+            case EventTypes::AppRender:             return std::monostate{}; // NO IMPL
+            case EventTypes::None:                  return std::monostate{};
+            default:                                return std::monostate{};
             }
         };
 

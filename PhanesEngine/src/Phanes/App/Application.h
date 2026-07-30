@@ -7,9 +7,6 @@
 #include "Phanes/Events/AppEvents.h"
 #include "Phanes/Layer/LayerStack.h"
 #include "Phanes/ImGui/ImGuiLayer.h"
-#include "Phanes/Renderer/Shader/Shader.h"
-#include "Phanes/Renderer/VertexArray/VertexArray.h"
-#include "Phanes/Renderer/Camera/OrthographicCamera.h"
 
 namespace Phanes
 {
@@ -32,10 +29,7 @@ namespace Phanes
         pn_forceinline Window& GetWindow() { return *window; }
 
     private:
-        std::shared_ptr<Shader> shader;
-        std::shared_ptr<VtxArr> vao;
-
-        OrthographicCamera camera;
+        
 
         bool running = true;
 
