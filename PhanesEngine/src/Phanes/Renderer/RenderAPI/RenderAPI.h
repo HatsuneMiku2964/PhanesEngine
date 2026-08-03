@@ -21,7 +21,7 @@ namespace Phanes
 
         pn_forceinline static RendererAPI GetAPI() { return API; }
 
-        virtual void DrawIndexed(const std::shared_ptr<VtxArr>& vao) = 0;
+        virtual void DrawIndexed(const Ref<VtxArr>& vao) = 0;
 
     private:
         static RendererAPI API;

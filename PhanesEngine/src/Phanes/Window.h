@@ -2,7 +2,6 @@
 
 #include "pnpch.h"
 
-#include "Core.h"
 #include "Phanes/Events/Events.h"
 
 namespace Phanes

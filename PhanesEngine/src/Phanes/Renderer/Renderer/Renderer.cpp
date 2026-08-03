@@ -2,6 +2,7 @@
 #include "Renderer.h"
 
 #include "Phanes/Renderer/RenderCommand/RenderCommand.h"
+#include "Platforms/RenderAPI/OpenGL/OpenGLShader.h"
 
 namespace Phanes
 {
@@ -10,10 +11,13 @@ namespace Phanes
     void Renderer::BeginScene(OrthographicCamera& camera) { scene_data->vp_mat = camera.GetVPMat(); }
     void Renderer::EndScene() {}
 
-    void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VtxArr>& vao)
+    void Renderer::Submit(const Ref<Shader>& shader, const Ref<VtxArr>& vao, const glm::mat4& transform)
     {
         shader->Bind();
-        shader->SetUniformMat4("u_view_proj", scene_data->vp_mat);
+
+        // TODO: these 2 lines sucks
+        std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniform("u_view_proj", scene_data->vp_mat);
+        std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniform("u_model", transform);
 
         vao->Bind();
         RenderCmd::DrawIndexed(vao);

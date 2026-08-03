@@ -10,6 +10,6 @@ namespace Phanes
         void Clear() override;
         void SetClearColor(const glm::vec4& color) override;
 
-        void DrawIndexed(const std::shared_ptr<VtxArr> &vao) override;
+        void DrawIndexed(const Ref<VtxArr> &vao) override;
     };
 }

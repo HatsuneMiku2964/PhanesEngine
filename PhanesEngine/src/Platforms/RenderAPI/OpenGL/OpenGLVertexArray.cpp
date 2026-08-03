@@ -11,7 +11,7 @@ namespace Phanes
     void OpenGLVtxArr::Bind() const { glBindVertexArray(vtx_arr_id); }
     void OpenGLVtxArr::Unbind() const { glBindVertexArray(0); }
 
-    void OpenGLVtxArr::AddVtxBuffer(const std::shared_ptr<VtxBuffer>& buffer)
+    void OpenGLVtxArr::AddVtxBuffer(const Ref<VtxBuffer>& buffer)
     {
         PN_ASSERT(buffer->GetLayout().size(), "Vertex buffer has no layouts!!");
 
@@ -22,7 +22,7 @@ namespace Phanes
 
         vtx_buffers.push_back(buffer);
     }
-    void OpenGLVtxArr::SetIdxBuffer(const std::shared_ptr<IdxBuffer>& buffer)
+    void OpenGLVtxArr::SetIdxBuffer(const Ref<IdxBuffer>& buffer)
     {
         glBindVertexArray(vtx_arr_id);
         buffer->Bind();

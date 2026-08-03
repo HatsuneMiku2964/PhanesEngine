@@ -12,6 +12,7 @@ namespace Phanes
         pn_forceinline const glm::mat4& GetProjMat() const { return proj_mat; }
         pn_forceinline const glm::mat4& GetViewMat() const { return view_mat; }
         pn_forceinline const glm::mat4& GetVPMat() const { return vp_mat; }
+
         pn_forceinline const glm::vec3& GetPos() const { return pos; }
         pn_forceinline float GetRot() const { return rot; }
         pn_forceinline void SetPos(const glm::vec3& new_pos) { pos = new_pos; UpdateViewMat(); }

@@ -1,6 +1,8 @@
 #include "pnpch.h"
 #include "Application.h"
 
+#include <GLFW/glfw3.h> // TODO: Remove it
+
 #include "Phanes/Events/EventsDispatch.h"
 
 namespace Phanes
@@ -15,6 +17,7 @@ namespace Phanes
 
         window = std::unique_ptr<Window>(Window::Create());
         window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+        window->SetVSync(false);
 
         imgui_layer = new ImGuiLayer();
         PushOverlay(imgui_layer);
@@ -24,8 +27,11 @@ namespace Phanes
     void Application::Run()
     {
         while (running) {
-            
-            for (Layer* layer : layerStack) layer->OnUpdate();
+            float time = (float) glfwGetTime(); // TODO: should change to sth like Platform::GetTime();
+            time_step = time - last_frame_time;
+            last_frame_time = time;
+
+            for (Layer* layer : layerStack) layer->OnUpdate(time_step);
 
             imgui_layer->Begin();
             for (Layer* layer : layerStack) layer->OnImGuiRender();

@@ -7,10 +7,10 @@
 #include "Phanes/Events/AppEvents.h"
 #include "Phanes/Layer/LayerStack.h"
 #include "Phanes/ImGui/ImGuiLayer.h"
+#include "Phanes/Core/TimeStep/TimeStep.h"
 
 namespace Phanes
 {
-
     class Application
     {
     public:
@@ -20,24 +20,25 @@ namespace Phanes
         void Run();
         void OnEvent(Event& e);
 
-        bool OnWindowClose(WindowCloseEvent& e);
-
         pn_forceinline void PushLayer(Layer* layer) { layerStack.PushLayer(layer); }
         pn_forceinline void PushOverlay(Layer* overlay) { layerStack.PushOverlay(overlay); }
 
         pn_forceinline static Application& Get() { return *instance; }
         pn_forceinline Window& GetWindow() { return *window; }
 
-    private:
-        
+    protected:
+        bool OnWindowClose(WindowCloseEvent& e);
 
+    private:
         bool running = true;
+
+        TimeStep time_step = 0.f;
+        float last_frame_time = 0.f;
 
         LayerStack layerStack;
         ImGuiLayer* imgui_layer;
 
         std::unique_ptr<Window> window;
-
         static Application* instance;
     };
 

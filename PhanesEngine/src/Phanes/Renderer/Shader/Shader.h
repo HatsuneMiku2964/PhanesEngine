@@ -1,7 +1,5 @@
 #pragma once
 
-#include <glm/glm.hpp>
-
 namespace Phanes
 {
     struct ShaderSrc
@@ -12,18 +10,15 @@ namespace Phanes
     class Shader
     {
     public:
-        Shader(const std::string &path);
-        ~Shader();
+        
+        virtual ~Shader() = default;
 
-        virtual void Bind() const;
-        virtual void Unbind() const;
+        virtual void Bind() const = 0;
+        virtual void Unbind() const = 0;
 
-        void SetUniformMat4(const std::string& name, const glm::mat4& value);
+        virtual int GetUniformLoc(const std::string& name) const = 0;
 
-        static ShaderSrc ParseShader(const std::string &path);
-    private:
-        uint32_t shader_id = 0;
-        const std::string filepath;
+        static Shader* Create(const std::string& path);
     };
 
 }

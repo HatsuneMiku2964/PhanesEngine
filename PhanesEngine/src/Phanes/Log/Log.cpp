@@ -4,8 +4,8 @@
 
 namespace Phanes
 {
-    std::shared_ptr<spdlog::logger> Log::coreLogger_;
-    std::shared_ptr<spdlog::logger> Log::clientLogger_;
+    Ref<spdlog::logger> Log::coreLogger_;
+    Ref<spdlog::logger> Log::clientLogger_;
 
     void Log::Init()
     {

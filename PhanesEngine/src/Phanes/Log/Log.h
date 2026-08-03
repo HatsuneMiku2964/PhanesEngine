@@ -11,12 +11,12 @@ namespace Phanes
     public:
         static void Init();
 
-        pn_forceinline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return coreLogger_; }
-        pn_forceinline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return clientLogger_; }
+        pn_forceinline static Ref<spdlog::logger>& GetCoreLogger() { return coreLogger_; }
+        pn_forceinline static Ref<spdlog::logger>& GetClientLogger() { return clientLogger_; }
 
     private:
-        static std::shared_ptr<spdlog::logger> coreLogger_;
-        static std::shared_ptr<spdlog::logger> clientLogger_;
+        static Ref<spdlog::logger> coreLogger_;
+        static Ref<spdlog::logger> clientLogger_;
     };
 }
 

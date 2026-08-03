@@ -1,82 +1,17 @@
 ﻿#include "pnpch.h"
 #include "Shader.h"
 
-#include <glad/glad.h>
-#include <glm/gtc/type_ptr.hpp>
+#include "Phanes/Renderer/Renderer/Renderer.h"
+#include "Platforms/RenderAPI/OpenGL/OpenGLShader.h"
 
 namespace Phanes
 {
-    Shader::Shader(const std::string& path)
+    Shader* Shader::Create(const std::string& path)
     {
-        ShaderSrc src = ParseShader(path);
-
-        shader_id = glCreateProgram();
-        uint32_t program = shader_id;
-
-        uint32_t vs = glCreateShader(GL_VERTEX_SHADER);
-        uint32_t fs = glCreateShader(GL_FRAGMENT_SHADER);
-
-        const char* vs_src = src.vtxsrc.c_str();
-        glShaderSource(vs, 1, &vs_src, nullptr);
-        glCompileShader(vs);
-
-        const char* fs_src = src.frgmsrc.c_str();
-        glShaderSource(fs, 1, &fs_src, nullptr);
-        glCompileShader(fs);
-
-        glAttachShader(program, vs);
-        glAttachShader(program, fs);
-        glLinkProgram(program);
-        glValidateProgram(program);
-
-        glDeleteShader(vs);
-        glDeleteShader(fs);
-
-        glDetachShader(program, vs);
-        glDetachShader(program, fs);
-    }
-    Shader::~Shader() { glDeleteProgram(shader_id); }
-
-    void Shader::Bind() const { glUseProgram(shader_id); }
-    void Shader::Unbind() const { glUseProgram(0); }
-
-    void Shader::SetUniformMat4(const std::string& name, const glm::mat4& value)
-    {
-        int loc = glGetUniformLocation(shader_id, name.c_str());
-        glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(value));
-    }
-
-    ShaderSrc Shader::ParseShader(const std::string& path)
-    {
-        std::ifstream stream(path);
-        if (!stream.is_open()) {
-            PN_CORE_ASSERT(false, "Invalid shader file path: {0}", path.c_str());
-            return ShaderSrc();
+        switch (Renderer::GetAPI()) {
+        case RenderAPI::RendererAPI::OpenGL:       return new OpenGLShader(path);
+        case RenderAPI::RendererAPI::None:         PN_CORE_ASSERT(false, "Renderer API should not be None!!"); return nullptr;
+        default:                                   PN_CORE_ASSERT(false, "Unknown renderer API"); return nullptr;
         }
-
-        enum class ShaderType { NONE = -1, VERTEX = 0, FRAGMENT = 1 };
-
-        std::string line;
-        std::stringstream ss[2];
-        ShaderType type = ShaderType::NONE;
-
-        while (getline(stream, line)) {
-            if (line.find("#shader") != std::string::npos) {
-                if (line.find("vertex") != std::string::npos)           type = ShaderType::VERTEX;
-                else if (line.find("fragment") != std::string::npos)    type = ShaderType::FRAGMENT;
-                else {
-                    PN_CORE_ASSERT(false, "Invalid shader type: "
-                                   "should be either \"#shader vertex\" or \"#shader fragment\".\n"
-                                   "                   see file {0}", path.c_str());
-                    return ShaderSrc();
-                }
-            } else {
-                ss[(int) type] << line << "\n";
-            }
-        }
-        ShaderSrc src;
-        src.vtxsrc = ss[0].str();
-        src.frgmsrc = ss[1].str();
-        return src;
     }
 }

@@ -15,6 +15,7 @@
 
 #include "Phanes/Log/Log.h"
 #include "Phanes/Core.h"
+#include "Phanes/Core/TimeStep/TimeStep.h"
 
 #ifdef PN_PLATFORMS_WINDOWS
     #include <Windows.h>

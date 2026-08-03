@@ -1,7 +1,6 @@
 #pragma once
 
 #include <variant>
-#include <utility>
 
 #include "Phanes/Events/Events.h"
 #include "Phanes/Events/AppEvents.h"
