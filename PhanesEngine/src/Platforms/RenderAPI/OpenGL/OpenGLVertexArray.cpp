@@ -3,7 +3,7 @@
 
 #include <glad/glad.h>
 
-namespace Phanes
+namespace PN
 {
     OpenGLVtxArr::OpenGLVtxArr() { glCreateVertexArrays(1, &vtx_arr_id); }
     OpenGLVtxArr::~OpenGLVtxArr() { glDeleteVertexArrays(1, &vtx_arr_id); }

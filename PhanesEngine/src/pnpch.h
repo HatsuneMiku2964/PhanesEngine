@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <fstream>
 
 #include <functional>
 #include <memory>
@@ -13,9 +14,10 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "Phanes/Log/Log.h"
-#include "Phanes/Core.h"
+#include "Phanes/Core/Core.h"
+#include "Phanes/Core/Log/Log.h"
 #include "Phanes/Core/TimeStep/TimeStep.h"
+#include "Phanes/Core/Renderer/Renderer/Renderer.h"
 
 #ifdef PN_PLATFORMS_WINDOWS
     #include <Windows.h>

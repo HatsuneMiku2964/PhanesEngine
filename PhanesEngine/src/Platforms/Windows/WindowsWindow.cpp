@@ -1,12 +1,12 @@
 #include "pnpch.h"
 #include "WindowsWindow.h"
 
-#include "Phanes/Events/AppEvents.h"
-#include "Phanes/Events/KeyEvents.h"
-#include "Phanes/Events/MouseEvents.h"
+#include "Phanes/Core/Events/AppEvents.h"
+#include "Phanes/Core/Events/KeyEvents.h"
+#include "Phanes/Core/Events/MouseEvents.h"
 #include "Platforms/RenderAPI/OpenGL/OpenGLRenderContext.h"
 
-namespace Phanes
+namespace PN
 {
     static bool GLFWInitialized = false;
     static void GLFWErrorCallback(int error, const char* description) { PN_CORE_LOG_ERROR("GLFW Error ({0}): {1}", error, description); }

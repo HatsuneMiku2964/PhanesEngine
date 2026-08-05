@@ -11,6 +11,7 @@ IncludeDirs["GLFW"] = "PhanesEngine/vendor/GLFW/include"
 IncludeDirs["Glad"] = "PhanesEngine/vendor/Glad/include"
 IncludeDirs["ImGui"] = "PhanesEngine/vendor/imgui"
 IncludeDirs["glm"] = "PhanesEngine/vendor/glm"
+IncludeDirs["stb_image"] = "PhanesEngine/vendor/stb_image"
 
 group "Dependencies"
     include "PhanesEngine/vendor/GLFW"
@@ -36,6 +37,8 @@ project "PhanesEngine"
     {
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
+        "%{prj.name}/vendor/stb_image/**.h",
+        "%{prj.name}/vendor/stb_image/**.cpp",
         "%{prj.name}/vendor/glm/glm/**.hpp",
         "%{prj.name}/vendor/glm/glm/**.inl",
     }
@@ -48,6 +51,7 @@ project "PhanesEngine"
         "%{IncludeDirs.Glad}",
         "%{IncludeDirs.ImGui}",
         "%{IncludeDirs.glm}",
+        "%{IncludeDirs.stb_image}",
     }
 
     links 

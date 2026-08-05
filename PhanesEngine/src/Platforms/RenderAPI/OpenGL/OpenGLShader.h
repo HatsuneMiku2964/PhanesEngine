@@ -3,9 +3,9 @@
 #include <variant>
 
 #include "glm/gtc/type_ptr.hpp"
-#include "Phanes/Renderer/Shader/Shader.h"
+#include "Phanes/Core/Renderer/Shader/Shader.h"
 
-namespace Phanes
+namespace PN
 {
     class OpenGLShader : public Shader
     {
@@ -28,7 +28,14 @@ namespace Phanes
         void SetUniform(const std::string& name, const T& value);
         void SetUniform(const std::string& name, const UniformBox& value); //support std::variant
 
-        static ShaderSrc ParseShader(const std::string& path);
+    private:
+        using shader_container = std::unordered_map<uint32_t, std::string>;
+
+        std::string ReadFile(const std::string& path);
+        uint32_t StrToShaderType(const std::string & type);
+        shader_container Partition(const std::string& src);
+        void Compile(const std::string &path);
+
     private:
         uint32_t shader_id = 0;
         const std::string filepath;

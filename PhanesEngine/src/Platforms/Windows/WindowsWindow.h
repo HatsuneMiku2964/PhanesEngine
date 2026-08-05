@@ -2,10 +2,10 @@
 
 #include <GLFW/glfw3.h>
 
-#include "Phanes/Window.h"
-#include "Phanes/Renderer/RenderContext.h"
+#include "Phanes/Core/Window.h"
+#include "Phanes/Core/Renderer/RenderContext.h"
 
-namespace Phanes
+namespace PN
 {
     class WindowsWindow : public Window
     {

@@ -2,16 +2,15 @@
 #include "ImGuiLayer.h"
 
 #include <imgui.h>
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Phanes/App/Application.h"
+#include "Phanes/Core/App/Application.h"
 
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
 
-namespace Phanes
+namespace PN
 {
     ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer") {}
     ImGuiLayer::~ImGuiLayer() {}

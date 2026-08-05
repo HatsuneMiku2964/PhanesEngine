@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 
 // INFO: belongs to OpenGLVtxBuffer
-namespace Phanes
+namespace PN
 {
     // TODO: remove it in the future
     pn_forceinline static GLenum ShaderDataTypeToGLenum(const ShaderData::ShaderDataType& type)
@@ -63,7 +63,7 @@ namespace Phanes
 // ~OpenGLVtxBuffer
 
 // INFO: belongs to OpenGLIdxBuffer
-namespace Phanes
+namespace PN
 {
     OpenGLIdxBuffer::OpenGLIdxBuffer(std::span<const uint32_t> span)
     {

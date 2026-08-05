@@ -2,9 +2,9 @@
 
 #include <span>
 
-#include "Phanes/Renderer/Buffer/Buffer.h"
+#include "Phanes/Core/Renderer/Buffer/Buffer.h"
 
-namespace Phanes
+namespace PN
 {
     class OpenGLVtxBuffer : public VtxBuffer
     {
@@ -32,7 +32,7 @@ namespace Phanes
 }
 
 
-namespace Phanes
+namespace PN
 {
     class OpenGLIdxBuffer : public IdxBuffer
     {

@@ -4,38 +4,9 @@
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
-namespace Phanes
+namespace PN
 {
-    OpenGLShader::OpenGLShader(const std::string& path)
-    {
-        ShaderSrc src = ParseShader(path);
-
-        shader_id = glCreateProgram();
-        uint32_t program = shader_id;
-
-        uint32_t vs = glCreateShader(GL_VERTEX_SHADER);
-        uint32_t fs = glCreateShader(GL_FRAGMENT_SHADER);
-
-        const char* vs_src = src.vtxsrc.c_str();
-        glShaderSource(vs, 1, &vs_src, nullptr);
-        glCompileShader(vs);
-
-        const char* fs_src = src.frgmsrc.c_str();
-        glShaderSource(fs, 1, &fs_src, nullptr);
-        glCompileShader(fs);
-
-        glAttachShader(program, vs);
-        glAttachShader(program, fs);
-        glLinkProgram(program);
-        glValidateProgram(program);
-
-        glDeleteShader(vs);
-        glDeleteShader(fs);
-
-        glDetachShader(program, vs);
-        glDetachShader(program, fs);
-    }
-
+    OpenGLShader::OpenGLShader(const std::string& path) { Compile(path); }
     OpenGLShader::~OpenGLShader() { glDeleteProgram(shader_id); }
 
     void OpenGLShader::Bind() const { glUseProgram(shader_id); }
@@ -46,7 +17,7 @@ namespace Phanes
         if (uniform_loc_cache.contains(name)) return uniform_loc_cache.at(name);
 
         int result = glGetUniformLocation(shader_id, name.c_str());
-        if (result == -1) PN_CORE_LOG_ERROR("invalid uniform location!!");
+        if (result == -1) PN_CORE_LOG_ERROR("invalid uniform location of name \"{0}\"!!", name.c_str());
         uniform_loc_cache[name] = result;
         return result;
     }
@@ -57,61 +28,130 @@ namespace Phanes
         int location = GetUniformLoc(name);
         if (location == -1) return;
 
-        if constexpr (std::is_same_v<T, int>)               glUniform1i(location, value);
+        if      constexpr (std::is_same_v<T, int>)          glUniform1i(location, value);
         else if constexpr (std::is_same_v<T, float>)        glUniform1f(location, value);
         else if constexpr (std::is_same_v<T, glm::vec2>)    glUniform2f(location, value.x, value.y);
         else if constexpr (std::is_same_v<T, glm::vec3>)    glUniform3f(location, value.x, value.y, value.z);
         else if constexpr (std::is_same_v<T, glm::vec4>)    glUniform4f(location, value.x, value.y, value.z, value.w);
         else if constexpr (std::is_same_v<T, glm::mat3>)    glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(value));
         else if constexpr (std::is_same_v<T, glm::mat4>)    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
-        else static_assert(!sizeof(T*), "Unsupported Uniform Type!");
+        else                                                PN_CORE_ASSERT(false, "Unsupported Uniform Type!");
     }
-
-    template void OpenGLShader::SetUniform<int>(const std::string&, const int&);
-    template void OpenGLShader::SetUniform<float>(const std::string&, const float&);
-    template void OpenGLShader::SetUniform<glm::vec2>(const std::string&, const glm::vec2&);
-    template void OpenGLShader::SetUniform<glm::vec3>(const std::string&, const glm::vec3&);
-    template void OpenGLShader::SetUniform<glm::vec4>(const std::string&, const glm::vec4&);
-    template void OpenGLShader::SetUniform<glm::mat3>(const std::string&, const glm::mat3&);
-    template void OpenGLShader::SetUniform<glm::mat4>(const std::string&, const glm::mat4&);
-
     void OpenGLShader::SetUniform(const std::string& name, const UniformBox& value)
     {
         auto&& fn = [this, &name](auto&& arg) { this->SetUniform(name, arg); };
         std::visit(fn, value);
     }
 
-    ShaderSrc OpenGLShader::ParseShader(const std::string& path)
+    std::string OpenGLShader::ReadFile(const std::string& path)
     {
-        std::ifstream stream(path);
-        if (!stream.is_open()) {
-            PN_CORE_ASSERT(false, "Invalid shader file path: {0}", path.c_str());
-            return ShaderSrc();
-        }
+        std::ifstream in(path, std::ios::in, std::ios::binary);
+        if (!in) { PN_CORE_ASSERT(false, "Invalid shader file path: {0}", path.c_str()); return {}; }
 
-        enum class ShaderType { NONE = -1, VERTEX = 0, FRAGMENT = 1 };
+        std::string src;
 
-        std::string line;
-        std::stringstream ss[2];
-        ShaderType type = ShaderType::NONE;
+        in.seekg(0, std::ios::end);
+        src.resize(in.tellg());
+        in.seekg(0, std::ios::beg);
+        in.read(src.data(), src.size());
+        in.close();
 
-        while (getline(stream, line)) {
-            if (line.find("#shader") != std::string::npos) {
-                if (line.find("vertex") != std::string::npos)           type = ShaderType::VERTEX;
-                else if (line.find("fragment") != std::string::npos)    type = ShaderType::FRAGMENT;
-                else {
-                    PN_CORE_ASSERT(false, "Invalid shader type: "
-                                   "should be either \"#shader vertex\" or \"#shader fragment\".\n"
-                                   "                   see file {0}", path.c_str());
-                    return ShaderSrc();
-                }
-            } else {
-                ss[(int) type] << line << "\n";
-            }
-        }
-        ShaderSrc src;
-        src.vtxsrc = ss[0].str();
-        src.frgmsrc = ss[1].str();
         return src;
     }
+
+    uint32_t OpenGLShader::StrToShaderType(const std::string& type)
+    {
+        if (type == "vertex")   return GL_VERTEX_SHADER;
+        if (type == "fragment") return GL_FRAGMENT_SHADER;
+
+        PN_CORE_LOG_ERROR("invalid shader type of \"{0}\"", type);
+        return 0;
+    }
+    std::unordered_map<uint32_t, std::string> OpenGLShader::Partition(const std::string& src)
+    {
+        std::unordered_map<uint32_t, std::string> res;
+        const char* token = "#shader";
+        size_t token_len = strlen(token);
+        size_t start_pos = src.find(token);
+
+        while (start_pos != std::string::npos)
+        {
+            size_t eol = src.find_first_of("\r\n", start_pos);
+            PN_CORE_ASSERT(eol != std::string::npos, "syntax error");
+
+            size_t type_start = start_pos + token_len + 1;
+            std::string type = src.substr(type_start, eol - type_start);
+            PN_CORE_ASSERT(StrToShaderType(type), "syntax error: invalid shader type");
+
+            size_t next = src.find_first_not_of("\r\n", eol);
+            if (next == std::string::npos) break;
+            start_pos = src.find(token, next);
+
+            size_t end_pos = start_pos - 1;
+            res[StrToShaderType(type)] = src.substr(next, end_pos-next);
+        }
+
+        return res;
+    }
+
+    void OpenGLShader::Compile(const std::string &path)
+    {
+        std::string src_str= ReadFile(path);
+        shader_container src = Partition(src_str);
+
+        uint32_t program = glCreateProgram();
+        std::vector<uint32_t> shaders;
+
+        for (const auto& [type, str] : src)
+        {
+            uint32_t shader = glCreateShader(type);
+            const char* src = str.c_str();
+            glShaderSource(shader, 1, &src, nullptr);
+            glCompileShader(shader);
+            {
+                int compiled;
+                glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+                if (!compiled) {
+                    int len;
+                    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
+                    std::vector<char> message(len);
+                    glGetShaderInfoLog(shader, len, &len, message.data());
+                    PN_CORE_ASSERT(false, "{0}", message.data());
+                    break;
+                }
+            }
+            glAttachShader(program, shader);
+            shaders.push_back(shader);
+        }
+
+        glLinkProgram(program);
+        {
+            int linked;
+            glGetProgramiv(program, GL_LINK_STATUS, &linked);
+            if (!linked) {
+                int len;
+                glGetProgramiv(program, GL_INFO_LOG_LENGTH, &len);
+                std::vector<char> message(len);
+                glGetProgramInfoLog(program, len, &len, message.data());
+                PN_CORE_ASSERT(false, "{0}", message.data());
+
+                glDeleteProgram(program);
+                for (uint32_t shader: shaders) glDeleteShader(shader);
+                return;
+            }
+        }
+        glValidateProgram(program);
+
+        for (uint32_t shader : shaders) glDetachShader(program, shader);
+
+        shader_id = program;
+    }
 }
+
+template void PN::OpenGLShader::SetUniform<int>(const std::string&, const int&);
+template void PN::OpenGLShader::SetUniform<float>(const std::string&, const float&);
+template void PN::OpenGLShader::SetUniform<glm::vec2>(const std::string&, const glm::vec2&);
+template void PN::OpenGLShader::SetUniform<glm::vec3>(const std::string&, const glm::vec3&);
+template void PN::OpenGLShader::SetUniform<glm::vec4>(const std::string&, const glm::vec4&);
+template void PN::OpenGLShader::SetUniform<glm::mat3>(const std::string&, const glm::mat3&);
+template void PN::OpenGLShader::SetUniform<glm::mat4>(const std::string&, const glm::mat4&);

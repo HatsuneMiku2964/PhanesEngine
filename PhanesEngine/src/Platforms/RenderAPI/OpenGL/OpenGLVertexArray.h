@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "Phanes/Renderer/VertexArray/VertexArray.h"
+#include "Phanes/Core/Renderer/VertexArray/VertexArray.h"
 
-namespace Phanes
+namespace PN
 {
     class OpenGLVtxArr : public VtxArr
     {

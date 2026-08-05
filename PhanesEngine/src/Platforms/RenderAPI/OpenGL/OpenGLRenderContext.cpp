@@ -4,7 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
-namespace Phanes
+namespace PN
 {
     OpenGLRenderContext::OpenGLRenderContext(GLFWwindow* window) : window_handle(window) { PN_CORE_ASSERT(window, "window handle is NULL!!"); }
 

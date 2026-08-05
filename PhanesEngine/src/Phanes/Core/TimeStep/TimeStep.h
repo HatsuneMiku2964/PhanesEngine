@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Phanes
+namespace PN
 {
     class TimeStep
     {

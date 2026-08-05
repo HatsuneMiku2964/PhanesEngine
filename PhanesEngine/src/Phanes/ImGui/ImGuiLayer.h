@@ -1,12 +1,8 @@
 #pragma once
 
-#include "Phanes/Layer/Layer.h"
+#include "Phanes/Core/Layer/Layer.h"
 
-#include "Phanes/Events/KeyEvents.h"
-#include "Phanes/Events/MouseEvents.h"
-#include "Phanes/Events/AppEvents.h"
-
-namespace Phanes
+namespace PN
 {
     class ImGuiLayer : public Layer
     {

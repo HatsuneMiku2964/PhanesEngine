@@ -1,12 +1,14 @@
 ﻿#pragma once
 
-#include "Phanes/Renderer/RenderAPI/RenderAPI.h"
+#include "Phanes/Core/Renderer/RenderAPI.h"
 
-namespace Phanes
+namespace PN
 {
     class OpenGLRenderAPI : public RenderAPI
     {
     public:
+        void Init() override;
+
         void Clear() override;
         void SetClearColor(const glm::vec4& color) override;
 

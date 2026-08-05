@@ -3,9 +3,9 @@
 
 #include <GLFW/glfw3.h>
 
-#include "Phanes/App/Application.h"
+#include "Phanes/Core/App/Application.h"
 
-namespace Phanes
+namespace PN
 {
     Input* Input::instance_ = new WindowsInput();
     

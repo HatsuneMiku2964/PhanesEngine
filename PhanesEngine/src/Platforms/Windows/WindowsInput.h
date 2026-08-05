@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "Phanes/Input.h"
-namespace Phanes
+#include "Phanes/Core/Input.h"
+namespace PN
 {
     class WindowsInput : public Input
     {

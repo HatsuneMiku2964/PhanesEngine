@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Phanes/Renderer/RenderContext.h"
+#include "Phanes/Core/Renderer/RenderContext.h"
 
 struct GLFWwindow;
 
-namespace Phanes
+namespace PN
 {
     class OpenGLRenderContext : public RenderContext
     {
