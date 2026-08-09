@@ -6,7 +6,22 @@
 
 namespace PN
 {
-    OpenGLShader::OpenGLShader(const std::string& path) { Compile(path); }
+    OpenGLShader::OpenGLShader(const std::string& path)
+        : filepath(path)
+    {
+        std::string src_str = ReadFile(path);
+        shader_container src = Partition(src_str);
+        Compile(src);
+
+        // extract name from the path
+        size_t beg = path.find_last_of("/\\");
+        beg = (beg == std::string::npos) ? 0 : beg + 1;
+
+        size_t end = path.find_last_of('.');
+        end = (end == std::string::npos) ? 0 : end;
+
+        name = path.substr(beg, end - beg);
+    }
     OpenGLShader::~OpenGLShader() { glDeleteProgram(shader_id); }
 
     void OpenGLShader::Bind() const { glUseProgram(shader_id); }
@@ -43,23 +58,7 @@ namespace PN
         std::visit(fn, value);
     }
 
-    std::string OpenGLShader::ReadFile(const std::string& path)
-    {
-        std::ifstream in(path, std::ios::in, std::ios::binary);
-        if (!in) { PN_CORE_ASSERT(false, "Invalid shader file path: {0}", path.c_str()); return {}; }
-
-        std::string src;
-
-        in.seekg(0, std::ios::end);
-        src.resize(in.tellg());
-        in.seekg(0, std::ios::beg);
-        in.read(src.data(), src.size());
-        in.close();
-
-        return src;
-    }
-
-    uint32_t OpenGLShader::StrToShaderType(const std::string& type)
+    uint32_t OpenGLShader::StrToShaderType(const std::string& type) const
     {
         if (type == "vertex")   return GL_VERTEX_SHADER;
         if (type == "fragment") return GL_FRAGMENT_SHADER;
@@ -67,7 +66,21 @@ namespace PN
         PN_CORE_LOG_ERROR("invalid shader type of \"{0}\"", type);
         return 0;
     }
-    std::unordered_map<uint32_t, std::string> OpenGLShader::Partition(const std::string& src)
+    std::string OpenGLShader::ReadFile(const std::string& path) const
+    {
+        std::ifstream in(path, std::ios::in | std::ios::binary | std::ios::ate);
+        if (!in) { PN_CORE_ASSERT(false, "Invalid shader file path: {0}", path.c_str()); return {}; }
+
+        std::string src;
+
+        src.resize(in.tellg());
+        in.seekg(0, std::ios::beg);
+        in.read(src.data(), src.size());
+        in.close();
+
+        return src;
+    }
+    std::unordered_map<uint32_t, std::string> OpenGLShader::Partition(const std::string& src) const
     {
         std::unordered_map<uint32_t, std::string> res;
         const char* token = "#shader";
@@ -87,21 +100,21 @@ namespace PN
             if (next == std::string::npos) break;
             start_pos = src.find(token, next);
 
-            size_t end_pos = start_pos - 1;
-            res[StrToShaderType(type)] = src.substr(next, end_pos-next);
+            size_t end_pos = (start_pos == std::string::npos) ? src.size() : start_pos;
+            res[StrToShaderType(type)] = src.substr(next, end_pos - next);
         }
 
         return res;
     }
-
-    void OpenGLShader::Compile(const std::string &path)
+    void OpenGLShader::Compile(const shader_container& src)
     {
-        std::string src_str= ReadFile(path);
-        shader_container src = Partition(src_str);
-
         uint32_t program = glCreateProgram();
-        std::vector<uint32_t> shaders;
 
+        static constexpr uint8_t max_shaders_amt_support = 2; // INFO: we only support 2 shaders now
+        PN_CORE_ASSERT(src.size() <= max_shaders_amt_support, "we only support 2 shaders now!!");
+        std::array<uint32_t, max_shaders_amt_support> shaders;
+
+        int shader_cnt = 0;
         for (const auto& [type, str] : src)
         {
             uint32_t shader = glCreateShader(type);
@@ -121,7 +134,7 @@ namespace PN
                 }
             }
             glAttachShader(program, shader);
-            shaders.push_back(shader);
+            shaders[shader_cnt++] = shader;
         }
 
         glLinkProgram(program);
@@ -136,22 +149,28 @@ namespace PN
                 PN_CORE_ASSERT(false, "{0}", message.data());
 
                 glDeleteProgram(program);
-                for (uint32_t shader: shaders) glDeleteShader(shader);
+                for (uint32_t shader : shaders) glDeleteShader(shader);
                 return;
             }
         }
         glValidateProgram(program);
 
-        for (uint32_t shader : shaders) glDetachShader(program, shader);
+        for (uint32_t shader : shaders) {
+            glDetachShader(program, shader);
+            glDeleteShader(shader);
+        }
 
         shader_id = program;
     }
 }
 
-template void PN::OpenGLShader::SetUniform<int>(const std::string&, const int&);
-template void PN::OpenGLShader::SetUniform<float>(const std::string&, const float&);
-template void PN::OpenGLShader::SetUniform<glm::vec2>(const std::string&, const glm::vec2&);
-template void PN::OpenGLShader::SetUniform<glm::vec3>(const std::string&, const glm::vec3&);
-template void PN::OpenGLShader::SetUniform<glm::vec4>(const std::string&, const glm::vec4&);
-template void PN::OpenGLShader::SetUniform<glm::mat3>(const std::string&, const glm::mat3&);
-template void PN::OpenGLShader::SetUniform<glm::mat4>(const std::string&, const glm::mat4&);
+namespace PN
+{
+    template void OpenGLShader::SetUniform<int>(const std::string&, const int&);
+    template void OpenGLShader::SetUniform<float>(const std::string&, const float&);
+    template void OpenGLShader::SetUniform<glm::vec2>(const std::string&, const glm::vec2&);
+    template void OpenGLShader::SetUniform<glm::vec3>(const std::string&, const glm::vec3&);
+    template void OpenGLShader::SetUniform<glm::vec4>(const std::string&, const glm::vec4&);
+    template void OpenGLShader::SetUniform<glm::mat3>(const std::string&, const glm::mat3&);
+    template void OpenGLShader::SetUniform<glm::mat4>(const std::string&, const glm::mat4&);
+}

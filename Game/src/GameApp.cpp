@@ -9,15 +9,15 @@ class SampleLayer : public PN::Layer
 {
 public:
     SampleLayer()
-        :Layer("sample layer"), camera(-1.6f, 1.6f, -0.9f, 0.9f)
+        :Layer("sample layer")
     {
         vao.reset(PN::VtxArr::Create());
 
         float vertices[] = {
-            -0.5f, -0.5f, 0.f, 0.f, 
-             0.5f, -0.5f, 1.f, 0.f, 
-             0.5f,  0.5f, 1.f, 1.f, 
-            -0.5f,  0.5f, 0.f, 1.f, 
+            -0.5f, -0.5f, 0.f, 0.f,
+             0.5f, -0.5f, 1.f, 0.f,
+             0.5f,  0.5f, 1.f, 1.f,
+            -0.5f,  0.5f, 0.f, 1.f,
         };
         PN::Ref<PN::VtxBuffer> vbo;
         PN::BufferLayout layout = {
@@ -30,8 +30,8 @@ public:
         PN::Ref<PN::IdxBuffer> ibo;
         ibo.reset(PN::IdxBuffer::Create(indices));
 
-        shader.reset(PN::Shader::Create("../Game/Assets/Shaders/Shader.shader")); 
-        
+        manager.Load("../Game/Assets/Shaders/Shader.shader");
+
         tex = PN::Texture2D::Create("../Game/Assets/Textures/tex.png");
         background = PN::Texture2D::Create("../Game/Assets/Textures/background.png");
 
@@ -50,33 +50,17 @@ public:
 
     void OnUpdate(PN::TimeStep ts) override
     {
+        camera_ctrl.OnUpdate(ts);
+
         PN::RenderCmd::SetClearColor({0.06f, 0.06f, 0.06f, 0.06f});
         PN::RenderCmd::Clear();
 
-        float time = (float) ts;
-        {
-            if (PN::Input::IsKeyPressed(PN_KEY_A)) pos.x -= speed * time;
-            if (PN::Input::IsKeyPressed(PN_KEY_D)) pos.x += speed * time;
-            if (PN::Input::IsKeyPressed(PN_KEY_S)) pos.y -= speed * time;
-            if (PN::Input::IsKeyPressed(PN_KEY_W)) pos.y += speed * time;
-
-            if (PN::Input::IsKeyPressed(PN_KEY_Q)) rot -= rot_rate * time;
-            if (PN::Input::IsKeyPressed(PN_KEY_E)) rot += rot_rate * time;
-
-            if (PN::Input::IsKeyPressed(PN_KEY_UP))     tri_pos.y += speed * time;
-            if (PN::Input::IsKeyPressed(PN_KEY_DOWN))   tri_pos.y -= speed * time;
-            if (PN::Input::IsKeyPressed(PN_KEY_LEFT))   tri_pos.x -= speed * time;
-            if (PN::Input::IsKeyPressed(PN_KEY_RIGHT))  tri_pos.x += speed * time;
-        }
-        camera.SetPos({pos, 0.f});
-        camera.SetRot(rot);
-
-        //std::dynamic_pointer_cast<PN::OpenGLShader>(shader)->SetUniform("u_color", color);
+        shader = manager.Get("Shader");
         std::dynamic_pointer_cast<PN::OpenGLShader>(shader)->SetUniform("u_tex", 0);
 
         glm::mat4 transform = glm::translate(glm::mat4(1.f), glm::vec3(tri_pos, 0.f));
 
-        PN::Renderer::BeginScene(camera);
+        PN::Renderer::BeginScene(camera_ctrl.GetCamera());
         tex->Bind();
         PN::Renderer::Submit(shader, vao, transform);
         background->Bind();
@@ -84,8 +68,15 @@ public:
         PN::Renderer::EndScene();
     }
 
+    void OnEvent(PN::Event& event) override
+    {
+        camera_ctrl.OnEvent(event);
+    }
+
 private:
-    PN::OrthographicCamera camera;
+    PN::ShaderManager manager;
+
+    PN::OrthoCameraController camera_ctrl;
     PN::Ref<PN::Shader> shader;
     PN::Ref<PN::VtxArr> vao;
 

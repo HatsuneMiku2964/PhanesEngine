@@ -20,15 +20,12 @@
     #define PN_ASSERT(x, ...) { if(!(x)) { PN_LOG_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
     #define PN_CORE_ASSERT(x, ...) { if(!(x)) { PN_CORE_LOG_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
 #else
-    #define PN_ASSERT(x, ...)
+    #define PN_CORE_ASSERT(x, ...)
     #define PN_CORE_ASSERT(x, ...)
 #endif
 
 // Bitwise
 #define BIT_PUSH(x) (1 << x)
-
-// Event binding
-#define BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
 
 // Inlining
 #ifdef _MSC_VER
@@ -39,9 +36,24 @@
     #define pn_forceinline inline
 #endif
 
+// Event binding
+#define BIND_EVENT_FN(fn) ::PN::BindEventFn(&std::remove_reference_t<decltype(*this)>::fn, this)
+
+namespace PN 
+{
+    template<typename Class, typename EventT>
+    auto BindEventFn(bool(Class::*fn)(EventT&), Class* instance)
+    {
+        return [instance, fn](EventT& e) -> bool {
+            return (instance->*fn)(e);
+        };
+    }
+}
+
 // Memory
 #include <memory>
-namespace PN {
+namespace PN 
+{
     template<typename T>
     using Scope = std::unique_ptr<T>;
 

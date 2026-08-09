@@ -8,11 +8,10 @@ namespace PN
 {
     Renderer::SceneData* Renderer::scene_data = new SceneData();
 
-    void Renderer::Init() {
-        RenderCmd::Init();
-    }
+    void Renderer::Init() { RenderCmd::Init(); }
+    void Renderer::OnWindowResized(uint32_t width, uint32_t height) { RenderCmd::SetViewport(0, 0, width, height); }
 
-    void Renderer::BeginScene(OrthographicCamera& camera) { scene_data->vp_mat = camera.GetVPMat(); }
+    void Renderer::BeginScene(const OrthographicCamera& camera) { scene_data->vp_mat = camera.GetVPMat(); }
     void Renderer::EndScene() {}
 
     void Renderer::Submit(const Ref<Shader>& shader, const Ref<VtxArr>& vao, const glm::mat4& transform)

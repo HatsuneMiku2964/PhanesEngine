@@ -52,7 +52,7 @@ namespace PN
     }
 
     void OpenGLVtxBuffer::init(const std::span<const float>& span_) {
-        PN_ASSERT(!(span_.size() > INT32_MAX), "Element count of vertex buffer exceeds maximum GLsizei capacity of 2147483647 !!");
+        PN_CORE_ASSERT(!(span_.size() > INT32_MAX), "Element count of vertex buffer exceeds maximum GLsizei capacity of 2147483647 !!");
         elem_cnt = static_cast<uint32_t>(span_.size());
 
         glCreateBuffers(1, &buffer_id);
@@ -67,7 +67,7 @@ namespace PN
 {
     OpenGLIdxBuffer::OpenGLIdxBuffer(std::span<const uint32_t> span)
     {
-        PN_ASSERT(!(span.size() > INT32_MAX), "Element count of index buffer exceeds maximum GLsizei capacity of 2147483647 !!");
+        PN_CORE_ASSERT(!(span.size() > INT32_MAX), "Element count of index buffer exceeds maximum GLsizei capacity of 2147483647 !!");
         elem_cnt = static_cast<uint32_t>(span.size());
 
         glCreateBuffers(1, &buffer_id);

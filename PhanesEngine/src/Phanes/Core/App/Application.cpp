@@ -16,7 +16,7 @@ namespace PN
         instance = this;
 
         window = std::unique_ptr<Window>(Window::Create());
-        window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+        window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
         window->SetVSync(false);
 
         imgui_layer = new ImGuiLayer();
@@ -33,8 +33,8 @@ namespace PN
             time_step = time - last_frame_time;
             last_frame_time = time;
 
-            for (Layer* layer : layerStack) layer->OnUpdate(time_step);
-
+            if (!minimized) for (Layer* layer : layerStack) layer->OnUpdate(time_step);
+            
             imgui_layer->Begin();
             for (Layer* layer : layerStack) layer->OnImGuiRender();
             imgui_layer->End();
@@ -47,16 +47,28 @@ namespace PN
         EventDispatcher dispatcher(e);
 
         // Info: won't do anything if e is not a WindowCloseEvent
-        e.Handled = dispatcher.Dispatch([this](WindowCloseEvent& ev) { return OnWindowClose(ev); });
+        e.Handled = dispatcher.Dispatch(BIND_EVENT_FN(OnWindowClose), BIND_EVENT_FN(OnWindowResize));
 
         for (auto it = layerStack.end(); it != layerStack.begin();) {
             (*--it)->OnEvent(e);
             if (e.Handled) break;
         }
     }
-    bool Application::OnWindowClose(WindowCloseEvent& e)
+
+    bool Application::OnWindowClose(const WindowCloseEvent& e)
     {
         running = false;
         return true;
+    }
+    bool Application::OnWindowResize(const WindowResizeEvent& ev)
+    {
+        if (ev.GetHeight() == 0 || ev.GetWidth() == 0) {
+            minimized = true;
+            return false;
+        } else {
+            minimized = false;
+            Renderer::OnWindowResized(ev.GetWidth(), ev.GetHeight());
+            return false;
+        }
     }
 }

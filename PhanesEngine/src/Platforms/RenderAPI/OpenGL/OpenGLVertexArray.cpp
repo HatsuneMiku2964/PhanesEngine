@@ -13,7 +13,7 @@ namespace PN
 
     void OpenGLVtxArr::AddVtxBuffer(const Ref<VtxBuffer>& buffer)
     {
-        PN_ASSERT(buffer->GetLayout().size(), "Vertex buffer has no layouts!!");
+        PN_CORE_ASSERT(buffer->GetLayout().size(), "Vertex buffer has no layouts!!");
 
         glBindVertexArray(vtx_arr_id);
         buffer->Bind();

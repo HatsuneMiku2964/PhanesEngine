@@ -8,6 +8,7 @@ namespace PN
     {
     public:
         OrthographicCamera(float left, float right, float bottom, float top);
+        void SetProjection(float left, float right, float bottom, float top);
 
         pn_forceinline const glm::mat4& GetProjMat() const { return proj_mat; }
         pn_forceinline const glm::mat4& GetViewMat() const { return view_mat; }

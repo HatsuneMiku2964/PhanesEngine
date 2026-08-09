@@ -87,7 +87,7 @@ namespace PN
                 data.EventFn(event);
                 break;
             }
-            default: PN_ASSERT(false, "Unknown key action of {0}!!", action);
+            default: PN_CORE_ASSERT(false, "Unknown key action of {0}!!", action);
             }
         });
         glfwSetCharCallback(window_, [](GLFWwindow* window, uint32_t key) {

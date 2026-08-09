@@ -22,7 +22,7 @@
 #include "Phanes/Core/Renderer/Texture/Texture.h"
 #include "Phanes/Core/Renderer/VertexArray/VertexArray.h"
 
-#include "Phanes/Core/Renderer/Camera/OrthographicCamera.h"
+#include "Phanes/Core/Renderer/Camera/OrthoCameraController.h"
 
 
 // keycodes

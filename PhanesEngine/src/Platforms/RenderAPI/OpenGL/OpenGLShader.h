@@ -23,6 +23,8 @@ namespace PN
         void Unbind() const override;
 
         int GetUniformLoc(const std::string& name) const override;
+        pn_forceinline const std::string& GetName() const override { return name; }
+        pn_forceinline const std::string& GetPath() const override { return filepath; }
 
         template<typename T>
         void SetUniform(const std::string& name, const T& value);
@@ -30,15 +32,16 @@ namespace PN
 
     private:
         using shader_container = std::unordered_map<uint32_t, std::string>;
+        uint32_t            StrToShaderType(const std::string & type) const;
 
-        std::string ReadFile(const std::string& path);
-        uint32_t StrToShaderType(const std::string & type);
-        shader_container Partition(const std::string& src);
-        void Compile(const std::string &path);
+        std::string         ReadFile(const std::string& path) const;
+        shader_container    Partition(const std::string& src) const;
+        void                Compile(const shader_container &src);
 
     private:
         uint32_t shader_id = 0;
         const std::string filepath;
+        std::string name;
 
         // cache
         mutable std::unordered_map<std::string, int> uniform_loc_cache;

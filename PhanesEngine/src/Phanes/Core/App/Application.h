@@ -27,10 +27,12 @@ namespace PN
         pn_forceinline Window& GetWindow() { return *window; }
 
     protected:
-        bool OnWindowClose(WindowCloseEvent& e);
+        bool OnWindowClose(const WindowCloseEvent& e);
+        bool OnWindowResize(const WindowResizeEvent & ev);
 
     private:
         bool running = true;
+        bool minimized = false;
 
         TimeStep time_step = 0.f;
         float last_frame_time = 0.f;
@@ -38,7 +40,7 @@ namespace PN
         LayerStack layerStack;
         ImGuiLayer* imgui_layer;
 
-        std::unique_ptr<Window> window;
+        Ref<Window> window;
         static Application* instance;
     };
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <variant>
+#include <type_traits>
 
 #include "Events.h"
 #include "AppEvents.h"
@@ -22,38 +23,57 @@ namespace PN
 
     class EventDispatcher
     {
+        template<typename F>
+        struct event_traits;
+
+        template<typename C, typename R, typename EventT>
+        struct event_traits<R(C::*)(EventT&) const>
+        {
+            using EventType = std::remove_cvref_t<EventT>;
+        };
+
+        template<typename C, typename R, typename EventT>
+        struct event_traits<R(C::*)(EventT&)>
+        {
+            using EventType = std::remove_cvref_t<EventT>;
+        };
+
+        template<typename F>
+        using event_traits_t = event_traits<decltype(&std::decay_t<F>::operator())>::EventType;
+
     public:
-        EventDispatcher(Event& e) : event_(e), eventbox_(PackEvent(e)) {}
+        EventDispatcher(Event& e) : event(e), eventbox(PackEvent(e)) {}
 
         template<typename T>
         bool Dispatch(std::function<bool(T&)> func)
         {
-            PN_CORE_LOG_WARN("Legacy func used: EventDispatcher::Dispatch(std::function<bool(T&)> func)");
-            if (event_.GetEventType() == T::GetStaticType()) {
-                event_.Handled = func(*(T*) &event_);
+            if (event.GetEventType() == T::GetStaticType()) {
+                event.Handled = func(*(T*) &event);
                 return true;
             }
             return false;
         }
 
         template<typename... Args>
-        bool Dispatch(Args&&... args)               // INFO: all args (lambdas) should return bool
+        bool Dispatch(Args&&... args)
         {
-            FnOverload overload{
-                std::forward<Args>(args)...,        // pack all callbacks using perfect forwarding
-                [](const auto&) { return false; },        // handle arbitary EVENT type
-                [this](std::monostate) {            // handle arbitary type
-                    PN_CORE_LOG_WARN("Try dispatching unknown event: {0} event", event_.GetName());
-                    return false;
-                }
-            };
-
-            bool success = std::visit(overload, eventbox_);
-            event_.Handled = success;
-            return success;
+            (dispatch_single(std::forward<Args>(args)), ...);
+            return event.Handled;
         }
 
     private:
+        template<typename F>
+        void dispatch_single(F&& func)
+        {
+            if (event.Handled) return;
+
+            using EventT = event_traits_t<F>;
+            if (event.GetEventType() != EventT::GetStaticType()) return;
+
+            event.Handled |= func(*(EventT*)&event);
+            
+        }
+
         pn_forceinline static EventBox PackEvent(Event& e)
         {
             switch (e.GetEventType()) {
@@ -78,8 +98,8 @@ namespace PN
         };
 
     private:
-        Event& event_;
-        EventBox eventbox_;
+        Event& event;
+        EventBox eventbox;
     };
 
 }
