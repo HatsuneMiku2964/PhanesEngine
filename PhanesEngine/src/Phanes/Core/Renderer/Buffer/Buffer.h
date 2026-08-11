@@ -4,64 +4,61 @@
 
 namespace PN
 {
-    namespace ShaderData
+    enum class ShaderDataType : uint8_t
     {
-        enum class ShaderDataType : uint8_t
-        {
-            None = 0,
-            Float, Float2, Float3, Float4,
-            Mat3, Mat4,
-            Int, Int2, Int3, Int4,
-        };
+        None = 0,
+        Float, Float2, Float3, Float4,
+        Mat3, Mat4,
+        Int, Int2, Int3, Int4,
+    };
 
-        pn_forceinline static uint32_t ShaderDataTypeSize(const ShaderDataType& type)
-        {
-            switch (type) {
-            case ShaderDataType::Float:     return 4;
-            case ShaderDataType::Float2:    return 4 * 2;
-            case ShaderDataType::Float3:    return 4 * 3;
-            case ShaderDataType::Float4:    return 4 * 4;
-            case ShaderDataType::Mat3:      return 4 * 3 * 3;
-            case ShaderDataType::Mat4:      return 4 * 4 * 4;
-            case ShaderDataType::Int:       return 4;
-            case ShaderDataType::Int2:      return 4 * 2;
-            case ShaderDataType::Int3:      return 4 * 3;
-            case ShaderDataType::Int4:      return 4 * 4;
+    pn_forceinline static uint32_t ShaderDataTypeSize(const ShaderDataType& type)
+    {
+        switch (type) {
+        case ShaderDataType::Float:     return 4;
+        case ShaderDataType::Float2:    return 4 * 2;
+        case ShaderDataType::Float3:    return 4 * 3;
+        case ShaderDataType::Float4:    return 4 * 4;
+        case ShaderDataType::Mat3:      return 4 * 3 * 3;
+        case ShaderDataType::Mat4:      return 4 * 4 * 4;
+        case ShaderDataType::Int:       return 4;
+        case ShaderDataType::Int2:      return 4 * 2;
+        case ShaderDataType::Int3:      return 4 * 3;
+        case ShaderDataType::Int4:      return 4 * 4;
 
-            case ShaderDataType::None:  PN_CORE_LOG_ERROR("Invalid shader data type of \"None\"");  return 0;
-            default:                    PN_CORE_LOG_ERROR("Unknown shader data type!!");            return 0;
-            }
+        case ShaderDataType::None:  PN_CORE_LOG_ERROR("Invalid shader data type of \"None\"");  return 0;
+        default:                    PN_CORE_LOG_ERROR("Unknown shader data type!!");            return 0;
         }
     }
 
     struct BufferLayout_Elem
     {
-        BufferLayout_Elem(const ShaderData::ShaderDataType& type)
-            : Size(ShaderData::ShaderDataTypeSize(type)), Type(type), Normalize(false), Offset(0)
+        BufferLayout_Elem(const ShaderDataType& type)
+            : Size(ShaderDataTypeSize(type)), Type(type), Normalize(false), Offset(0)
         {
         }
 
         uint32_t Size;
-        ShaderData::ShaderDataType Type;
+        ShaderDataType Type;
         uint32_t Normalize;
         uint32_t Offset;
 
         pn_forceinline uint32_t GetElemCnt() const
         {
             switch (Type) {
-                case ShaderData::ShaderDataType::Float:     return 1;
-                case ShaderData::ShaderDataType::Float2:    return 2;
-                case ShaderData::ShaderDataType::Float3:    return 3;
-                case ShaderData::ShaderDataType::Float4:    return 4;
-                case ShaderData::ShaderDataType::Mat3:      return 3 * 3;
-                case ShaderData::ShaderDataType::Mat4:      return 4 * 4;
-                case ShaderData::ShaderDataType::Int:       return 1;
-                case ShaderData::ShaderDataType::Int2:      return 2;
-                case ShaderData::ShaderDataType::Int3:      return 3;
-                case ShaderData::ShaderDataType::Int4:      return 4;
+            case ShaderDataType::Float:     return 1;
+            case ShaderDataType::Float2:    return 2;
+            case ShaderDataType::Float3:    return 3;
+            case ShaderDataType::Float4:    return 4;
+            case ShaderDataType::Mat3:      return 3 * 3;
+            case ShaderDataType::Mat4:      return 4 * 4;
+            case ShaderDataType::Int:       return 1;
+            case ShaderDataType::Int2:      return 2;
+            case ShaderDataType::Int3:      return 3;
+            case ShaderDataType::Int4:      return 4;
 
-                case ShaderData::ShaderDataType::None: PN_CORE_LOG_ERROR("Invalid shader data type of \"None\"");  return 0;
-                default:                               PN_CORE_LOG_ERROR("Unknown shader data type!!");            return 0;
+            case ShaderDataType::None: PN_CORE_LOG_ERROR("Invalid shader data type of \"None\"");  return 0;
+            default:                   PN_CORE_LOG_ERROR("Unknown shader data type!!");            return 0;
             }
         }
     };
@@ -110,8 +107,8 @@ namespace PN
         virtual const BufferLayout& GetLayout() const = 0;
         virtual uint32_t GetCount() const = 0;
 
-        static VtxBuffer* Create(std::span<const float> vertices);
-        static VtxBuffer* Create(std::span<const float> vertices, const BufferLayout& layout);
+        static Ref<VtxBuffer> Create(std::span<const float> vertices);
+        static Ref<VtxBuffer> Create(std::span<const float> vertices, const BufferLayout &layout);
     };
     class IdxBuffer
     {
@@ -123,6 +120,6 @@ namespace PN
 
         virtual uint32_t GetCount() const = 0;
 
-        static IdxBuffer* Create(std::span<const uint32_t> indices);
+        static Ref<IdxBuffer> Create(std::span<const uint32_t> indices);
     };
 }

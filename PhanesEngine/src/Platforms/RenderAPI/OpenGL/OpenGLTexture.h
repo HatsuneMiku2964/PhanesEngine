@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <glad/glad.h>
+
 #include "Phanes/Core/Renderer/Texture/Texture.h"
 
 namespace PN
@@ -8,10 +10,13 @@ namespace PN
     {
     public:
         OpenGLTexture2D(const std::string& path);
+        OpenGLTexture2D(uint32_t width, uint32_t height);
         ~OpenGLTexture2D() override;
 
         pn_forceinline uint32_t GetWidth() const override { return width; }
         pn_forceinline uint32_t GetHeight() const override { return height; }
+
+        void SetData(void *data, uint32_t size) override;
 
         void Bind(uint32_t slot = 0) override;
         void Unbind() override;
@@ -19,6 +24,7 @@ namespace PN
     private:
         std::string path;
         uint32_t width = 0, height = 0;
+        GLenum intern_fmt = 0, data_fmt = 0;
         uint32_t texture_id;
     };
 }

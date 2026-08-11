@@ -32,30 +32,44 @@ namespace PN
         if (uniform_loc_cache.contains(name)) return uniform_loc_cache.at(name);
 
         int result = glGetUniformLocation(shader_id, name.c_str());
-        if (result == -1) PN_CORE_LOG_ERROR("invalid uniform location of name \"{0}\"!!", name.c_str());
+        if (result == -1) PN_CORE_LOG_ERROR("invalid uniform variable of name \"{0}\"!!", name.c_str());
         uniform_loc_cache[name] = result;
         return result;
     }
-
-    template <typename T>
-    void OpenGLShader::SetUniform(const std::string& name, const T& value)
+    void OpenGLShader::SetUniform_int(const std::string& name, int val)
     {
-        int location = GetUniformLoc(name);
-        if (location == -1) return;
-
-        if      constexpr (std::is_same_v<T, int>)          glUniform1i(location, value);
-        else if constexpr (std::is_same_v<T, float>)        glUniform1f(location, value);
-        else if constexpr (std::is_same_v<T, glm::vec2>)    glUniform2f(location, value.x, value.y);
-        else if constexpr (std::is_same_v<T, glm::vec3>)    glUniform3f(location, value.x, value.y, value.z);
-        else if constexpr (std::is_same_v<T, glm::vec4>)    glUniform4f(location, value.x, value.y, value.z, value.w);
-        else if constexpr (std::is_same_v<T, glm::mat3>)    glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(value));
-        else if constexpr (std::is_same_v<T, glm::mat4>)    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
-        else                                                PN_CORE_ASSERT(false, "Unsupported Uniform Type!");
+        int loc = GetUniformLoc(name);
+        glUniform1i(loc, val);
     }
-    void OpenGLShader::SetUniform(const std::string& name, const UniformBox& value)
+    void OpenGLShader::SetUniform_float(const std::string& name, float val)
     {
-        auto&& fn = [this, &name](auto&& arg) { this->SetUniform(name, arg); };
-        std::visit(fn, value);
+        int loc = GetUniformLoc(name);
+        glUniform1f(loc, val);
+    }
+    void OpenGLShader::SetUniform_vec2(const std::string& name, glm::vec2 val)
+    {
+        int loc = GetUniformLoc(name);
+        glUniform2f(loc, val.x, val.y);
+    }
+    void OpenGLShader::SetUniform_vec3(const std::string& name, glm::vec3 val)
+    {
+        int loc = GetUniformLoc(name);
+        glUniform3f(loc, val.x, val.y, val.z);
+    }
+    void OpenGLShader::SetUniform_vec4(const std::string& name, glm::vec4 val)
+    {
+        int loc = GetUniformLoc(name);
+        glUniform4f(loc, val.x, val.y, val.z, val.w);
+    }
+    void OpenGLShader::SetUniform_mat3(const std::string& name, glm::mat3 val)
+    {
+        int loc = GetUniformLoc(name);
+        glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(val));
+    }
+    void OpenGLShader::SetUniform_mat4(const std::string& name, glm::mat4 val)
+    {
+        int loc = GetUniformLoc(name);
+        glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(val));
     }
 
     uint32_t OpenGLShader::StrToShaderType(const std::string& type) const
@@ -162,15 +176,4 @@ namespace PN
 
         shader_id = program;
     }
-}
-
-namespace PN
-{
-    template void OpenGLShader::SetUniform<int>(const std::string&, const int&);
-    template void OpenGLShader::SetUniform<float>(const std::string&, const float&);
-    template void OpenGLShader::SetUniform<glm::vec2>(const std::string&, const glm::vec2&);
-    template void OpenGLShader::SetUniform<glm::vec3>(const std::string&, const glm::vec3&);
-    template void OpenGLShader::SetUniform<glm::vec4>(const std::string&, const glm::vec4&);
-    template void OpenGLShader::SetUniform<glm::mat3>(const std::string&, const glm::mat3&);
-    template void OpenGLShader::SetUniform<glm::mat4>(const std::string&, const glm::mat4&);
 }

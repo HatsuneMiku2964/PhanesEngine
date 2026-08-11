@@ -18,10 +18,10 @@ namespace PN
         float move_delta = move_speed * (float) ts;
         float rot_delta = rot_speed * (float) ts;
 
-        if (Input::IsKeyPressed(PN_KEY_W)) camera.SetPos(camera.GetPos() + glm::vec3(0.f, move_delta, 0.f));
-        if (Input::IsKeyPressed(PN_KEY_A)) camera.SetPos(camera.GetPos() + glm::vec3(-move_delta, 0.f, 0.f));
-        if (Input::IsKeyPressed(PN_KEY_S)) camera.SetPos(camera.GetPos() + glm::vec3(0.f, -move_delta, 0.f));
-        if (Input::IsKeyPressed(PN_KEY_D)) camera.SetPos(camera.GetPos() + glm::vec3(move_delta, 0.f, 0.f));
+        if (Input::IsKeyPressed(PN_KEY_W)) camera.SetPos(camera.GetPos() + camera.GetFwdVec() * move_delta);
+        if (Input::IsKeyPressed(PN_KEY_S)) camera.SetPos(camera.GetPos() - camera.GetFwdVec() * move_delta);
+        if (Input::IsKeyPressed(PN_KEY_A)) camera.SetPos(camera.GetPos() - camera.GetRightVec() * move_delta);
+        if (Input::IsKeyPressed(PN_KEY_D)) camera.SetPos(camera.GetPos() + camera.GetRightVec() * move_delta);
 
         if (Input::IsKeyPressed(PN_KEY_Q)) camera.SetRot(camera.GetRot() - rot_delta);
         if (Input::IsKeyPressed(PN_KEY_E)) camera.SetRot(camera.GetRot() + rot_delta);

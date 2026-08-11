@@ -16,11 +16,16 @@ namespace PN
         vp_mat = proj_mat * view_mat;
     }
 
-    void OrthographicCamera::UpdateViewMat()
+    void OrthographicCamera::UpdateData()
     {
         glm::mat4 transform = glm::translate(glm::mat4(1.f), pos) *
             glm::rotate(glm::mat4(1.f), glm::radians(rot), glm::vec3(0, 0, 1));
         view_mat = glm::inverse(transform);
         vp_mat = proj_mat * view_mat;
+
+        fwd.x = cos(glm::radians(rot + 90.f));
+        fwd.y = sin(glm::radians(rot + 90.f));
+        fwd = glm::normalize(fwd);
+        right = glm::normalize(glm::vec3(fwd.y, -fwd.x, 0.f));
     }
 }

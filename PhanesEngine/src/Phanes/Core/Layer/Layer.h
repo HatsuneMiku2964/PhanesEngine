@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Phanes/Core/Core.h"
 #include "Phanes/Core/Events/Events.h"
+#include "Phanes/Core/TimeStep/TimeStep.h"
 
 namespace PN
 {

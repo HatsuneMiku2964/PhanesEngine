@@ -70,7 +70,6 @@ project "PhanesEngine"
         
         defines 
         { 
-            "PN_PLATFORMS_WINDOWS",
             "PN_BUILD_DLL",
             "PN_ENABLE_ASSERTS",
             "GLFW_INCLUDE_NONE",
@@ -126,7 +125,6 @@ project "Game"
 
         defines
         {
-            "PN_PLATFORMS_WINDOWS"
         }
 
     filter "configurations:Debug"

@@ -46,7 +46,6 @@ namespace PN
     {
         EventDispatcher dispatcher(e);
 
-        // Info: won't do anything if e is not a WindowCloseEvent
         e.Handled = dispatcher.Dispatch(BIND_EVENT_FN(OnWindowClose), BIND_EVENT_FN(OnWindowResize));
 
         for (auto it = layerStack.end(); it != layerStack.begin();) {

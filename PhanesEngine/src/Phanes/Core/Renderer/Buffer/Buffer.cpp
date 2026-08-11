@@ -9,27 +9,28 @@
 
 namespace PN
 {
-    VtxBuffer* VtxBuffer::Create(std::span<const float> vertices)
+    Ref<VtxBuffer> VtxBuffer::Create(std::span<const float> vertices)
     {
         switch (Renderer::GetAPI()) {
-        case RenderAPI::RendererAPI::OpenGL:       return new OpenGLVtxBuffer(vertices);
-        case RenderAPI::RendererAPI::None:         PN_CORE_ASSERT(false, "Renderer API should not be None!!"); return nullptr;
-        default:                        PN_CORE_ASSERT(false, "Unknown renderer API"); return nullptr;
-        }
-    }
-    VtxBuffer* VtxBuffer::Create(std::span<const float> vertices, const BufferLayout& layout)
-    {
-        switch (Renderer::GetAPI()) {
-        case RenderAPI::RendererAPI::OpenGL:       return new OpenGLVtxBuffer(vertices, layout);
+        case RenderAPI::RendererAPI::OpenGL:       return std::make_shared<OpenGLVtxBuffer>(vertices);
         case RenderAPI::RendererAPI::None:         PN_CORE_ASSERT(false, "Renderer API should not be None!!"); return nullptr;
         default:                        PN_CORE_ASSERT(false, "Unknown renderer API"); return nullptr;
         }
     }
 
-    IdxBuffer* IdxBuffer::Create(std::span<const uint32_t> indices)
+    Ref<VtxBuffer> VtxBuffer::Create(std::span<const float> vertices, const BufferLayout &layout)
     {
         switch (Renderer::GetAPI()) {
-        case RenderAPI::RendererAPI::OpenGL:       return new OpenGLIdxBuffer(indices);
+        case RenderAPI::RendererAPI::OpenGL:       return std::make_shared<OpenGLVtxBuffer>(vertices, layout);
+        case RenderAPI::RendererAPI::None:         PN_CORE_ASSERT(false, "Renderer API should not be None!!"); return nullptr;
+        default:                        PN_CORE_ASSERT(false, "Unknown renderer API"); return nullptr;
+        }
+    }
+
+    Ref<IdxBuffer> IdxBuffer::Create(std::span<const uint32_t> indices)
+    {
+        switch (Renderer::GetAPI()) {
+        case RenderAPI::RendererAPI::OpenGL:       return std::make_shared<OpenGLIdxBuffer>(indices);
         case RenderAPI::RendererAPI::None:         PN_CORE_ASSERT(false, "Renderer API should not be None!!"); return nullptr;
         default:                        PN_CORE_ASSERT(false, "Unknown renderer API"); return nullptr;
         }

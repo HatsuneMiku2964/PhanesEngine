@@ -14,6 +14,7 @@
 #include <glm/glm/glm.hpp>
 
 // rendering
+#include "Phanes/Core/Renderer/2D/Renderer2D.h"
 #include "Phanes/Core/Renderer/Renderer/Renderer.h"
 #include "Phanes/Core/Renderer/RenderCommand/RenderCommand.h"
 
@@ -29,10 +30,5 @@
 #include "Phanes/Core/KeyCodes/KeyCodes.h"
 #include "Phanes/Core/KeyCodes/MouseButtons.h"
 
-
 // dependencies
 #include "Phanes/ImGui/ImGuiLayer.h"
-
-
-// the entry point ( int main() )
-#include "Phanes/Core/Entry.h"

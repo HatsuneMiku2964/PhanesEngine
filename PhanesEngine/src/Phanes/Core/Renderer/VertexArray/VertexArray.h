@@ -18,7 +18,7 @@ namespace PN
         virtual const std::vector<Ref<VtxBuffer>>& GetVtxBuffers() const = 0;
         virtual const Ref<IdxBuffer>& GetIdxBuffer() const = 0;
 
-        static VtxArr* Create();
+        static Ref<VtxArr> Create();
     };
 
 }

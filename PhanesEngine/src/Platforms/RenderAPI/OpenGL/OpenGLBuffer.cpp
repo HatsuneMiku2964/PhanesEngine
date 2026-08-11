@@ -7,21 +7,21 @@
 namespace PN
 {
     // TODO: remove it in the future
-    pn_forceinline static GLenum ShaderDataTypeToGLenum(const ShaderData::ShaderDataType& type)
+    pn_forceinline static GLenum ShaderDataTypeToGLenum(const ShaderDataType& type)
     {
         switch (type) {
-        case ShaderData::ShaderDataType::Float:     return GL_FLOAT;
-        case ShaderData::ShaderDataType::Float2:    return GL_FLOAT;
-        case ShaderData::ShaderDataType::Float3:    return GL_FLOAT;
-        case ShaderData::ShaderDataType::Float4:    return GL_FLOAT;
-        case ShaderData::ShaderDataType::Mat3:      return GL_FLOAT;
-        case ShaderData::ShaderDataType::Mat4:      return GL_FLOAT;
-        case ShaderData::ShaderDataType::Int:       return GL_INT;
-        case ShaderData::ShaderDataType::Int2:      return GL_INT;
-        case ShaderData::ShaderDataType::Int3:      return GL_INT;
-        case ShaderData::ShaderDataType::Int4:      return GL_INT;
-        case ShaderData::ShaderDataType::None:      PN_CORE_LOG_ERROR("Invalid shader data type of \"None\"");  return 0;
-        default:                                    PN_CORE_LOG_ERROR("Unknown shader data type!!");            return 0;
+        case ShaderDataType::Float:     return GL_FLOAT;
+        case ShaderDataType::Float2:    return GL_FLOAT;
+        case ShaderDataType::Float3:    return GL_FLOAT;
+        case ShaderDataType::Float4:    return GL_FLOAT;
+        case ShaderDataType::Mat3:      return GL_FLOAT;
+        case ShaderDataType::Mat4:      return GL_FLOAT;
+        case ShaderDataType::Int:       return GL_INT;
+        case ShaderDataType::Int2:      return GL_INT;
+        case ShaderDataType::Int3:      return GL_INT;
+        case ShaderDataType::Int4:      return GL_INT;
+        case ShaderDataType::None:      PN_CORE_LOG_ERROR("Invalid shader data type of \"None\"");  return 0;
+        default:                        PN_CORE_LOG_ERROR("Unknown shader data type!!");            return 0;
         }
     }
 

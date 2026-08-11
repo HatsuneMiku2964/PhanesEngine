@@ -19,6 +19,11 @@ namespace PN
         PN_CORE_LOG_INFO("    renderer: {0}", (const char*) glGetString(GL_RENDERER));
         PN_CORE_LOG_INFO("    version:  {0}", (const char*) glGetString(GL_VERSION));
 
+        int version_maj, version_min;
+        glGetIntegerv(GL_MAJOR_VERSION, &version_maj);
+        glGetIntegerv(GL_MINOR_VERSION, &version_min);
+        PN_CORE_ASSERT(version_maj > 4 || (version_maj == 4 && version_min >= 5), "Phanes requires a OpenGL for at least version 4.5!!");
+
         return (bool) status;
     }
 
