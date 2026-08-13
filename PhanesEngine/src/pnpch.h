@@ -16,9 +16,13 @@
 #include <unordered_set>
 
 #include "Phanes/Core/Core.h"
-#include "Phanes/Core/Log/Log.h"
+
 #include "Phanes/Core/TimeStep/TimeStep.h"
+
 #include "Phanes/Core/Renderer/Renderer/Renderer.h"
+
+#include "Phanes/Core/Debugging/Log/Log.h"
+#include "Phanes/Core/Debugging/Benchmark/Instrumentation.h"
 
 #ifdef PN_PLATFORMS_WINDOWS
     #include <Windows.h>

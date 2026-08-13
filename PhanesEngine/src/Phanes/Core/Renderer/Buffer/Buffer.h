@@ -2,6 +2,8 @@
 
 #include <span>
 
+#include "Phanes/Core/Debugging/Log/Log.h"
+
 namespace PN
 {
     enum class ShaderDataType : uint8_t

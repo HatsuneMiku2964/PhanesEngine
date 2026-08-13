@@ -1,5 +1,8 @@
 #pragma once
-#include "glm/glm.hpp"
+
+#include <glm/glm.hpp>
+
+#include "Phanes/Core/Debugging/Log/Log.h"
 
 namespace PN
 {

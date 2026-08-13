@@ -11,7 +11,6 @@ namespace PN
 
     Application::Application()
     {
-        PN_CORE_LOG_WARN("Phanes Engine is lauched...");
         PN_CORE_ASSERT(!instance, "Assertion Failed: Application already exists!");
         instance = this;
 
@@ -24,7 +23,6 @@ namespace PN
 
         Renderer::Init();
     }
-    Application::~Application() { PN_CORE_LOG_INFO("Phanes Engine is closed"); }
 
     void Application::Run()
     {
@@ -33,7 +31,9 @@ namespace PN
             time_step = time - last_frame_time;
             last_frame_time = time;
 
+            PROFILE_BEGIN_SESSION("Update layers");
             if (!minimized) for (Layer* layer : layerStack) layer->OnUpdate(time_step);
+            PROFILE_END_SESSION();
             
             imgui_layer->Begin();
             for (Layer* layer : layerStack) layer->OnImGuiRender();

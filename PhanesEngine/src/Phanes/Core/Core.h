@@ -66,6 +66,10 @@
 // Event binding
 #define BIND_EVENT_FN(fn) ::PN::BindEventFn(&std::remove_reference_t<decltype(*this)>::fn, this)
 
+// Macro
+#define PN_TOKEN_CONCAT_IMPL(a, b) a##b
+#define PN_TOKEN_CONCAT(a, b) PN_TOKEN_CONCAT_IMPL(a, b)
+
 namespace PN
 {
     template<typename Class, typename EventT>

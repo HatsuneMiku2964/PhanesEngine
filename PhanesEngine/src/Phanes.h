@@ -4,9 +4,9 @@
 
 // from the engine
 #include "Phanes/Core/Input.h"
-#include "Phanes/Core/Log/Log.h"
 #include "Phanes/Core/Layer/Layer.h"
 #include "Phanes/Core/App/Application.h"
+#include "Phanes/Core/Debugging/Log/Log.h"
 #include "Phanes/Core/TimeStep/TimeStep.h"
 
 
