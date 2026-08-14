@@ -15,7 +15,7 @@ namespace PN
 
     void Instrumentor::BeginSession(const std::string& name, const std::string& filepath)
     {
-        ostream.open(filepath), "failed to open file!!";
+        ostream.open(filepath);
         WriteHeader();
         current_session = new InstrumentationSession{name};
     }
@@ -31,7 +31,7 @@ namespace PN
 
     void Instrumentor::WriteHeader()
     {
-        ostream << "{\"otherData\": {},\"traceEvents\":[";
+        ostream << "[";
         ostream.flush();
     }
     void Instrumentor::WriteProfile(const ProfileResult& result)
@@ -42,8 +42,8 @@ namespace PN
         std::ranges::replace(name, '"', '\'');
 
         ostream << "{";
-        ostream << "\"cat\":\"function\",";
-        ostream << "\"dur\":" << (result.End - result.Start) << ',';
+        ostream << "\"cat\":\"" << current_session->Name << "\",";
+        ostream << "\"dur\":" << result.Dur << ',';
         ostream << "\"name\":\"" << name << "\",";
         ostream << "\"ph\":\"X\",";
         ostream << "\"pid\":0,";
@@ -55,7 +55,7 @@ namespace PN
     }
     void Instrumentor::WriteFooter()
     {
-        ostream << "]}";
+        ostream << "]";
         ostream.flush();
     }
 
@@ -68,16 +68,19 @@ namespace PN
     {
         start_timepoint = std::chrono::high_resolution_clock::now();
     }
-
     Timer::~Timer() { if (!stopped) Stop(); }
-    void Timer::Stop() {
+
+    void Timer::Stop()
+    {
         auto endTimepoint = std::chrono::high_resolution_clock::now();
 
         long long start = std::chrono::time_point_cast<std::chrono::microseconds>(start_timepoint).time_since_epoch().count();
         long long end = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch().count();
 
+        long long dur = end - start;
+
         size_t threadID = std::hash<std::thread::id>{}(std::this_thread::get_id());
-        Instrumentor::Get()->WriteProfile({name, start, end, threadID});
+        Instrumentor::Get()->WriteProfile({name, start, dur, threadID});
 
         stopped = true;
     }

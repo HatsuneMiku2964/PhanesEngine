@@ -37,9 +37,9 @@ namespace PN
         // main attributes of the window
         struct WindowData
         {
-            std::string Title;
-            uint32_t Width, Height;
-            bool VSync;
+            std::string Title = "Phanes Engine";
+            uint32_t Width=0, Height=0;
+            bool VSync=false;
             EventCallbackFn EventFn;
         };
 

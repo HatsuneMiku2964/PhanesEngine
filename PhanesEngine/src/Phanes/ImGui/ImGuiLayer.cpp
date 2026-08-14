@@ -17,6 +17,8 @@ namespace PN
 
     void ImGuiLayer::OnAttach()
     {
+        PROFILE_FN();
+
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
@@ -41,6 +43,8 @@ namespace PN
 
     void ImGuiLayer::OnDetach()
     {
+        PROFILE_FN();
+
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
@@ -48,7 +52,7 @@ namespace PN
 
     void ImGuiLayer::OnImGuiRender()
     {
-        static bool show = true;
+        static bool show = false;
         ImGui::ShowDemoWindow(&show);
     }
 

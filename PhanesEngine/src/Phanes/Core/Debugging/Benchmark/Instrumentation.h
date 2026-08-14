@@ -23,7 +23,7 @@ namespace PN
     struct ProfileResult
     {
         std::string Name;
-        long long Start, End;
+        long long Start, Dur;
         size_t ThreadID;
     };
     struct InstrumentationSession
@@ -34,7 +34,7 @@ namespace PN
     class Instrumentor
     {
     public:
-        void BeginSession(const std::string& name, const std::string& filepath = "../Game/results.json");
+        void BeginSession(const std::string& name, const std::string& filepath);
         void EndSession();
 
         void WriteProfile(const ProfileResult& result);
@@ -73,10 +73,10 @@ namespace PN
     };
 }
 
-#define ENABLE_PROFILING 1
+#define ENABLE_PROFILING
 
-#if ENABLE_PROFILING == 1
-    #define PROFILE_BEGIN_SESSION(name) ::PN::Instrumentor::Get()->BeginSession(name);
+#ifdef ENABLE_PROFILING
+    #define PROFILE_BEGIN_SESSION(name, filepath) ::PN::Instrumentor::Get()->BeginSession(name, filepath);
     #define PROFILE_END_SESSION() ::PN::Instrumentor::Get()->EndSession();
     #define PROFILE_SCOPE(name) ::PN::Timer PN_TOKEN_CONCAT(timer, __LINE__)(name);
     #define PROFILE_FN() PROFILE_SCOPE(__FUNCSIG__);

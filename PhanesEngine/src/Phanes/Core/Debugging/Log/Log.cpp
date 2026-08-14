@@ -4,17 +4,17 @@
 
 namespace PN
 {
-    Ref<spdlog::logger> Log::coreLogger_;
-    Ref<spdlog::logger> Log::clientLogger_;
+    Ref<spdlog::logger> Log::core_logger;
+    Ref<spdlog::logger> Log::client_logger;
 
     void Log::Init()
     {
         spdlog::set_pattern("%^[%T] %n: %v%$");
-        coreLogger_ = spdlog::stdout_color_mt("PHANES");
-        coreLogger_->set_level(spdlog::level::trace);
+        core_logger = spdlog::stdout_color_mt("PHANES");
+        core_logger->set_level(spdlog::level::trace);
 
-        clientLogger_ = spdlog::stdout_color_mt("APP");
-        clientLogger_->set_level(spdlog::level::trace);
+        client_logger = spdlog::stdout_color_mt("APP");
+        client_logger->set_level(spdlog::level::trace);
 
         PN_CORE_LOG_INFO("Log initialized successfully");
     }

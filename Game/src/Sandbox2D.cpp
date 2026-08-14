@@ -37,7 +37,7 @@ void Sandbox2D::OnUpdate(PN::TimeStep ts)
     }
     for (int i = 0; i < it_cnt; ++i) {
         for (int j = 0; j < it_cnt; ++j) {
-            PN::Renderer2D::DrawQuad({(float) i * 1.01f, (float) j * 1.01f, 0.1f}, {1.f, 1.f}, tex);
+            PN::Renderer2D::DrawQuad({(float) i * 1.01f, (float) j * 1.01f, 0.1f}, {1.f, 1.f}, tex, tile_factor);
         }
     }
     PN::Renderer2D::EndScene();
@@ -52,5 +52,6 @@ void Sandbox2D::OnImGuiRender()
 {
     ImGui::Begin("Settings");
     ImGui::ColorEdit3("Color", glm::value_ptr(color));
+    ImGui::DragFloat("tile factor", &tile_factor, 0.1f, 0.f, 10.f);
     ImGui::End();
 }

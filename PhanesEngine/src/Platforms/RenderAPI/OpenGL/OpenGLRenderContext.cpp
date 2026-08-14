@@ -6,10 +6,12 @@
 
 namespace PN
 {
-    OpenGLRenderContext::OpenGLRenderContext(GLFWwindow* window) : window_handle(window) { PN_CORE_ASSERT(window, "window handle is NULL!!"); }
+    OpenGLRenderContext::OpenGLRenderContext(GLFWwindow* window) : window_handle(window) { PN_CORE_ASSERT(window, "window handle is invalid!!"); }
 
     bool OpenGLRenderContext::Init()
     {
+        PROFILE_FN()
+
         glfwMakeContextCurrent(window_handle);
         int status = gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
         PN_CORE_ASSERT(status, "Failed to initialize Glad!");

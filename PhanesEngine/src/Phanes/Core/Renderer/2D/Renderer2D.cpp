@@ -19,11 +19,13 @@ namespace PN
 
     void Renderer2D::Init()
     {
+        PROFILE_FN();
+
         data = new Renderer2DData();
         data->vao = VtxArr::Create();
 
-        float vertices[] = {
-            -0.5f, -0.5f, 0.f, 0.f, 
+        constexpr float vertices[] = {
+            -0.5f, -0.5f, 0.f, 0.f,
              0.5f, -0.5f, 1.f, 0.f,
              0.5f,  0.5f, 1.f, 1.f,
             -0.5f,  0.5f, 0.f, 1.f
@@ -41,14 +43,14 @@ namespace PN
         data->tex_shader->SetUniform("u_tex", 0);
 
         data->white_tex = Texture2D::Create(1, 1);
-        uint32_t white_tex_data = 0xffffffff;
+        static constinit uint32_t white_tex_data = 0xffffffff;
         data->white_tex->SetData(&white_tex_data, sizeof(uint32_t));
 
         data->vao->AddVtxBuffer(vbo);
         data->vao->SetIdxBuffer(ibo);
         data->vao->Unbind();
     }
-    void Renderer2D::Shutdown() { delete data; }
+    void Renderer2D::Shutdown() { PROFILE_FN(); delete data; }
 
     void Renderer2D::BeginScene(const OrthographicCamera& camera)
     {
@@ -57,7 +59,10 @@ namespace PN
     }
     void Renderer2D::EndScene() {}
 
-    void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color) { DrawQuad({pos.x, pos.y, 0.f}, size, color); }
+    void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color)
+    {
+        DrawQuad({pos.x, pos.y, 0.f}, size, color);
+    }
     void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color)
     {
         data->tex_shader->SetUniform("u_color", color);
@@ -69,10 +74,14 @@ namespace PN
         data->vao->Bind();
         RenderCmd::DrawIndexed(data->vao);
     }
-    void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture) { DrawQuad({pos.x, pos.y, 0.f}, size, texture); }
-    void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture)
+    void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tile_factor)
+    {
+        DrawQuad({pos.x, pos.y, 0.f}, size, texture);
+    }
+    void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tile_factor)
     {
         data->tex_shader->SetUniform("u_color", glm::vec4(1.f));
+        data->tex_shader->SetUniform("u_tile", tile_factor);
         texture->Bind();
 
         glm::mat4 model = glm::translate(glm::mat4(1.f), pos) * glm::scale(glm::mat4(1.f), {size, 1.f});

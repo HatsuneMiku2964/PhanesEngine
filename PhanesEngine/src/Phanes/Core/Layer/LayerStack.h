@@ -7,7 +7,7 @@ namespace PN
     class LayerStack
     {
     public:
-        LayerStack() : Idx_(0) {}
+        LayerStack() : Idx_(0) { PROFILE_FN(); }
         ~LayerStack();
         
         void PushLayer(Layer* layer);
@@ -15,12 +15,14 @@ namespace PN
         void PopLayer(Layer* layer);
         void PopOverlay(Layer* overlay);
 
-        pn_forceinline std::vector<Layer*>::iterator begin() { return Lys_.begin(); }
-        pn_forceinline std::vector<Layer*>::iterator end() { return Lys_.end(); }
+        pn_forceinline std::vector<Layer*>::iterator begin() noexcept { return Layers_.begin(); }
+        pn_forceinline std::vector<Layer*>::iterator end() noexcept { return Layers_.end(); }
+        pn_forceinline std::vector<Layer*>::const_iterator begin() const noexcept { return Layers_.begin(); }
+        pn_forceinline std::vector<Layer*>::const_iterator end() const noexcept { return Layers_.end(); }
+        pn_forceinline size_t size() const noexcept { return Layers_.size(); }
 
     protected:
-        std::vector<Layer*> Lys_;	// the actual stack
-        uint32_t Idx_;			/* INFO: the index of the last layer (not overlays, the first half),
-                                            this is to make sure that layers & overlays are inserted properly */
+        std::vector<Layer*> Layers_;
+        uint32_t Idx_;
     };
 }

@@ -21,13 +21,13 @@ namespace PN
         pn_forceinline const std::string& GetPath() const override { return filepath; }
 
     protected:
-        void SetUniform_int(const std::string& name, int val) override;
-        void SetUniform_float(const std::string& name, float val) override;
-        void SetUniform_vec2(const std::string& name, glm::vec2 val) override;
-        void SetUniform_vec3(const std::string& name, glm::vec3 val) override;
-        void SetUniform_vec4(const std::string& name, glm::vec4 val) override;
-        void SetUniform_mat3(const std::string& name, glm::mat3 val) override;
-        void SetUniform_mat4(const std::string& name, glm::mat4 val) override;
+        void SetUniform_int(int loc, int val) override;
+        void SetUniform_float(int loc, float val) override;
+        void SetUniform_vec2( int loc, glm::vec2 val) override;
+        void SetUniform_vec3( int loc, glm::vec3 val) override;
+        void SetUniform_vec4( int loc, glm::vec4 val) override;
+        void SetUniform_mat3( int loc, glm::mat3 val) override;
+        void SetUniform_mat4( int loc, glm::mat4 val) override;
 
     private:
         using shader_container = std::unordered_map<uint32_t, std::string>;

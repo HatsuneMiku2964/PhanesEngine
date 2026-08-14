@@ -10,12 +10,12 @@ namespace PN
     public:
         static void Init();
 
-        pn_forceinline static Ref<spdlog::logger>& GetCoreLogger() { return coreLogger_; }
-        pn_forceinline static Ref<spdlog::logger>& GetClientLogger() { return clientLogger_; }
+        pn_forceinline static Ref<spdlog::logger>& GetCoreLogger() { return core_logger; }
+        pn_forceinline static Ref<spdlog::logger>& GetClientLogger() { return client_logger; }
 
     private:
-        static Ref<spdlog::logger> coreLogger_;
-        static Ref<spdlog::logger> clientLogger_;
+        static Ref<spdlog::logger> core_logger;
+        static Ref<spdlog::logger> client_logger;
     };
 }
 

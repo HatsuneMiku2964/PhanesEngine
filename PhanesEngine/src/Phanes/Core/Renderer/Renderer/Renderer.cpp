@@ -9,7 +9,11 @@ namespace PN
 {
     Renderer::SceneData* Renderer::scene_data = new SceneData();
 
-    void Renderer::Init() { RenderCmd::Init(); Renderer2D::Init(); }
+    void Renderer::Init() {
+        PROFILE_FN();
+        RenderCmd::Init(); 
+        Renderer2D::Init();
+    }
     void Renderer::OnWindowResized(uint32_t width, uint32_t height) { RenderCmd::SetViewport(0, 0, width, height); }
 
     void Renderer::BeginScene(const OrthographicCamera& camera) { scene_data->vp_mat = camera.GetVPMat(); }

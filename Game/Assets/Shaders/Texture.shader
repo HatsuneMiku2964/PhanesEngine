@@ -24,9 +24,10 @@ in vec2 v_tex_coord;
 
 uniform vec4 u_color;
 uniform sampler2D u_tex;
+uniform float u_tile;
 
 void main()
 {
-	color = texture(u_tex, v_tex_coord) * u_color;
+	color = texture(u_tex, v_tex_coord * u_tile) * u_color;
 	//color = vec4(v_tex_coord, 0.f, 1.f);
 }

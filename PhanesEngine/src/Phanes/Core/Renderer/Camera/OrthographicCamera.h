@@ -14,8 +14,8 @@ namespace PN
         pn_forceinline const glm::mat4& GetViewMat() const { return view_mat; }
         pn_forceinline const glm::mat4& GetVPMat() const { return vp_mat; }
 
-        pn_forceinline const glm::vec3& GetFwdVec() const { return {fwd, 0.f}; }
-        pn_forceinline const glm::vec3& GetRightVec()const { return {right, 0.f}; }
+        pn_forceinline const glm::vec2& GetFwdVec() const { return fwd; }
+        pn_forceinline const glm::vec2& GetRightVec()const { return right; }
 
         pn_forceinline const glm::vec3& GetPos() const { return pos; }
         pn_forceinline float GetRot() const { return rot; }

@@ -15,10 +15,10 @@ namespace PN
     enum class EventCategories : int
     {
         None = 0,
-        Application = BIT_PUSH(0),
-        Input = BIT_PUSH(1),
-        Keyboard = BIT_PUSH(2),
-        Mouse = BIT_PUSH(3),
+        Application = 1 << 0,
+        Input = 1 << 1,
+        Keyboard = 1 << 2,
+        Mouse = 1 << 3,
     };
 
     // bitwise operators for EventCategories, so we can combine them using bitwise operations

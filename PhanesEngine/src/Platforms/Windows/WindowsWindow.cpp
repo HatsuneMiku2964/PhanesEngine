@@ -24,28 +24,36 @@ namespace PN
 
     void WindowsWindow::SetVSync(bool enabled)
     {
+        PROFILE_FN();
         data.VSync = enabled;
 
-        if (enabled) glfwSwapInterval(1);
-        else glfwSwapInterval(0);
+        if (enabled)    glfwSwapInterval(1);
+        else            glfwSwapInterval(0);
     }
 
     void WindowsWindow::Init(const WindowProps& props)
     {
+        PROFILE_FN();
+
         data.Width = props.Width;
         data.Height = props.Height;
         data.Title = props.Title;
 
         PN_CORE_LOG_INFO("Creating window: Title: {0}, size = {1}px * {2}px", props.Title, props.Width, props.Height);
 
-        if (!GLFWInitialized) {
+        if (!GLFWInitialized) 
+        {
+            PROFILE_SCOPE("glfwInit");
             int success = glfwInit();
             PN_CORE_ASSERT(success, "Could not initialize GLFW!");
             glfwSetErrorCallback(GLFWErrorCallback);
             GLFWInitialized = true;
         }
 
-        window_ = glfwCreateWindow((int) props.Width, (int) props.Height, data.Title.c_str(), nullptr, nullptr);
+        {
+            PROFILE_SCOPE("glfwCreateWindow");
+            window_ = glfwCreateWindow((int) props.Width, (int) props.Height, data.Title.c_str(), nullptr, nullptr);
+        }
         context_.reset(new OpenGLRenderContext(window_));
         context_->Init();
 
@@ -125,5 +133,9 @@ namespace PN
         // ~Set GLFW callbacks
     }
 
-    void WindowsWindow::Shutdown() { glfwDestroyWindow(window_); PN_CORE_LOG_INFO("window distroyed"); }
+    void WindowsWindow::Shutdown()
+    {
+        PROFILE_FN(); 
+        glfwDestroyWindow(window_); 
+    }
 };

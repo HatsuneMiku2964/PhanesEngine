@@ -9,6 +9,8 @@ namespace PN
     OpenGLShader::OpenGLShader(const std::string& path)
         : filepath(path)
     {
+        PROFILE_FN();
+
         std::string src_str = ReadFile(path);
         shader_container src = Partition(src_str);
         Compile(src);
@@ -36,41 +38,14 @@ namespace PN
         uniform_loc_cache[name] = result;
         return result;
     }
-    void OpenGLShader::SetUniform_int(const std::string& name, int val)
-    {
-        int loc = GetUniformLoc(name);
-        glUniform1i(loc, val);
-    }
-    void OpenGLShader::SetUniform_float(const std::string& name, float val)
-    {
-        int loc = GetUniformLoc(name);
-        glUniform1f(loc, val);
-    }
-    void OpenGLShader::SetUniform_vec2(const std::string& name, glm::vec2 val)
-    {
-        int loc = GetUniformLoc(name);
-        glUniform2f(loc, val.x, val.y);
-    }
-    void OpenGLShader::SetUniform_vec3(const std::string& name, glm::vec3 val)
-    {
-        int loc = GetUniformLoc(name);
-        glUniform3f(loc, val.x, val.y, val.z);
-    }
-    void OpenGLShader::SetUniform_vec4(const std::string& name, glm::vec4 val)
-    {
-        int loc = GetUniformLoc(name);
-        glUniform4f(loc, val.x, val.y, val.z, val.w);
-    }
-    void OpenGLShader::SetUniform_mat3(const std::string& name, glm::mat3 val)
-    {
-        int loc = GetUniformLoc(name);
-        glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(val));
-    }
-    void OpenGLShader::SetUniform_mat4(const std::string& name, glm::mat4 val)
-    {
-        int loc = GetUniformLoc(name);
-        glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(val));
-    }
+
+    void OpenGLShader::SetUniform_int(int loc, int val) { glUniform1i(loc, val); }
+    void OpenGLShader::SetUniform_float(int loc, float val) { glUniform1f(loc, val); }
+    void OpenGLShader::SetUniform_vec2(int loc, glm::vec2 val) { glUniform2f(loc, val.x, val.y); }
+    void OpenGLShader::SetUniform_vec3(int loc, glm::vec3 val) { glUniform3f(loc, val.x, val.y, val.z); }
+    void OpenGLShader::SetUniform_vec4(int loc, glm::vec4 val) { glUniform4f(loc, val.x, val.y, val.z, val.w); }
+    void OpenGLShader::SetUniform_mat3(int loc, glm::mat3 val) { glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(val)); }
+    void OpenGLShader::SetUniform_mat4(int loc, glm::mat4 val) { glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(val)); }
 
     uint32_t OpenGLShader::StrToShaderType(const std::string& type) const
     {
@@ -82,6 +57,8 @@ namespace PN
     }
     std::string OpenGLShader::ReadFile(const std::string& path) const
     {
+        PROFILE_FN();
+
         std::ifstream in(path, std::ios::in | std::ios::binary | std::ios::ate);
         if (!in) { PN_CORE_ASSERT(false, "Invalid shader file path: {0}", path.c_str()); return {}; }
 
@@ -96,6 +73,8 @@ namespace PN
     }
     std::unordered_map<uint32_t, std::string> OpenGLShader::Partition(const std::string& src) const
     {
+        PROFILE_FN();
+
         std::unordered_map<uint32_t, std::string> res;
         const char* token = "#shader";
         size_t token_len = strlen(token);
@@ -122,6 +101,8 @@ namespace PN
     }
     void OpenGLShader::Compile(const shader_container& src)
     {
+        PROFILE_FN();
+
         uint32_t program = glCreateProgram();
 
         static constexpr uint8_t max_shaders_amt_support = 2; // INFO: we only support 2 shaders now

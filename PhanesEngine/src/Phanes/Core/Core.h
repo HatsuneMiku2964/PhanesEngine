@@ -51,8 +51,6 @@
 #define PN_CORE_ASSERT(x, ...)
 #endif
 
-// Bitwise
-#define BIT_PUSH(x) (1 << x)
 
 // Inlining
 #ifdef _MSC_VER

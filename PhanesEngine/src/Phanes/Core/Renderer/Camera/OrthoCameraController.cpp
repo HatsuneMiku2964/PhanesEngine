@@ -15,13 +15,17 @@ namespace PN
 
     void OrthoCameraController::OnUpdate(TimeStep ts)
     {
+        PROFILE_FN();
         float move_delta = move_speed * (float) ts;
         float rot_delta = rot_speed * (float) ts;
 
-        if (Input::IsKeyPressed(PN_KEY_W)) camera.SetPos(camera.GetPos() + camera.GetFwdVec() * move_delta);
-        if (Input::IsKeyPressed(PN_KEY_S)) camera.SetPos(camera.GetPos() - camera.GetFwdVec() * move_delta);
-        if (Input::IsKeyPressed(PN_KEY_A)) camera.SetPos(camera.GetPos() - camera.GetRightVec() * move_delta);
-        if (Input::IsKeyPressed(PN_KEY_D)) camera.SetPos(camera.GetPos() + camera.GetRightVec() * move_delta);
+        glm::vec3 front = {camera.GetFwdVec(), 0.f};
+        glm::vec3 right = {camera.GetRightVec(), 0.f};
+
+        if (Input::IsKeyPressed(PN_KEY_W)) camera.SetPos(camera.GetPos() + front * move_delta);
+        if (Input::IsKeyPressed(PN_KEY_S)) camera.SetPos(camera.GetPos() - front * move_delta);
+        if (Input::IsKeyPressed(PN_KEY_A)) camera.SetPos(camera.GetPos() - right * move_delta);
+        if (Input::IsKeyPressed(PN_KEY_D)) camera.SetPos(camera.GetPos() + right * move_delta);
 
         if (Input::IsKeyPressed(PN_KEY_Q)) camera.SetRot(camera.GetRot() - rot_delta);
         if (Input::IsKeyPressed(PN_KEY_E)) camera.SetRot(camera.GetRot() + rot_delta);
@@ -29,10 +33,9 @@ namespace PN
 
     void OrthoCameraController::OnEvent(Event& e)
     {
+        PROFILE_FN();
         EventDispatcher dispatcher(e);
-        e.Handled = dispatcher.Dispatch(
-            BIND_EVENT_FN(OnMouseScrolled), BIND_EVENT_FN(OnWindowResize)
-        );
+        e.Handled = dispatcher.Dispatch(BIND_EVENT_FN(OnMouseScrolled), BIND_EVENT_FN(OnWindowResize));
     }
 
     bool OrthoCameraController::OnMouseScrolled(MouseScrolledEvent& e)
