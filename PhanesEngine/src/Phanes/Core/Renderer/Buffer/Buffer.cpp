@@ -1,14 +1,21 @@
 ﻿#include "pnpch.h"
 #include "Buffer.h"
 
-#include <imgui.h>
-
 #include "Phanes/Core/Renderer/Renderer/Renderer.h"
 #include "Phanes/Core/Renderer/RenderAPI.h"
 #include "Platforms/RenderAPI/OpenGL/OpenGLBuffer.h"
 
 namespace PN
 {
+    Ref<VtxBuffer> VtxBuffer::Create(uint32_t size)
+    {
+        switch (Renderer::GetAPI()) {
+        case RenderAPI::RendererAPI::OpenGL:       return std::make_shared<OpenGLVtxBuffer>(size);
+        case RenderAPI::RendererAPI::None:         PN_CORE_ASSERT(false, "Renderer API should not be None!!"); return nullptr;
+        default:                        PN_CORE_ASSERT(false, "Unknown renderer API"); return nullptr;
+        }
+    }
+
     Ref<VtxBuffer> VtxBuffer::Create(std::span<const float> vertices)
     {
         switch (Renderer::GetAPI()) {
@@ -18,7 +25,7 @@ namespace PN
         }
     }
 
-    Ref<VtxBuffer> VtxBuffer::Create(std::span<const float> vertices, const BufferLayout &layout)
+    Ref<VtxBuffer> VtxBuffer::Create(std::span<const float> vertices, const BufferLayout& layout)
     {
         switch (Renderer::GetAPI()) {
         case RenderAPI::RendererAPI::OpenGL:       return std::make_shared<OpenGLVtxBuffer>(vertices, layout);
@@ -31,6 +38,14 @@ namespace PN
     {
         switch (Renderer::GetAPI()) {
         case RenderAPI::RendererAPI::OpenGL:       return std::make_shared<OpenGLIdxBuffer>(indices);
+        case RenderAPI::RendererAPI::None:         PN_CORE_ASSERT(false, "Renderer API should not be None!!"); return nullptr;
+        default:                        PN_CORE_ASSERT(false, "Unknown renderer API"); return nullptr;
+        }
+    }
+    Ref<IdxBuffer> IdxBuffer::Create(uint32_t* indices, uint32_t cnt)
+    {
+        switch (Renderer::GetAPI()) {
+        case RenderAPI::RendererAPI::OpenGL:       return std::make_shared<OpenGLIdxBuffer>(indices, cnt);
         case RenderAPI::RendererAPI::None:         PN_CORE_ASSERT(false, "Renderer API should not be None!!"); return nullptr;
         default:                        PN_CORE_ASSERT(false, "Unknown renderer API"); return nullptr;
         }

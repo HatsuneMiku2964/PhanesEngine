@@ -28,18 +28,18 @@ void Sandbox2D::OnUpdate(PN::TimeStep ts)
 
     PN::Renderer2D::BeginScene(camera_ctrl.GetCamera());
 
-    static constexpr int it_cnt = 20;
+    static constexpr int it_cnt = 1;
 
     for (int i = 0; i < it_cnt; ++i) {
         for (int j = 0; j < it_cnt; ++j) {
             PN::Renderer2D::DrawQuad({(float) i * 1.01f, (float) j * 1.01f}, {1.0f, 1.0f}, {color, 1.f});
         }
     }
-    for (int i = 0; i < it_cnt; ++i) {
+    /*for (int i = 0; i < it_cnt; ++i) {
         for (int j = 0; j < it_cnt; ++j) {
             PN::Renderer2D::DrawQuad({(float) i * 1.01f, (float) j * 1.01f, 0.1f}, {1.f, 1.f}, tex, tile_factor);
         }
-    }
+    }*/
     PN::Renderer2D::EndScene();
 }
 

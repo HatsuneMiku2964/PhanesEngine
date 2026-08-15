@@ -16,7 +16,7 @@ namespace PN
         pn_forceinline uint32_t GetWidth() const override { return width; }
         pn_forceinline uint32_t GetHeight() const override { return height; }
 
-        void SetData(void *data, uint32_t size) override;
+        void SetData(const void *data, uint32_t size) override;
 
         void Bind(uint32_t slot = 0) override;
         void Unbind() override;

@@ -124,7 +124,7 @@ namespace PN
                     glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
                     std::vector<char> message(len);
                     glGetShaderInfoLog(shader, len, &len, message.data());
-                    PN_CORE_ASSERT(false, "{0}", message.data());
+                    PN_CORE_ASSERT(false, message.data());
                     break;
                 }
             }
@@ -141,7 +141,7 @@ namespace PN
                 glGetProgramiv(program, GL_INFO_LOG_LENGTH, &len);
                 std::vector<char> message(len);
                 glGetProgramInfoLog(program, len, &len, message.data());
-                PN_CORE_ASSERT(false, "{0}", message.data());
+                PN_CORE_ASSERT(false, message.data());
 
                 glDeleteProgram(program);
                 for (uint32_t shader : shaders) glDeleteShader(shader);

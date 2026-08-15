@@ -24,7 +24,7 @@ namespace PN
 
         pn_forceinline static RendererAPI GetAPI() { return API; }
 
-        virtual void DrawIndexed(const Ref<VtxArr>& vao) = 0;
+        virtual void DrawIndexed(const Ref<VtxArr>& vao, uint32_t idx_cnt = 0) = 0;
 
     private:
         inline static RendererAPI API = RendererAPI::OpenGL;

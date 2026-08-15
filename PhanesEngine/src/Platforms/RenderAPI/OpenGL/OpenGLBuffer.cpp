@@ -25,6 +25,12 @@ namespace PN
         }
     }
 
+    OpenGLVtxBuffer::OpenGLVtxBuffer(uint32_t size)
+    {
+        glCreateBuffers(1, &buffer_id);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer_id);
+        glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+    }
     OpenGLVtxBuffer::OpenGLVtxBuffer(std::span<const float> span) { init(span); }
     OpenGLVtxBuffer::OpenGLVtxBuffer(std::span<const float> span, const BufferLayout& layout) { init(span); OpenGLVtxBuffer::ConfigLayout(layout); }
     OpenGLVtxBuffer::~OpenGLVtxBuffer() { glDeleteBuffers(1, &buffer_id); }
@@ -51,7 +57,14 @@ namespace PN
         }
     }
 
-    void OpenGLVtxBuffer::init(const std::span<const float>& span_) {
+    void OpenGLVtxBuffer::SetData(const void* data, uint32_t size)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, buffer_id);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+    }
+
+    void OpenGLVtxBuffer::init(const std::span<const float>& span_)
+    {
         PN_CORE_ASSERT(!(span_.size() > INT32_MAX), "Element count of vertex buffer exceeds maximum GLsizei capacity of 2147483647 !!");
         elem_cnt = static_cast<uint32_t>(span_.size());
 
@@ -65,6 +78,13 @@ namespace PN
 // INFO: belongs to OpenGLIdxBuffer
 namespace PN
 {
+    OpenGLIdxBuffer::OpenGLIdxBuffer(uint32_t* indices, uint32_t cnt)
+    {
+        glCreateBuffers(1, &buffer_id);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer_id);
+        glBufferData(GL_ARRAY_BUFFER, cnt * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+    }
+
     OpenGLIdxBuffer::OpenGLIdxBuffer(std::span<const uint32_t> span)
     {
         PN_CORE_ASSERT(!(span.size() > INT32_MAX), "Element count of index buffer exceeds maximum GLsizei capacity of 2147483647 !!");

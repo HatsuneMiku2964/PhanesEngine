@@ -17,8 +17,9 @@ namespace PN
     void OpenGLRenderAPI::Clear() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
     void OpenGLRenderAPI::SetClearColor(const glm::vec4& color) { glClearColor(color.r, color.g, color.b, color.a); }
 
-    void OpenGLRenderAPI::DrawIndexed(const Ref<VtxArr>& vao)
+    void OpenGLRenderAPI::DrawIndexed(const Ref<VtxArr>& vao, uint32_t idx_cnt)
     {
-        glDrawElements(GL_TRIANGLES, vao->GetIdxBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+        uint32_t cnt = idx_cnt ? idx_cnt : vao->GetIdxBuffer()->GetCount();
+        glDrawElements(GL_TRIANGLES, cnt, GL_UNSIGNED_INT, nullptr);
     }
 }

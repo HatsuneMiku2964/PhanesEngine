@@ -61,7 +61,7 @@ namespace PN
     }
     OpenGLTexture2D::~OpenGLTexture2D() { glDeleteTextures(1, &texture_id); }
 
-    void OpenGLTexture2D::SetData(void* data, uint32_t size)
+    void OpenGLTexture2D::SetData(const void* data, uint32_t size)
     {
         uint32_t bpp = (data_fmt == GL_RGBA) ? 4 : 3;
         PN_CORE_ASSERT(size == width * height * bpp, "data must be entirely a texture!!");

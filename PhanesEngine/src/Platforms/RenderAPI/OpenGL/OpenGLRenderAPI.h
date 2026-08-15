@@ -13,6 +13,6 @@ namespace PN
         void Clear() override;
         void SetClearColor(const glm::vec4& color) override;
 
-        void DrawIndexed(const Ref<VtxArr> &vao) override;
+        void DrawIndexed(const Ref<VtxArr> &vao, uint32_t idx_cnt = 0) override;
     };
 }

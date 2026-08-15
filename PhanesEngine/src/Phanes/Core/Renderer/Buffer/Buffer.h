@@ -109,6 +109,9 @@ namespace PN
         virtual const BufferLayout& GetLayout() const = 0;
         virtual uint32_t GetCount() const = 0;
 
+        virtual void SetData(const void* data, uint32_t size) = 0;
+
+        static Ref<VtxBuffer> Create(uint32_t size);
         static Ref<VtxBuffer> Create(std::span<const float> vertices);
         static Ref<VtxBuffer> Create(std::span<const float> vertices, const BufferLayout &layout);
     };
@@ -123,5 +126,6 @@ namespace PN
         virtual uint32_t GetCount() const = 0;
 
         static Ref<IdxBuffer> Create(std::span<const uint32_t> indices);
+        static Ref<IdxBuffer> Create(uint32_t* indices, uint32_t cnt);
     };
 }

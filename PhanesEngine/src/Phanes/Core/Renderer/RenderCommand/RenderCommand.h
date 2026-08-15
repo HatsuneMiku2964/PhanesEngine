@@ -13,7 +13,7 @@ namespace PN
         pn_forceinline static void Clear() { render_api->Clear(); }
         pn_forceinline static void SetClearColor(const glm::vec4& color) { render_api->SetClearColor(color); }
 
-        pn_forceinline static void DrawIndexed(const Ref<VtxArr>& vao) { render_api->DrawIndexed(vao); }
+        pn_forceinline static void DrawIndexed(const Ref<VtxArr>& vao, uint32_t idx_cnt = 0) { render_api->DrawIndexed(vao, idx_cnt); }
     private:
         static RenderAPI* render_api;
     };
