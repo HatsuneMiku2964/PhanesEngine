@@ -1,6 +1,7 @@
 #pragma once
 
 namespace PN {
+
     class Texture
     {
     public:
@@ -13,6 +14,10 @@ namespace PN {
 
         virtual void Bind(uint32_t slot = 0) = 0;
         virtual void Unbind() = 0;
+
+        virtual uint32_t GetTexId() const = 0;
+
+        virtual bool operator==(const Texture& o) const = 0;
     };
 
     class Texture2D : public Texture

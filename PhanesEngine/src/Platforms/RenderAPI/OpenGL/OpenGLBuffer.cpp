@@ -43,7 +43,8 @@ namespace PN
         this->layout = layout;
 
         uint32_t idx = 0;
-        for (const auto& elem : layout) {
+        for (const auto& elem : layout) 
+        {
             glEnableVertexAttribArray(idx);
             glVertexAttribPointer(
                 idx,
@@ -83,6 +84,7 @@ namespace PN
         glCreateBuffers(1, &buffer_id);
         glBindBuffer(GL_ARRAY_BUFFER, buffer_id);
         glBufferData(GL_ARRAY_BUFFER, cnt * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+        elem_cnt = cnt;
     }
 
     OpenGLIdxBuffer::OpenGLIdxBuffer(std::span<const uint32_t> span)

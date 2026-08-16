@@ -21,6 +21,10 @@ namespace PN
         void Bind(uint32_t slot = 0) override;
         void Unbind() override;
 
+        uint32_t GetTexId() const override { return texture_id; }
+
+        bool operator==(const Texture& o) const override { return texture_id == ((OpenGLTexture2D&) o).texture_id; }
+
     private:
         std::string path;
         uint32_t width = 0, height = 0;

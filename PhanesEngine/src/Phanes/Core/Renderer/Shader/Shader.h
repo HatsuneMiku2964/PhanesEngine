@@ -17,12 +17,13 @@ namespace PN
 
         virtual int GetUniformLoc(const std::string& name) const = 0;
         template<typename T>
-        pn_forceinline void SetUniform(const std::string& name, const T& val)
+        pn_forceinline void SetUniform(const std::string& name, const T& val, uint32_t cnt = 0)
         {
             int loc = GetUniformLoc(name);
             if (loc == -1) return;
 
             if      constexpr (std::is_same_v<T, int>)          SetUniform_int(loc, val);
+            else if constexpr (std::is_same_v<T, int*>)         SetUniform_int_arr(loc, val, cnt);
             else if constexpr (std::is_same_v<T, float>)        SetUniform_float(loc, val);
             else if constexpr (std::is_same_v<T, glm::vec2>)    SetUniform_vec2(loc, val);
             else if constexpr (std::is_same_v<T, glm::vec3>)    SetUniform_vec3(loc, val);
@@ -40,6 +41,7 @@ namespace PN
 
     protected:
         virtual void SetUniform_int(int loc, int val) = 0;
+        virtual void SetUniform_int_arr(int loc, int* val, uint32_t cnt) = 0;
         virtual void SetUniform_float(int loc, float val) = 0;
         virtual void SetUniform_vec2(int loc, glm::vec2 val) = 0;
         virtual void SetUniform_vec3(int loc, glm::vec3 val) = 0;

@@ -2,11 +2,11 @@
 
 // Platform
 #ifdef _WIN32
-#ifdef _WIN64
-#define PN_PLATFORMS_WINDOWS
-#else
-#error "Phanes Engine do not support Win32 yet!!!"
-#endif
+    #ifdef _WIN64
+        #define PN_PLATFORMS_WINDOWS
+    #else
+        #error "Phanes Engine do not support Win32 yet!!!"
+    #endif
 #elif defined(__APPLE__) || defined(__MACH__)
 #include <TargetConditionals.h>
 
@@ -61,13 +61,12 @@
 #define pn_forceinline inline
 #endif
 
-// Event binding
-#define BIND_EVENT_FN(fn) ::PN::BindEventFn(&std::remove_reference_t<decltype(*this)>::fn, this)
-
 // Macro
 #define PN_TOKEN_CONCAT_IMPL(a, b) a##b
 #define PN_TOKEN_CONCAT(a, b) PN_TOKEN_CONCAT_IMPL(a, b)
 
+// Event binding
+#define BIND_EVENT_FN(fn) ::PN::BindEventFn(&std::remove_reference_t<decltype(*this)>::fn, this)
 namespace PN
 {
     template<typename Class, typename EventT>

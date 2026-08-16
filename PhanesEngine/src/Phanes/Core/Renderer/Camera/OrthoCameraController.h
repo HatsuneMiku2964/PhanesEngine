@@ -29,7 +29,7 @@ namespace PN {
 
         OrthographicCamera camera;
 
-        float move_speed = 3.f;
+        float move_speed = 30.f;
         float rot_speed = 180.f;
     };
 }

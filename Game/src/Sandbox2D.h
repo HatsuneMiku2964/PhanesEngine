@@ -23,6 +23,7 @@ private:
 
     PN::Ref<PN::Texture2D> tex;
     float tile_factor = 1.f;
+    float padding = 0.1f;
 
     glm::vec3 color = {0.2f, 0.1f, 1.f};
 };

@@ -40,7 +40,7 @@ namespace PN
 
     bool OrthoCameraController::OnMouseScrolled(MouseScrolledEvent& e)
     {
-        zoom_lvl -= e.GetYOffset() * 0.1f;
+        zoom_lvl -= e.GetYOffset() * 1.f;
         zoom_lvl = std::max(zoom_lvl, 0.05f);
         camera.SetProjection(-aspect_ratio * zoom_lvl, aspect_ratio * zoom_lvl, -zoom_lvl, zoom_lvl);
         return false;

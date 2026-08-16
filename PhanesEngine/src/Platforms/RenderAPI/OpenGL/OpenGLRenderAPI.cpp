@@ -19,6 +19,7 @@ namespace PN
 
     void OpenGLRenderAPI::DrawIndexed(const Ref<VtxArr>& vao, uint32_t idx_cnt)
     {
+        vao->Bind();
         uint32_t cnt = idx_cnt ? idx_cnt : vao->GetIdxBuffer()->GetCount();
         glDrawElements(GL_TRIANGLES, cnt, GL_UNSIGNED_INT, nullptr);
     }

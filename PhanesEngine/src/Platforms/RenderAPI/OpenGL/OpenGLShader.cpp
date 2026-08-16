@@ -40,6 +40,7 @@ namespace PN
     }
 
     void OpenGLShader::SetUniform_int(int loc, int val) { glUniform1i(loc, val); }
+    void OpenGLShader::SetUniform_int_arr(int loc, int *val, uint32_t cnt) { glUniform1iv(loc, cnt, val); }
     void OpenGLShader::SetUniform_float(int loc, float val) { glUniform1f(loc, val); }
     void OpenGLShader::SetUniform_vec2(int loc, glm::vec2 val) { glUniform2f(loc, val.x, val.y); }
     void OpenGLShader::SetUniform_vec3(int loc, glm::vec3 val) { glUniform3f(loc, val.x, val.y, val.z); }

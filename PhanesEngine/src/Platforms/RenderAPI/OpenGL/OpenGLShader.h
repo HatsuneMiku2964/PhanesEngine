@@ -22,6 +22,7 @@ namespace PN
 
     protected:
         void SetUniform_int(int loc, int val) override;
+        void SetUniform_int_arr(int loc, int* val, uint32_t cnt) override;
         void SetUniform_float(int loc, float val) override;
         void SetUniform_vec2( int loc, glm::vec2 val) override;
         void SetUniform_vec3( int loc, glm::vec3 val) override;
