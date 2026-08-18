@@ -20,6 +20,14 @@ namespace PN
         KeyPressedEvent, KeyReleasedEvent, KeyTypedEvent, WindowResizeEvent, WindowCloseEvent
         >;
 
+    template<typename Class, typename EventT>
+    auto BindEventFn(bool(Class::* fn)(EventT&), Class* instance)
+    {
+        return [instance, fn](EventT& e) -> bool {
+            return (instance->*fn)(e);
+        };
+    }
+
 
     class EventDispatcher
     {

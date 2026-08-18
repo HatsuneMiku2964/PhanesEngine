@@ -10,14 +10,14 @@ namespace PN
 {
     struct Quad_vtx
     {
-        glm::vec2 Pos;
+        glm::vec3 Pos;
         glm::vec4 Color;
         glm::vec2 TexCoord;
         float TexIdx;
     };
     struct Renderer2D_Data
     {
-        static constexpr int MAX_QUADS_CNT = 10000;
+        static constexpr int MAX_QUADS_CNT = 15000;
         static constexpr int MAX_VERTICES = MAX_QUADS_CNT * 4;
         static constexpr int MAX_INDICES = MAX_QUADS_CNT * 6;
         static constexpr int MAX_TEX_SLOT_CNT = 32;
@@ -46,7 +46,7 @@ namespace PN
         data->VAO = VtxArr::Create();
 
         BufferLayout layout = {
-            ShaderDataType::Float2,
+            ShaderDataType::Float3,
             ShaderDataType::Float4,
             ShaderDataType::Float2,
             ShaderDataType::Float,
@@ -81,7 +81,7 @@ namespace PN
 
         int samplers[Renderer2D_Data::MAX_TEX_SLOT_CNT];
         for (uint32_t i = 0; i < Renderer2D_Data::MAX_TEX_SLOT_CNT; ++i) samplers[i] = i;
-        
+
         data->TexShader = Shader::Create("../Game/Assets/Shaders/Texture.shader");
         data->TexShader->Bind();
         data->TexShader->SetUniform("u_tex", (int*) samplers, Renderer2D_Data::MAX_TEX_SLOT_CNT);
@@ -132,19 +132,19 @@ namespace PN
             data->BufferPtr->TexIdx = 0.f;
             data->BufferPtr++;
 
-            data->BufferPtr->Pos = {pos.x + size.x, pos.y};
+            data->BufferPtr->Pos = {pos.x + size.x, pos.y, pos.z};
             data->BufferPtr->Color = color;
             data->BufferPtr->TexCoord = {1.f, 0.f,};
             data->BufferPtr->TexIdx = 0.f;
             data->BufferPtr++;
 
-            data->BufferPtr->Pos = {pos.x + size.x, pos.y + size.y};
+            data->BufferPtr->Pos = {pos.x + size.x, pos.y + size.y, pos.z};
             data->BufferPtr->Color = color;
             data->BufferPtr->TexCoord = {1.f, 1.f,};
             data->BufferPtr->TexIdx = 0.f;
             data->BufferPtr++;
 
-            data->BufferPtr->Pos = {pos.x, pos.y + size.y};
+            data->BufferPtr->Pos = {pos.x, pos.y + size.y, pos.z};
             data->BufferPtr->Color = color;
             data->BufferPtr->TexCoord = {0.f, 1.f,};
             data->BufferPtr->TexIdx = 0.f;
@@ -152,6 +152,30 @@ namespace PN
         }
         data->IdxCnt += 6;
     }
+
+    void Renderer2D::DrawQuad(const Transform& transform, const glm::vec4& color)
+    {
+        static constexpr glm::vec4 quadVertexPositions[4] = {
+            { -0.5f, -0.5f, 0.0f, 1.0f },
+            {  0.5f, -0.5f, 0.0f, 1.0f },
+            {  0.5f,  0.5f, 0.0f, 1.0f },
+            { -0.5f,  0.5f, 0.0f, 1.0f }
+        };
+
+        const glm::mat4& transformMat = transform.GetTransformMat();
+
+        for (int i = 0; i < 4; ++i)
+        {
+            data->BufferPtr->Pos = transformMat * quadVertexPositions[i];
+            data->BufferPtr->Color = color;
+            data->BufferPtr->TexCoord = {(i == 1 || i == 2) ? 1.f : 0.f, (i >= 2) ? 1.f : 0.f};
+            data->BufferPtr->TexIdx = 0.f;
+            data->BufferPtr++;
+        }
+
+        data->IdxCnt += 6;
+    }
+
     void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tile_factor)
     {
         DrawQuad({pos.x, pos.y, 0.f}, size, texture, tile_factor);
@@ -187,19 +211,19 @@ namespace PN
             data->BufferPtr->TexIdx = texture_idx;
             data->BufferPtr++;
 
-            data->BufferPtr->Pos = {pos.x + size.x, pos.y};
+            data->BufferPtr->Pos = {pos.x + size.x, pos.y, pos.z};
             data->BufferPtr->Color = color;
             data->BufferPtr->TexCoord = {tile_factor, 0.f};
             data->BufferPtr->TexIdx = texture_idx;
             data->BufferPtr++;
 
-            data->BufferPtr->Pos = {pos.x + size.x, pos.y + size.y};
+            data->BufferPtr->Pos = {pos.x + size.x, pos.y + size.y, pos.z};
             data->BufferPtr->Color = color;
             data->BufferPtr->TexCoord = {tile_factor, tile_factor};
             data->BufferPtr->TexIdx = texture_idx;
             data->BufferPtr++;
 
-            data->BufferPtr->Pos = {pos.x, pos.y + size.y};
+            data->BufferPtr->Pos = {pos.x, pos.y + size.y, pos.z};
             data->BufferPtr->Color = color;
             data->BufferPtr->TexCoord = {0.f, tile_factor};
             data->BufferPtr->TexIdx = texture_idx;

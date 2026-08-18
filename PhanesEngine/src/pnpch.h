@@ -15,6 +15,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include <glm/glm.hpp>
+
 #include "Phanes/Core/Core.h"
 
 #include "Phanes/Core/TimeStep/TimeStep.h"
@@ -23,6 +25,8 @@
 
 #include "Phanes/Core/Debugging/Log/Log.h"
 #include "Phanes/Core/Debugging/Benchmark/Instrumentation.h"
+
+#include "Phanes/Core/Transform/Transform.h"
 
 #ifdef PN_PLATFORMS_WINDOWS
     #include <Windows.h>
