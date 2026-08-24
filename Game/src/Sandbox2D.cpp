@@ -26,18 +26,28 @@ void Sandbox2D::OnUpdate(PN::TimeStep ts)
     PN::RenderCmd::SetClearColor({0.06f, 0.06f, 0.06f, 1.f});
     PN::RenderCmd::Clear();
 
+    PN::Renderer2D::ResetStat();
     PN::Renderer2D::BeginScene(camera_ctrl.GetCamera());
+    {
+        static constexpr int it_cnt = 30;
 
-    static constexpr int it_cnt = 10;
-
-    float padding_ = 1.f + padding;
-    for (int i = 0; i < it_cnt; ++i) for (int j = 0; j < it_cnt; ++j) 
-        PN::Renderer2D::DrawQuad({{1.f, 1.f}, 45.f, {(float) i * padding_, (float) j * padding_}}, {color, 1.f});
-        //PN::Renderer2D::DrawQuad({(float) i * padding_, (float) j * padding_, 0.f}, {1.0f, 1.0f}, {color, 1.f});
-        
-    for (int i = 0; i < it_cnt; ++i) for (int j = 0; j < it_cnt; ++j) 
-        PN::Renderer2D::DrawQuad({(float) i * padding_, (float) j * padding_, 0.1f}, {1.f, 1.f}, tex, tile_factor);
-
+        float padding_ = 1.f + padding;
+        for (int i = 0; i < it_cnt; ++i) for (int j = 0; j < it_cnt; ++j) {
+            PN::Renderer2D::DrawQuad(
+                {{1.f, 1.f}, rot, {(float) i * padding_, (float) j * padding_, 0.f}},
+                color);
+        }
+        for (int i = 0; i < it_cnt; ++i) for (int j = 0; j < it_cnt; ++j) {
+            PN::Renderer2D::DrawQuad({
+                {1.f, 1.f}, rot, {(float) i * padding_, (float) j * padding_, 0.1f}},
+                tex, tile_factor);
+        }
+    }
+    PN::Renderer2D::EndScene();
+    PN::Renderer2D::BeginScene(camera_ctrl.GetCamera());
+    for (float y = -5.f; y < 5.f; y += 0.5f) for (float x = -5.f; x < 5.f; x += 0.5f)
+        PN::Renderer2D::DrawQuad({{0.45f, 0.45f}, 0.f, {x+5.f, y - 7.f, 0.f}},
+                                 {(y + 5.f) / 10.f, 0.4f, (x + 5.f) / 7.f, 1.f});
     PN::Renderer2D::EndScene();
 }
 
@@ -49,8 +59,17 @@ void Sandbox2D::OnEvent(PN::Event& event)
 void Sandbox2D::OnImGuiRender()
 {
     ImGui::Begin("Settings");
-    ImGui::ColorEdit3("Color", glm::value_ptr(color));
+
+    ImGui::ColorEdit4("Color", glm::value_ptr(color));
     ImGui::DragFloat("tile factor", &tile_factor, 0.01f, 0.5f, 5.f);
     ImGui::DragFloat("padding", &padding, 0.001f, 0.f, 1.f);
+    ImGui::DragFloat("rotation", &rot, 0.5f, 0.f, 180.f);
+
+    auto& stat = PN::Renderer2D::GetStats();
+    ImGui::Text("Renderer Stats: ");
+    ImGui::Text("Draw calls: %u", stat.DrawCallCnt);
+    ImGui::Text("Quads: %u", stat.QuadCnt);
+    ImGui::Text("Vertices: %u", stat.GetVtxCnt());
+    ImGui::Text("Indices: %u", stat.GetIdxCnt());
     ImGui::End();
 }

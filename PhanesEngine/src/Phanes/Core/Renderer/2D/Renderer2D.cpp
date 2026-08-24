@@ -17,7 +17,7 @@ namespace PN
     };
     struct Renderer2D_Data
     {
-        static constexpr int MAX_QUADS_CNT = 15000;
+        static constexpr int MAX_QUADS_CNT = 20000;
         static constexpr int MAX_VERTICES = MAX_QUADS_CNT * 4;
         static constexpr int MAX_INDICES = MAX_QUADS_CNT * 6;
         static constexpr int MAX_TEX_SLOT_CNT = 32;
@@ -34,6 +34,8 @@ namespace PN
 
         std::array<Ref<Texture2D>, MAX_TEX_SLOT_CNT> Textures;
         uint32_t TexSlotIdx = 1; // 0 is the white yex
+
+        Renderer2D::Statistics Stat;
     };
     static Renderer2D_Data* data;
 
@@ -116,50 +118,35 @@ namespace PN
     void Renderer2D::Flush()
     {
         for (uint32_t i = 0; i < data->TexSlotIdx; ++i) data->Textures[i]->Bind(i);
+
         RenderCmd::DrawIndexed(data->VAO, data->IdxCnt);
+        data->Stat.DrawCallCnt++;
     }
-
-    void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color)
+    void Renderer2D::new_batch()
     {
-        DrawQuad({pos.x, pos.y, 0.f}, size, color);
+        EndScene();
+
+        data->BufferPtr = data->BufferStart;
+        data->IdxCnt = 0;
+        data->TexSlotIdx = 1;
     }
-    void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color)
-    {
-        {
-            data->BufferPtr->Pos = pos;
-            data->BufferPtr->Color = color;
-            data->BufferPtr->TexCoord = {0.f, 0.f,};
-            data->BufferPtr->TexIdx = 0.f;
-            data->BufferPtr++;
 
-            data->BufferPtr->Pos = {pos.x + size.x, pos.y, pos.z};
-            data->BufferPtr->Color = color;
-            data->BufferPtr->TexCoord = {1.f, 0.f,};
-            data->BufferPtr->TexIdx = 0.f;
-            data->BufferPtr++;
-
-            data->BufferPtr->Pos = {pos.x + size.x, pos.y + size.y, pos.z};
-            data->BufferPtr->Color = color;
-            data->BufferPtr->TexCoord = {1.f, 1.f,};
-            data->BufferPtr->TexIdx = 0.f;
-            data->BufferPtr++;
-
-            data->BufferPtr->Pos = {pos.x, pos.y + size.y, pos.z};
-            data->BufferPtr->Color = color;
-            data->BufferPtr->TexCoord = {0.f, 1.f,};
-            data->BufferPtr->TexIdx = 0.f;
-            data->BufferPtr++;
-        }
-        data->IdxCnt += 6;
-    }
 
     void Renderer2D::DrawQuad(const Transform& transform, const glm::vec4& color)
     {
+        if (data->IdxCnt >= Renderer2D_Data::MAX_INDICES) new_batch();
+
         static constexpr glm::vec4 quadVertexPositions[4] = {
             { -0.5f, -0.5f, 0.0f, 1.0f },
             {  0.5f, -0.5f, 0.0f, 1.0f },
             {  0.5f,  0.5f, 0.0f, 1.0f },
             { -0.5f,  0.5f, 0.0f, 1.0f }
+        };
+        static constexpr glm::vec2 texCoords[4] = {
+            { 0.0f, 0.0f },
+            { 1.0f, 0.0f },
+            { 1.0f, 1.0f },
+            { 0.0f, 1.0f }
         };
 
         const glm::mat4& transformMat = transform.GetTransformMat();
@@ -168,20 +155,19 @@ namespace PN
         {
             data->BufferPtr->Pos = transformMat * quadVertexPositions[i];
             data->BufferPtr->Color = color;
-            data->BufferPtr->TexCoord = {(i == 1 || i == 2) ? 1.f : 0.f, (i >= 2) ? 1.f : 0.f};
+            data->BufferPtr->TexCoord = texCoords[i];
             data->BufferPtr->TexIdx = 0.f;
             data->BufferPtr++;
         }
 
         data->IdxCnt += 6;
+        data->Stat.QuadCnt++;
     }
 
-    void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tile_factor)
+    void Renderer2D::DrawQuad(const Transform& transform, const Ref<Texture2D>& texture, float tile_factor)
     {
-        DrawQuad({pos.x, pos.y, 0.f}, size, texture, tile_factor);
-    }
-    void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tile_factor)
-    {
+        if (data->IdxCnt >= Renderer2D_Data::MAX_INDICES) new_batch();
+
         static constexpr glm::vec4 color = {1.f, 1.f, 1.f, 1.f};
 
         float texture_idx = 0.f;
@@ -192,43 +178,42 @@ namespace PN
         }
         if (texture_idx == 0.f)
         {
-            if (data->TexSlotIdx >= Renderer2D_Data::MAX_TEX_SLOT_CNT)
-            {
-                EndScene();
-                data->BufferPtr = data->BufferStart;
-                data->IdxCnt = 0;
-                data->TexSlotIdx = 1;
-            }
+            if (data->TexSlotIdx >= Renderer2D_Data::MAX_TEX_SLOT_CNT) new_batch();
+
             texture_idx = (float) data->TexSlotIdx;
             data->Textures[data->TexSlotIdx] = texture;
             data->TexSlotIdx++;
         }
 
+
+        static constexpr glm::vec4 quadVertexPositions[4] = {
+            { -0.5f, -0.5f, 0.0f, 1.0f },
+            {  0.5f, -0.5f, 0.0f, 1.0f },
+            {  0.5f,  0.5f, 0.0f, 1.0f },
+            { -0.5f,  0.5f, 0.0f, 1.0f }
+        };
+        static constexpr glm::vec2 texCoords[4] = {
+            { 0.0f, 0.0f },
+            { 1.0f, 0.0f },
+            { 1.0f, 1.0f },
+            { 0.0f, 1.0f }
+        };
+
+        const glm::mat4& transformMat = transform.GetTransformMat();
+
+        for (int i = 0; i < 4; ++i)
         {
-            data->BufferPtr->Pos = pos;
+            data->BufferPtr->Pos = transformMat * quadVertexPositions[i];
             data->BufferPtr->Color = color;
-            data->BufferPtr->TexCoord = {0.f, 0.f};
-            data->BufferPtr->TexIdx = texture_idx;
-            data->BufferPtr++;
-
-            data->BufferPtr->Pos = {pos.x + size.x, pos.y, pos.z};
-            data->BufferPtr->Color = color;
-            data->BufferPtr->TexCoord = {tile_factor, 0.f};
-            data->BufferPtr->TexIdx = texture_idx;
-            data->BufferPtr++;
-
-            data->BufferPtr->Pos = {pos.x + size.x, pos.y + size.y, pos.z};
-            data->BufferPtr->Color = color;
-            data->BufferPtr->TexCoord = {tile_factor, tile_factor};
-            data->BufferPtr->TexIdx = texture_idx;
-            data->BufferPtr++;
-
-            data->BufferPtr->Pos = {pos.x, pos.y + size.y, pos.z};
-            data->BufferPtr->Color = color;
-            data->BufferPtr->TexCoord = {0.f, tile_factor};
+            data->BufferPtr->TexCoord = texCoords[i] * tile_factor;
             data->BufferPtr->TexIdx = texture_idx;
             data->BufferPtr++;
         }
+
         data->IdxCnt += 6;
+        data->Stat.QuadCnt++;
     }
+
+    void Renderer2D::ResetStat() { memset(&data->Stat, 0, sizeof(Statistics)); }
+    const Renderer2D::Statistics& Renderer2D::GetStats() { return data->Stat; }
 }

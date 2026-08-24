@@ -15,12 +15,21 @@ namespace PN
         static void EndScene();
         static void Flush();
 
-        static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color);
-        static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color);
-
         static void DrawQuad(const Transform& transform, const glm::vec4& color);
+        static void DrawQuad(const Transform& transform, const Ref<Texture2D>& texture, float tile_factor);
 
-        static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tile_factor = 1.f);
-        static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tile_factor = 1.f);
+        struct Statistics
+        {
+            uint32_t DrawCallCnt = 0;
+            uint32_t QuadCnt = 0;
+
+            uint32_t GetVtxCnt() const { return QuadCnt * 4; }
+            uint32_t GetIdxCnt() const { return QuadCnt * 6; }
+        };
+        static void ResetStat();
+        static const Statistics& GetStats();
+
+    private:
+        static void new_batch();
     };
 }
