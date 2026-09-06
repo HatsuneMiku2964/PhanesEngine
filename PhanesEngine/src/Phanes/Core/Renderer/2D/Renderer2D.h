@@ -1,9 +1,9 @@
 #pragma once
 
-
 namespace PN
 {
     class Texture2D;
+    class SubTexture2D;
 
     class Renderer2D
     {

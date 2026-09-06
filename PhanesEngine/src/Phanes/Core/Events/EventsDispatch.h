@@ -34,16 +34,21 @@ namespace PN
         template<typename F>
         struct event_traits;
 
-        template<typename C, typename R, typename EventT>
-        struct event_traits<R(C::*)(EventT&) const>
-        {
-            using EventType = std::remove_cvref_t<EventT>;
-        };
+        template <typename F>
+        struct event_traits : public event_traits<decltype(&F::operator())> {};
 
-        template<typename C, typename R, typename EventT>
-        struct event_traits<R(C::*)(EventT&)>
+        template<typename C, typename R, typename... args>
+        struct event_traits<R(C::*)(args...) const> : public event_traits<R(*)(args...)>{};
+
+        template<typename C, typename R, typename... args>
+        struct event_traits<R(C::*)(args...)> : public event_traits<R(*)(args...)> {};
+
+        template<typename R, typename ... args>
+        struct event_traits<R(*)(args...)>
         {
-            using EventType = std::remove_cvref_t<EventT>;
+            using ReturnType = R;
+            using args_tuple = std::tuple<args...>;
+            using EventType = std::remove_cvref_t<std::tuple_element_t<0, args_tuple>>;
         };
 
         template<typename F>
@@ -69,7 +74,6 @@ namespace PN
             if (event.GetEventType() != EventT::GetStaticType()) return;
 
             event.Handled |= func(*(EventT*) &event);
-
         }
 
     private:

@@ -1,6 +1,8 @@
 #pragma once
 
-namespace PN {
+namespace PN
+{
+    struct SubTextureComp;
 
     class Texture
     {
@@ -15,7 +17,9 @@ namespace PN {
         virtual void Bind(uint32_t slot = 0) = 0;
         virtual void Unbind() = 0;
 
+        virtual const std::string& GetPath() const = 0;
         virtual uint32_t GetTexId() const = 0;
+        virtual SubTextureComp* GetSubTextureComp() const = 0;
 
         virtual bool operator==(const Texture& o) const = 0;
     };
@@ -25,5 +29,11 @@ namespace PN {
     public:
         static Ref<Texture2D> Create(const std::string& path);
         static Ref<Texture2D> Create(uint32_t width, uint32_t height);
+    };
+
+    struct SubTextureComp
+    {
+        float BlockWidth, BlockHeight;
+        float Width_idx, Height_idx;
     };
 }

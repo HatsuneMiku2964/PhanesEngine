@@ -4,6 +4,7 @@
 #include <glm/ext/matrix_transform.hpp>
 
 #include "Phanes/Core/Renderer/RenderCommand/RenderCommand.h"
+#include "Phanes/Core/Renderer/Texture/SubTexture2D.h"
 #include "Phanes/Core/Renderer/Texture/Texture.h"
 
 namespace PN
@@ -163,10 +164,11 @@ namespace PN
         data->IdxCnt += 6;
         data->Stat.QuadCnt++;
     }
-
     void Renderer2D::DrawQuad(const Transform& transform, const Ref<Texture2D>& texture, float tile_factor)
     {
         if (data->IdxCnt >= Renderer2D_Data::MAX_INDICES) new_batch();
+
+        SubTextureComp* comp = texture->GetSubTextureComp();
 
         static constexpr glm::vec4 color = {1.f, 1.f, 1.f, 1.f};
 
@@ -196,13 +198,20 @@ namespace PN
             { 0.0f, 0.0f },
             { 1.0f, 0.0f },
             { 1.0f, 1.0f },
-            { 0.0f, 1.0f }
+            { 0.0f, 1.0f },
+        };
+        glm::vec2 texCoords_sub[4] = {
+            { comp->BlockWidth * comp->Width_idx         , comp->BlockHeight * comp->Height_idx },
+            { comp->BlockWidth * (comp->Width_idx + 1)   , comp->BlockHeight * comp->Height_idx },
+            { comp->BlockWidth * (comp->Width_idx + 1)   , comp->BlockHeight * (comp->Height_idx+1) },
+            { comp->BlockWidth * comp->Width_idx         , comp->BlockHeight * (comp->Height_idx + 1) },
         };
 
         const glm::mat4& transformMat = transform.GetTransformMat();
 
         for (int i = 0; i < 4; ++i)
         {
+            const glm::vec2& tex_coord = (comp == nullptr) ? texCoords[i] : texCoords_sub[i];
             data->BufferPtr->Pos = transformMat * quadVertexPositions[i];
             data->BufferPtr->Color = color;
             data->BufferPtr->TexCoord = texCoords[i] * tile_factor;
